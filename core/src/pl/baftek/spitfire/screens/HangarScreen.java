@@ -1,0 +1,368 @@
+package pl.baftek.spitfire.screens;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
+
+import pl.baftek.spitfire.ui.MyTextButton;
+import pl.baftek.spitfire.game.SpitfireGame;
+import pl.baftek.spitfire.game.StringHelper;
+import pl.baftek.spitfire.enums.PlayerType;
+
+public class HangarScreen extends AbstractScreen
+{
+    private Timer timer;
+    private Texture bgTexture;
+    private Texture spitfireTexture;
+    private Texture mustangTexture;
+    private Texture IL2texture;
+    private Texture moneyTinyTexture;
+
+    private Table table;
+    private Image moneyImage;
+    private Label upgradesTitle;
+    private Label moneyLabel;
+    private MyTextButton exitButton;
+
+    private HorizontalGroup upGroup;
+    private VerticalGroup mainVerticalGroup;
+    private VerticalGroup contentVG;
+
+    private HorizontalGroup scrollerHG;
+    private MyTextButton actionButton;
+    private Image planeImage;
+    private PlayerType playerType;
+
+    HangarScreen(SpitfireGame game)
+    {
+        super(game);
+    }
+
+    @Override
+    protected void init()
+    {
+        timer = new Timer();
+
+        bgTexture = new Texture("hangar.jpg");
+        spitfireTexture = new Texture("spitfire.png");
+        mustangTexture = new Texture("mustang.png");
+        IL2texture = new Texture("il2.png");
+        moneyTinyTexture = new Texture("money_tiny.png");
+    }
+
+    @Override
+    protected void buildUI()
+    {
+        upGroup = new HorizontalGroup();
+        upGroup.padTop(10);
+        upGroup.padBottom(10);
+        upGroup.space(10);
+
+        mainVerticalGroup = new VerticalGroup();
+        mainVerticalGroup.padTop(20);
+        mainVerticalGroup.padBottom(20);
+        mainVerticalGroup.space(20);
+
+        initTitle();
+        initExitButton();
+        initUpGroup();
+        initContentGroup(game.getCurrentPlayerType());
+
+        table = new Table();
+        table.add(upGroup).row();
+        table.add(upgradesTitle).row();
+        table.add(mainVerticalGroup).height(950).row();
+        table.add(exitButton).row();
+        table.top(); //sets table in upper part of the screen, not middle
+        table.setFillParent(true);
+        stage.addActor(table);
+    }
+
+    private void initContentGroup(final PlayerType playerType)
+    {
+        //init section
+        String availabilityString;
+        String currentPlaneString;
+        String action;
+        String desc;
+        boolean bought;
+
+        Texture texture;
+
+        contentVG = new VerticalGroup();
+        contentVG.space(10);
+
+        scrollerHG = new HorizontalGroup();
+        scrollerHG.space(30);
+
+        System.out.println("playerType:" + playerType.toString());
+        this.playerType = playerType;
+
+        if (game.isBought(playerType))
+        {
+            game.setCurrentPlayerType(playerType);
+        }
+
+        if (playerType == PlayerType.SPITFIRE)
+        {
+            texture = spitfireTexture;
+            currentPlaneString = StringHelper.SPITIFRE;
+
+            action = StringHelper.UPGRADE;
+            desc = StringHelper.SPITFIRE_DESC;
+            bought = true;
+        }
+
+        else if (playerType == PlayerType.MUSTANG)
+        {
+            texture = mustangTexture;
+            currentPlaneString = StringHelper.MUSTANG;
+            desc = StringHelper.MUSTANG_DESC;
+
+            if (game.isBought(PlayerType.MUSTANG))
+            {
+                action = StringHelper.UPGRADE;
+                bought = true;
+            }
+
+            else
+            {
+                action = StringHelper.BUY + game.getPlanePrice(PlayerType.MUSTANG);
+                bought = false;
+            }
+        }
+
+        else if (playerType == PlayerType.IL2)
+        {
+            texture = IL2texture;
+            currentPlaneString = StringHelper.IL2;
+            desc = StringHelper.IL2_DESC;
+
+            if (game.isBought(PlayerType.IL2))
+            {
+                action = StringHelper.UPGRADE;
+                bought = true;
+            }
+
+            else
+            {
+                action = StringHelper.BUY + game.getPlanePrice(PlayerType.IL2);
+                bought = false;
+            }
+        }
+
+        else
+        {
+            desc = null;
+            action = null;
+            texture = null;
+            currentPlaneString = null;
+            bought = false;
+        }
+
+        availabilityString = Integer.toString(game.getCurrentPlaneAvailabilityLevel(playerType));
+
+        planeImage = new Image(texture);
+
+        actionButton = new MyTextButton(action, smallFontSize);
+        if (!bought)
+        {
+            Image moneyImage = new Image(moneyTinyTexture);
+            actionButton.add(moneyImage).right();
+        }
+        actionButton.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                //spitfire
+                if (playerType == PlayerType.SPITFIRE)
+                {
+                    game.setScreen(new UpgradesScreen(game));
+                }
+
+                //mustang
+                if (playerType == PlayerType.MUSTANG && !game.isBought(PlayerType.MUSTANG))
+                {
+                    game.buyPlane(PlayerType.MUSTANG, stage);
+                    game.setCurrentPlayerType(PlayerType.MUSTANG);
+                    refreshContentGroup(PlayerType.MUSTANG);
+                }
+
+                else if (playerType == PlayerType.MUSTANG && game.isBought(PlayerType.MUSTANG))
+                {
+                    game.setScreen(new UpgradesScreen(game));
+                }
+
+                //il2
+                if (playerType == PlayerType.IL2 && !game.isBought(PlayerType.IL2))
+                {
+                    game.buyPlane(PlayerType.IL2, stage);
+                    game.setCurrentPlayerType(PlayerType.IL2);
+                    refreshContentGroup(PlayerType.IL2);
+                }
+
+                else if (playerType == PlayerType.IL2 && game.isBought(PlayerType.IL2))
+                {
+                    game.setScreen(new UpgradesScreen(game));
+                }
+
+                super.clicked(event, x, y);
+            }
+        });
+
+        Label left = new Label("<", orangeLabelStyle);
+        left.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (playerType == PlayerType.SPITFIRE)
+                {
+                    refreshContentGroup(PlayerType.MUSTANG);
+                }
+
+                else if (playerType == PlayerType.MUSTANG)
+                {
+                    refreshContentGroup(PlayerType.IL2);
+                }
+
+                else if (playerType == PlayerType.IL2)
+                {
+                    refreshContentGroup(PlayerType.SPITFIRE);
+                }
+
+                super.clicked(event, x, y);
+            }
+        });
+
+        Label right = new Label(">", orangeLabelStyle);
+        right.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (playerType == PlayerType.SPITFIRE)
+                {
+                    refreshContentGroup(PlayerType.IL2);
+                }
+
+                else if (playerType == PlayerType.IL2)
+                {
+                    refreshContentGroup(PlayerType.MUSTANG);
+                }
+
+                else if (playerType == PlayerType.MUSTANG)
+                {
+                    refreshContentGroup(PlayerType.SPITFIRE);
+                }
+
+                super.clicked(event, x, y);
+            }
+        });
+
+        Label currentPlaneLabel = new Label(currentPlaneString, whiteLabelStyle);
+        currentPlaneLabel.setFontScale(mediumFontSize);
+
+        Label availabilityLabel = new Label(StringHelper.AVAILABLE_FROM_LEVEL + availabilityString, orangeLabelStyle);
+        availabilityLabel.setFontScale(verySmallFontSize);
+
+        Label descLabel = new Label(desc, whiteLabelStyle);
+        descLabel.setFontScale(ultraSmallFontSize);
+        descLabel.setAlignment(Align.center);
+
+        scrollerHG.addActor(left);
+        scrollerHG.addActor(currentPlaneLabel);
+        scrollerHG.addActor(right);
+
+        contentVG.addActor(availabilityLabel);
+        contentVG.addActor(scrollerHG);
+        contentVG.addActor(actionButton);
+        contentVG.addActor(planeImage);
+        contentVG.addActor(descLabel);
+
+        mainVerticalGroup.addActor(contentVG);
+    }
+
+    private void refreshContentGroup(PlayerType playerType)
+    {
+        mainVerticalGroup.removeActor(contentVG);
+        initContentGroup(playerType);
+    }
+
+    private void initUpGroup()
+    {
+        HorizontalGroup moneyHG = new HorizontalGroup();
+
+        moneyImage = new Image(moneyTinyTexture);
+
+        moneyLabel = new Label(Integer.toString(game.getMoney()), whiteLabelStyle);
+        moneyLabel.setFontScale(smallFontSize);
+
+        //refreshing money
+        timer.scheduleTask(new Timer.Task()
+        {
+            @Override
+            public void run()
+            {
+                moneyLabel.setText(Integer.toString(game.getMoney()));
+            }
+        }, 0.5f, 0.5f);
+
+        moneyHG.addActor(moneyLabel);
+        moneyHG.addActor(moneyImage);
+
+        upGroup.addActor(moneyHG);
+    }
+
+    private void initTitle()
+    {
+        upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
+        upgradesTitle.setFontScale(bigFontSize);
+    }
+
+    private void initExitButton()
+    {
+        exitButton = new MyTextButton(StringHelper.GO_TO_MENU, smallFontSize);
+        exitButton.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen(new MenuScreen(game));
+                super.clicked(event, x, y);
+            }
+        });
+    }
+
+    @Override
+    public void render(float delta)
+    {
+        super.render(delta);
+
+        spriteBatch.begin();
+        spriteBatch.draw(bgTexture, 0, 0);
+        spriteBatch.end();
+
+        stage.draw();
+    }
+
+    @Override
+    public void dispose()
+    {
+        bgTexture.dispose();
+        spitfireTexture.dispose();
+        mustangTexture.dispose();
+        IL2texture.dispose();
+        moneyTinyTexture.dispose();
+
+        super.dispose();
+    }
+}
