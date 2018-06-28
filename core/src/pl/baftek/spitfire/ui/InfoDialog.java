@@ -5,7 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
+import pl.baftek.spitfire.game.SpitfireGame;
+import pl.baftek.spitfire.game.SpitfireGame.ResHelper;
 import pl.baftek.spitfire.screens.AbstractScreen;
+
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.SKIN;
 
 /**
  *Dialog with one button, which result is false. You can other buttons with you own result, but then override
@@ -15,17 +19,17 @@ public class InfoDialog extends Dialog
 {
     public InfoDialog(String title, String text, String firstButtonText)
     {
-        super(title, AbstractScreen.skin);
+        super(title, SKIN);
         setMovable(false);
 
-        Label label = new Label(text, AbstractScreen.whiteLabelStyle);
-        label.setFontScale(AbstractScreen.ultraSmallFontSize);
+        Label label = new Label(text, ResHelper.whiteLabelStyle);
+        label.setFontScale(AbstractScreen.FONT_SIZE_1);
         label.setAlignment(Align.center);
 
-        MyTextButton button = new MyTextButton(firstButtonText, AbstractScreen.smallFontSize);
+        MyTextButton button = new MyTextButton(firstButtonText, AbstractScreen.FONT_SIZE_3);
 
-        getTitleLabel().setStyle(AbstractScreen.whiteLabelStyle);
-        getTitleLabel().setFontScale(AbstractScreen.verySmallFontSize);
+        getTitleLabel().setStyle(ResHelper.whiteLabelStyle);
+        getTitleLabel().setFontScale(AbstractScreen.FONT_SIZE_2);
 
         text(label);
         button(button, false);

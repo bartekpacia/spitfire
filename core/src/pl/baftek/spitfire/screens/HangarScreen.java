@@ -16,14 +16,12 @@ import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.enums.PlayerType;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+
 public class HangarScreen extends AbstractScreen
 {
     private Timer timer;
-    private Texture bgTexture;
-    private Texture spitfireTexture;
-    private Texture mustangTexture;
-    private Texture IL2texture;
-    private Texture moneyTinyTexture;
 
     private Table table;
     private Image moneyImage;
@@ -38,7 +36,6 @@ public class HangarScreen extends AbstractScreen
     private HorizontalGroup scrollerHG;
     private MyTextButton actionButton;
     private Image planeImage;
-    private PlayerType playerType;
 
     HangarScreen(SpitfireGame game)
     {
@@ -49,12 +46,6 @@ public class HangarScreen extends AbstractScreen
     protected void init()
     {
         timer = new Timer();
-
-        bgTexture = new Texture("hangar.jpg");
-        spitfireTexture = new Texture("spitfire.png");
-        mustangTexture = new Texture("mustang.png");
-        IL2texture = new Texture("il2.png");
-        moneyTinyTexture = new Texture("money_tiny.png");
     }
 
     @Override
@@ -103,7 +94,6 @@ public class HangarScreen extends AbstractScreen
         scrollerHG.space(30);
 
         System.out.println("playerType:" + playerType.toString());
-        this.playerType = playerType;
 
         if (game.isBought(playerType))
         {
@@ -112,7 +102,7 @@ public class HangarScreen extends AbstractScreen
 
         if (playerType == PlayerType.SPITFIRE)
         {
-            texture = spitfireTexture;
+            texture = SpitfireGame.ResHelper.spitfire;
             currentPlaneString = StringHelper.SPITIFRE;
 
             action = StringHelper.UPGRADE;
@@ -122,7 +112,7 @@ public class HangarScreen extends AbstractScreen
 
         else if (playerType == PlayerType.MUSTANG)
         {
-            texture = mustangTexture;
+            texture = SpitfireGame.ResHelper.mustang;
             currentPlaneString = StringHelper.MUSTANG;
             desc = StringHelper.MUSTANG_DESC;
 
@@ -139,13 +129,13 @@ public class HangarScreen extends AbstractScreen
             }
         }
 
-        else if (playerType == PlayerType.IL2)
+        else if (playerType == PlayerType.SZTURMOVIK)
         {
-            texture = IL2texture;
+            texture = SpitfireGame.ResHelper.szturmovik;
             currentPlaneString = StringHelper.IL2;
             desc = StringHelper.IL2_DESC;
 
-            if (game.isBought(PlayerType.IL2))
+            if (game.isBought(PlayerType.SZTURMOVIK))
             {
                 action = StringHelper.UPGRADE;
                 bought = true;
@@ -153,7 +143,7 @@ public class HangarScreen extends AbstractScreen
 
             else
             {
-                action = StringHelper.BUY + game.getPlanePrice(PlayerType.IL2);
+                action = StringHelper.BUY + game.getPlanePrice(PlayerType.SZTURMOVIK);
                 bought = false;
             }
         }
@@ -171,10 +161,10 @@ public class HangarScreen extends AbstractScreen
 
         planeImage = new Image(texture);
 
-        actionButton = new MyTextButton(action, smallFontSize);
+        actionButton = new MyTextButton(action, FONT_SIZE_3);
         if (!bought)
         {
-            Image moneyImage = new Image(moneyTinyTexture);
+            Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
             actionButton.add(moneyImage).right();
         }
         actionButton.addListener(new ClickListener()
@@ -202,14 +192,14 @@ public class HangarScreen extends AbstractScreen
                 }
 
                 //il2
-                if (playerType == PlayerType.IL2 && !game.isBought(PlayerType.IL2))
+                if (playerType == PlayerType.SZTURMOVIK && !game.isBought(PlayerType.SZTURMOVIK))
                 {
-                    game.buyPlane(PlayerType.IL2, stage);
-                    game.setCurrentPlayerType(PlayerType.IL2);
-                    refreshContentGroup(PlayerType.IL2);
+                    game.buyPlane(PlayerType.SZTURMOVIK, stage);
+                    game.setCurrentPlayerType(PlayerType.SZTURMOVIK);
+                    refreshContentGroup(PlayerType.SZTURMOVIK);
                 }
 
-                else if (playerType == PlayerType.IL2 && game.isBought(PlayerType.IL2))
+                else if (playerType == PlayerType.SZTURMOVIK && game.isBought(PlayerType.SZTURMOVIK))
                 {
                     game.setScreen(new UpgradesScreen(game));
                 }
@@ -231,10 +221,10 @@ public class HangarScreen extends AbstractScreen
 
                 else if (playerType == PlayerType.MUSTANG)
                 {
-                    refreshContentGroup(PlayerType.IL2);
+                    refreshContentGroup(PlayerType.SZTURMOVIK);
                 }
 
-                else if (playerType == PlayerType.IL2)
+                else if (playerType == PlayerType.SZTURMOVIK)
                 {
                     refreshContentGroup(PlayerType.SPITFIRE);
                 }
@@ -251,10 +241,10 @@ public class HangarScreen extends AbstractScreen
             {
                 if (playerType == PlayerType.SPITFIRE)
                 {
-                    refreshContentGroup(PlayerType.IL2);
+                    refreshContentGroup(PlayerType.SZTURMOVIK);
                 }
 
-                else if (playerType == PlayerType.IL2)
+                else if (playerType == PlayerType.SZTURMOVIK)
                 {
                     refreshContentGroup(PlayerType.MUSTANG);
                 }
@@ -269,13 +259,13 @@ public class HangarScreen extends AbstractScreen
         });
 
         Label currentPlaneLabel = new Label(currentPlaneString, whiteLabelStyle);
-        currentPlaneLabel.setFontScale(mediumFontSize);
+        currentPlaneLabel.setFontScale(FONT_SIZE_4);
 
         Label availabilityLabel = new Label(StringHelper.AVAILABLE_FROM_LEVEL + availabilityString, orangeLabelStyle);
-        availabilityLabel.setFontScale(verySmallFontSize);
+        availabilityLabel.setFontScale(FONT_SIZE_2);
 
         Label descLabel = new Label(desc, whiteLabelStyle);
-        descLabel.setFontScale(ultraSmallFontSize);
+        descLabel.setFontScale(FONT_SIZE_1);
         descLabel.setAlignment(Align.center);
 
         scrollerHG.addActor(left);
@@ -301,10 +291,10 @@ public class HangarScreen extends AbstractScreen
     {
         HorizontalGroup moneyHG = new HorizontalGroup();
 
-        moneyImage = new Image(moneyTinyTexture);
+        moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        moneyLabel = new Label(Integer.toString(game.getMoney()), whiteLabelStyle);
-        moneyLabel.setFontScale(smallFontSize);
+        moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
+        moneyLabel.setFontScale(FONT_SIZE_3);
 
         //refreshing money
         timer.scheduleTask(new Timer.Task()
@@ -312,7 +302,7 @@ public class HangarScreen extends AbstractScreen
             @Override
             public void run()
             {
-                moneyLabel.setText(Integer.toString(game.getMoney()));
+                moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
             }
         }, 0.5f, 0.5f);
 
@@ -325,12 +315,12 @@ public class HangarScreen extends AbstractScreen
     private void initTitle()
     {
         upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
-        upgradesTitle.setFontScale(bigFontSize);
+        upgradesTitle.setFontScale(FONT_SIZE_6);
     }
 
     private void initExitButton()
     {
-        exitButton = new MyTextButton(StringHelper.GO_TO_MENU, smallFontSize);
+        exitButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
         exitButton.addListener(new ClickListener()
         {
             @Override
@@ -348,21 +338,9 @@ public class HangarScreen extends AbstractScreen
         super.render(delta);
 
         spriteBatch.begin();
-        spriteBatch.draw(bgTexture, 0, 0);
+        spriteBatch.draw(SpitfireGame.ResHelper.hangar, 0, 0);
         spriteBatch.end();
 
         stage.draw();
-    }
-
-    @Override
-    public void dispose()
-    {
-        bgTexture.dispose();
-        spitfireTexture.dispose();
-        mustangTexture.dispose();
-        IL2texture.dispose();
-        moneyTinyTexture.dispose();
-
-        super.dispose();
     }
 }

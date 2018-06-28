@@ -9,7 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import pl.baftek.spitfire.game.StringHelper;
-import pl.baftek.spitfire.screens.AbstractScreen;
+
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 
 
 public class MyTextButton extends TextButton
@@ -20,7 +21,7 @@ public class MyTextButton extends TextButton
     public MyTextButton(String text, float fontScale)
     {
         super(text, new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH)));
-        LabelStyle style = new LabelStyle(AbstractScreen.whiteLabelStyle);
+        LabelStyle style = new LabelStyle(whiteLabelStyle);
 
         getLabel().setStyle(style);
         getLabel().setFontScale(fontScale);
@@ -30,10 +31,10 @@ public class MyTextButton extends TextButton
 
         setOrigin(getWidth() / 2, getHeight() / 2);
 
-        initResizing();
+        initOnClickResize();
     }
 
-    private void initResizing()
+    private void initOnClickResize()
     {
         addListener(new ClickListener()
         {

@@ -2,7 +2,6 @@ package pl.baftek.spitfire.screens;
 
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,6 +18,7 @@ import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.LEVEL;
 import static pl.baftek.spitfire.game.StringHelper.UPGRADE;
 
@@ -39,12 +39,6 @@ public class UpgradesScreen extends AbstractScreen
     private Image moneyImage;
     private MyTextButton backButton;
 
-    private Texture bgTexture;
-    private Texture moneyTexture;
-    private Texture engineTexture;
-    private Texture mgTexture;
-    private Texture missileTexture;
-
     UpgradesScreen(SpitfireGame game)
     {
         super(game);
@@ -53,11 +47,7 @@ public class UpgradesScreen extends AbstractScreen
     @Override
     protected void init()
     {
-        bgTexture = new Texture("hangar.jpg");
-        moneyTexture = new Texture("money_tiny.png");
-        mgTexture = new Texture("machine_gun.png");
-        engineTexture = new Texture("engine.png");
-        missileTexture = new Texture("missile_icon.png");
+
     }
 
     @Override
@@ -74,7 +64,7 @@ public class UpgradesScreen extends AbstractScreen
         contentVG.addActor(machineGunHG);
         contentVG.addActor(engineHG);
 
-        if(game.getCurrentPlayerType() == PlayerType.IL2)
+        if(game.getCurrentPlayerType() == PlayerType.SZTURMOVIK)
         {
             contentVG.addActor(missileHG);
         }
@@ -105,19 +95,19 @@ public class UpgradesScreen extends AbstractScreen
         machineGunHG = new HorizontalGroup();
         machineGunHG.space(ROW_HORIZONTAL_SPACING);
 
-        Image image = new Image(mgTexture);
+        Image image = new Image(SpitfireGame.ResHelper.machineGun);
 
         VerticalGroup textVerticalGroup = new VerticalGroup();
         textVerticalGroup.columnAlign(Align.left);
 
         Label title = new Label(StringHelper.MACHINE_GUN, whiteLabelStyle);
-        title.setFontScale(verySmallFontSize);
+        title.setFontScale(FONT_SIZE_2);
         final Label level = new Label(LEVEL + game.getMGLevel(game.getCurrentPlayerType()), whiteLabelStyle);
-        level.setFontScale(verySmallFontSize);
+        level.setFontScale(FONT_SIZE_2);
 
-        final Image moneyImg = new Image(moneyTexture);
+        final Image moneyImg = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getMGUpgradeCost(game.getCurrentPlayerType()), smallFontSize);
+        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getMGUpgradeCost(game.getCurrentPlayerType()), FONT_SIZE_3);
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
@@ -218,19 +208,19 @@ public class UpgradesScreen extends AbstractScreen
         engineHG = new HorizontalGroup();
         engineHG.space(ROW_HORIZONTAL_SPACING);
 
-        Image image = new Image(engineTexture);
+        Image image = new Image(SpitfireGame.ResHelper.engine);
 
         VerticalGroup textVerticalGroup = new VerticalGroup();
         textVerticalGroup.columnAlign(Align.left);
 
         Label title = new Label(StringHelper.ENGINE, whiteLabelStyle);
-        title.setFontScale(verySmallFontSize);
+        title.setFontScale(FONT_SIZE_2);
         final Label level = new Label(LEVEL + game.getEngineLevel(game.getCurrentPlayerType()), whiteLabelStyle);
-        level.setFontScale(verySmallFontSize);
+        level.setFontScale(FONT_SIZE_2);
 
-        final Image moneyImg = new Image(moneyTexture);
+        final Image moneyImg = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getEngineUpgradeCost(game.getCurrentPlayerType()), smallFontSize);
+        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getEngineUpgradeCost(game.getCurrentPlayerType()), FONT_SIZE_3);
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
@@ -322,19 +312,19 @@ public class UpgradesScreen extends AbstractScreen
         missileHG = new HorizontalGroup();
         missileHG.space(ROW_HORIZONTAL_SPACING);
 
-        Image image = new Image(missileTexture);
+        Image image = new Image(SpitfireGame.ResHelper.missile);
 
         VerticalGroup textVerticalGroup = new VerticalGroup();
         textVerticalGroup.columnAlign(Align.left);
 
         Label title = new Label(StringHelper.MISSILES, whiteLabelStyle);
-        title.setFontScale(verySmallFontSize);
+        title.setFontScale(FONT_SIZE_2);
         final Label level = new Label(LEVEL + game.getMissileLevel(game.getCurrentPlayerType()), whiteLabelStyle);
-        level.setFontScale(verySmallFontSize);
+        level.setFontScale(FONT_SIZE_2);
 
-        final Image moneyImg = new Image(moneyTexture);
+        final Image moneyImg = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getMissileUpgradeCost(game.getCurrentPlayerType()), smallFontSize);
+        final MyTextButton upgradeButton = new MyTextButton(StringHelper.UPGRADE + game.getMissileUpgradeCost(game.getCurrentPlayerType()), FONT_SIZE_3);
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
@@ -432,16 +422,16 @@ public class UpgradesScreen extends AbstractScreen
 
     private void upgradeMG(int newLevel, TextButton upgradeButton, Label levelLabel)
     {
-        if (game.getMoney() >= game.getMGUpgradeCost(game.getCurrentPlayerType()))
+        if (game.playerManager.getMoney() >= game.getMGUpgradeCost(game.getCurrentPlayerType()))
         {
             int olderUpgradeCost = game.getMGUpgradeCost(game.getCurrentPlayerType());
-            game.subtractMoney(game.getMGUpgradeCost(game.getCurrentPlayerType()));
+            game.playerManager.subtractMoney(game.getMGUpgradeCost(game.getCurrentPlayerType()));
             game.setMGLevel(game.getCurrentPlayerType(), newLevel);
             upgradeButton.setText(UPGRADE + game.getMGUpgradeCost(game.getCurrentPlayerType()));
             System.out.println("MG upgraded to level " + game.getMGLevel(game.getCurrentPlayerType()) + ". Spent " + olderUpgradeCost);
 
             levelLabel.setText(LEVEL + game.getMGLevel(game.getCurrentPlayerType()));
-            moneyLabel.setText(Integer.toString(game.getMoney()));
+            moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
         }
@@ -454,16 +444,16 @@ public class UpgradesScreen extends AbstractScreen
 
     private void upgradeEngine(int newLevel, TextButton upgradeButton, Label levelLabel)
     {
-        if (game.getMoney() >= game.getEngineUpgradeCost(game.getCurrentPlayerType()))
+        if (game.playerManager.getMoney() >= game.getEngineUpgradeCost(game.getCurrentPlayerType()))
         {
             int olderUpgradeCost = game.getEngineUpgradeCost(game.getCurrentPlayerType());
-            game.subtractMoney(game.getEngineUpgradeCost(game.getCurrentPlayerType()));
+            game.playerManager.subtractMoney(game.getEngineUpgradeCost(game.getCurrentPlayerType()));
             game.setEngineLevel(game.getCurrentPlayerType(), newLevel);
             upgradeButton.setText(UPGRADE + game.getEngineUpgradeCost(game.getCurrentPlayerType()));
             System.out.println("Engine upgraded to level " + game.getEngineLevel(game.getCurrentPlayerType()) + ". Spent " + olderUpgradeCost);
 
             levelLabel.setText(LEVEL + game.getEngineLevel(game.getCurrentPlayerType()));
-            moneyLabel.setText(Integer.toString(game.getMoney()));
+            moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
         }
@@ -476,16 +466,16 @@ public class UpgradesScreen extends AbstractScreen
 
     private void upgradeMissile(int newLevel, TextButton upgradeButton, Label levelLabel)
     {
-        if (game.getMoney() >= game.getMissileUpgradeCost(game.getCurrentPlayerType()))
+        if (game.playerManager.getMoney() >= game.getMissileUpgradeCost(game.getCurrentPlayerType()))
         {
             int olderUpgradeCost = game.getMissileUpgradeCost(game.getCurrentPlayerType());
-            game.subtractMoney(game.getMissileUpgradeCost(game.getCurrentPlayerType()));
+            game.playerManager.subtractMoney(game.getMissileUpgradeCost(game.getCurrentPlayerType()));
             game.setMissileLevel(game.getCurrentPlayerType(), newLevel);
             upgradeButton.setText(UPGRADE + game.getMissileUpgradeCost(game.getCurrentPlayerType()));
             System.out.println("Missiles upgraded to level " + game.getMissileLevel(game.getCurrentPlayerType()) + ". Spent " + olderUpgradeCost);
 
             levelLabel.setText(LEVEL + game.getMissileLevel(game.getCurrentPlayerType()));
-            moneyLabel.setText(Integer.toString(game.getMoney()));
+            moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
         }
@@ -498,7 +488,7 @@ public class UpgradesScreen extends AbstractScreen
 
     private void initBackButton()
     {
-        backButton = new MyTextButton(StringHelper.BACK, smallFontSize);
+        backButton = new MyTextButton(StringHelper.BACK, FONT_SIZE_3);
         backButton.addListener(new ClickListener()
         {
             @Override
@@ -512,10 +502,10 @@ public class UpgradesScreen extends AbstractScreen
 
     private void initMoneyHG()
     {
-        moneyImage = new Image(moneyTexture);
+        moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        moneyLabel = new Label(Integer.toString(game.getMoney()), whiteLabelStyle);
-        moneyLabel.setFontScale(verySmallFontSize);
+        moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
+        moneyLabel.setFontScale(FONT_SIZE_2);
 
         moneyHG = new HorizontalGroup();
         moneyHG.space(10);
@@ -526,10 +516,10 @@ public class UpgradesScreen extends AbstractScreen
     private void initTitle()
     {
         titleLabel = new Label("UPGRADES FOR", whiteLabelStyle);
-        titleLabel.setFontScale(normalFontSize);
+        titleLabel.setFontScale(FONT_SIZE_6);
 
-        currentPlaneLabel = new Label(game.getCurrentPlayerTypeString(), orangeLabelStyle);
-        currentPlaneLabel.setFontScale(normalFontSize);
+        currentPlaneLabel = new Label(game.getCurrentPlayerTypeString(), SpitfireGame.ResHelper.orangeLabelStyle);
+        currentPlaneLabel.setFontScale(FONT_SIZE_6);
     }
 
     @Override
@@ -538,23 +528,9 @@ public class UpgradesScreen extends AbstractScreen
         super.render(delta);
 
         spriteBatch.begin();
-
-        spriteBatch.draw(bgTexture, 0, 0);
-
+        spriteBatch.draw(SpitfireGame.ResHelper.hangar, 0, 0);
         spriteBatch.end();
 
         stage.draw();
-    }
-
-    @Override
-    public void dispose()
-    {
-        bgTexture.dispose();
-        moneyTexture.dispose();
-        mgTexture.dispose();
-        engineTexture.dispose();
-        missileTexture.dispose();
-
-        super.dispose();
     }
 }

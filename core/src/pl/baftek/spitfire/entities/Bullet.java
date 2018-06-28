@@ -3,6 +3,7 @@ package pl.baftek.spitfire.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Disposable;
 
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.enums.PlayerType;
@@ -10,10 +11,8 @@ import pl.baftek.spitfire.enums.PlayerType;
 public class Bullet extends GameObject implements Projectile
 {
     private static Texture texture;
-    private static final Sound normalShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.mp3"));
-    private static final Sound strongShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/hmg_shoot.mp3"));
     private float soundVolume;
-    private static Sound sound;
+    private Sound sound;
 
     private static final float DAMAGE_SPITFIRE = 0.5f;
     private static final float DAMAGE_IL2 = 0.75f;
@@ -22,12 +21,12 @@ public class Bullet extends GameObject implements Projectile
     private static int bulletSpeed;
     private float damage;
 
-    public Bullet(float x, float y, PlayerType playerType)
+    public Bullet(float x, float y, PlayerType playerType, SpitfireGame game)
     {
         if (playerType == PlayerType.SPITFIRE)
         {
             damage = DAMAGE_SPITFIRE;
-            sound = normalShootSound;
+            sound = SpitfireGame.ResHelper.normalShootSound;
             soundVolume = 0.5f;
             texture = new Texture("bullet1.png");
             bulletSpeed = 1700;
@@ -36,16 +35,16 @@ public class Bullet extends GameObject implements Projectile
         else if (playerType == PlayerType.MUSTANG)
         {
             damage = DAMAGE_MUSTANG;
-            sound = strongShootSound;
+            sound = SpitfireGame.ResHelper.strongShootSound;
             soundVolume = 0.25f;
             texture = new Texture("bullet2.png");
             bulletSpeed = 2200;
         }
 
-        else if (playerType == PlayerType.IL2)
+        else if (playerType == PlayerType.SZTURMOVIK)
         {
             damage = DAMAGE_IL2;
-            sound = normalShootSound;
+            sound = SpitfireGame.ResHelper.normalShootSound;
             soundVolume = 0.5f;
             texture = new Texture("bullet1.png");
             bulletSpeed = 1600;
@@ -57,7 +56,7 @@ public class Bullet extends GameObject implements Projectile
         this.width = texture.getWidth();
         this.height = texture.getHeight();
 
-        SpitfireGame.playSound(sound, soundVolume);
+        game.playSound(sound, soundVolume);
     }
 
     public void move()

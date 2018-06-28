@@ -13,14 +13,16 @@ import com.badlogic.gdx.utils.Align;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.screens.AbstractScreen;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
+
 public class PopupLabel extends Label
 {
     public PopupLabel(CharSequence text, Color color, final Stage stage)
     {
-        super(text, AbstractScreen.whiteLabelStyle);
+        super(text, whiteLabelStyle);
 
         setColor(color);
-        setFontScale(AbstractScreen.smallFontSize);
+        setFontScale(AbstractScreen.FONT_SIZE_3);
         setPosition(SpitfireGame.WIDTH / 2, SpitfireGame.HEIGHT / 2 + 350, Align.center);
         setAlignment(Align.center);
 

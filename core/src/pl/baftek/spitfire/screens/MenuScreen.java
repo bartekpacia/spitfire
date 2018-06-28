@@ -2,7 +2,6 @@ package pl.baftek.spitfire.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,6 +19,14 @@ import pl.baftek.spitfire.ui.InfoDialog;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.blueLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeButtonStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
+import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
+
 public class MenuScreen extends AbstractScreen
 {
     private static final String TAG = "MenuScreen";
@@ -30,17 +37,13 @@ public class MenuScreen extends AbstractScreen
     private VerticalGroup buttonsGroup;
 
     private MyTextButton playerButton;
+    private MyTextButton creditsButton;
 
     private Label titleLabel;
     private Label creatorLabel;
     private Label signLabel;
-    private Label versionTypeLabel;
+    private Label versionLabel;
     private TextButton bonusButton;
-
-    private Texture leaderboardTexture;
-    private Texture achievementsTexture;
-    private Texture playGamesTexture;
-    private Texture moneyTexture;
 
     private Image playGamesImage;
 
@@ -52,13 +55,8 @@ public class MenuScreen extends AbstractScreen
     @Override
     protected void init()
     {
-        leaderboardTexture = new Texture("leaderboards.png");
-        achievementsTexture = new Texture("achievement.png");
-        playGamesTexture = new Texture("play_games.png");
-        moneyTexture = new Texture("money_tiny.png");
-
-        boolean resumeSession = SpitfireGame.gameServiceClient.resumeSession();
-        Gdx.app.log("SpitfireGame.gameServiceClient.resumeSession()", Boolean.toString(resumeSession));
+        playGamesImage = new Image(SpitfireGame.ResHelper.playGames);
+        game.gameServiceClient.resumeSession();
     }
 
     @Override
@@ -70,20 +68,22 @@ public class MenuScreen extends AbstractScreen
         initTitle();
         initPlayGamesImageAndLabel();
         initBonusButton();
+        initCreditsButton();
 
         menuTable = new Table();
 
         menuTable.add(upGroup).padBottom(80).row();
         menuTable.add(midGroup).row();
-        menuTable.add(versionTypeLabel).padBottom(200).row();
-        menuTable.add(buttonsGroup).padBottom(60).row();
+        menuTable.add(versionLabel).padBottom(180).row();
+        menuTable.add(buttonsGroup).padBottom(30).row();
         menuTable.add(playGamesImage).row();
-        menuTable.add(signLabel).padBottom(50).row();
-        menuTable.add(creatorLabel).left().row();
+        menuTable.add(signLabel).padBottom(40).row();
+        menuTable.add(creatorLabel).left().bottom().row();
+        menuTable.add(creditsButton).left().row();
         menuTable.top();
         menuTable.setFillParent(true);
 
-        SpitfireGame.gameServiceClient.setListener(new IGameServiceListener()
+        game.gameServiceClient.setListener(new IGameServiceListener()
         {
             @Override
             public void gsOnSessionActive()
@@ -110,23 +110,38 @@ public class MenuScreen extends AbstractScreen
         updatePlayGamesUI();
     }
 
+    private void initCreditsButton()
+    {
+        creditsButton = new MyTextButton("Credits", AbstractScreen.FONT_SIZE_3);
+        creditsButton.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                InfoDialog dialog = new InfoDialog("Credits", StringHelper.CREDITS_TEXT, "OK");
+                dialog.show(stage);
+                super.clicked(event, x, y);
+            }
+        });
+    }
+
     private void initStatusGroup()
     {
-        Label moneyLabel = new Label(Integer.toString(game.getMoney()), whiteLabelStyle);
-        moneyLabel.setFontScale(verySmallFontSize);
+        Label moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
+        moneyLabel.setFontScale(FONT_SIZE_2);
 
-        Image moneyImg = new Image(moneyTexture);
+        Image moneyImg = new Image(SpitfireGame.ResHelper.smallMoney);
 
         HorizontalGroup horizontalGroup = new HorizontalGroup();
         horizontalGroup.space(10);
         horizontalGroup.addActor(moneyLabel);
         horizontalGroup.addActor(moneyImg);
 
-        Label lvlLabel = new Label("LVL " + game.getPlayerLevel(), greenLabelStyle);
-        lvlLabel.setFontScale(verySmallFontSize);
+        Label lvlLabel = new Label("LVL " + game.playerManager.getLevel(), greenLabelStyle);
+        lvlLabel.setFontScale(FONT_SIZE_2);
 
-        Label xpLabel = new Label(game.getXp() + " / " + game.getXpForNextLevel() + " XP", greenLabelStyle);
-        xpLabel.setFontScale(verySmallFontSize);
+        Label xpLabel = new Label(game.playerManager.getXp() + " / " + game.playerManager.getXpForNextLevel() + " XP", greenLabelStyle);
+        xpLabel.setFontScale(FONT_SIZE_2);
 
         upGroup = new HorizontalGroup();
         upGroup.space(30);
@@ -137,7 +152,7 @@ public class MenuScreen extends AbstractScreen
 
     private void initMidGroup()
     {
-        playerButton = new MyTextButton("placeholder", smallFontSize);
+        playerButton = new MyTextButton("placeholder", FONT_SIZE_3);
 
         playerButton.addListener(new ClickListener()
         {
@@ -149,18 +164,24 @@ public class MenuScreen extends AbstractScreen
             }
         });
 
-        Image imageLeaderboards = new Image(leaderboardTexture);
+        Image imageLeaderboards = new Image(SpitfireGame.ResHelper.leaderboard);
         imageLeaderboards.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.setScreen(new LeaderboardsScreen(game));
+                try
+                {
+                    game.gameServiceClient.showLeaderboards(LEADERBOARD_HIGH_SCORE);
+                } catch (GameServiceException e)
+                {
+                    e.printStackTrace();
+                }
                 super.clicked(event, x, y);
             }
         });
 
-        Image imageAchievements = new Image(achievementsTexture);
+        Image imageAchievements = new Image(SpitfireGame.ResHelper.achievements);
         imageAchievements.addListener(new ClickListener()
         {
             @Override
@@ -168,7 +189,7 @@ public class MenuScreen extends AbstractScreen
             {
                 try
                 {
-                    SpitfireGame.gameServiceClient.showAchievements();
+                    game.gameServiceClient.showAchievements();
                 } catch (GameServiceException e)
                 {
                     e.printStackTrace();
@@ -192,13 +213,13 @@ public class MenuScreen extends AbstractScreen
 
     private void initButtons()
     {
-        MyTextButton buttonPlay = new MyTextButton("PLAY", normalFontSize);
+        MyTextButton buttonPlay = new MyTextButton("PLAY", FONT_SIZE_5);
         buttonPlay.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (SpitfireGame.gameServiceClient.isSessionActive())
+                if (game.gameServiceClient.isSessionActive())
                 {
                     game.setScreen(new GameplayScreen(game));
                 } else
@@ -210,7 +231,7 @@ public class MenuScreen extends AbstractScreen
             }
         });
 
-        MyTextButton buttonUpgrades = new MyTextButton("HANGAR", normalFontSize);
+        MyTextButton buttonUpgrades = new MyTextButton("HANGAR", FONT_SIZE_5);
         buttonUpgrades.addListener(new ClickListener()
         {
             @Override
@@ -221,7 +242,7 @@ public class MenuScreen extends AbstractScreen
             }
         });
 
-        MyTextButton settingsButton = new MyTextButton("SETTINGS", normalFontSize);
+        MyTextButton settingsButton = new MyTextButton("SETTINGS", FONT_SIZE_5);
         settingsButton.addListener(new ClickListener()
         {
             @Override
@@ -233,7 +254,7 @@ public class MenuScreen extends AbstractScreen
         });
 
         buttonsGroup = new VerticalGroup();
-        buttonsGroup.space(40);
+        buttonsGroup.space(30);
 
         buttonsGroup.addActor(buttonPlay);
 
@@ -243,21 +264,21 @@ public class MenuScreen extends AbstractScreen
 
     private void initPlayGamesImageAndLabel()
     {
-        playGamesImage = new Image(playGamesTexture);
+        playGamesImage = new Image(SpitfireGame.ResHelper.playGames);
         signLabel = new Label(StringHelper.SIGNED_OUT, redLabelStyle);
-        signLabel.setFontScale(verySmallFontSize);
+        signLabel.setFontScale(FONT_SIZE_2);
 
         playGamesImage.addListener(new ClickListener()
         {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                if (SpitfireGame.gameServiceClient.isSessionActive())
+                if (game.gameServiceClient.isSessionActive())
                 {
-                    SpitfireGame.gameServiceClient.logOff();
+                    game.gameServiceClient.logOff();
                 } else
                 {
-                    SpitfireGame.gameServiceClient.logIn();
+                    game.gameServiceClient.logIn();
                 }
 
                 updatePlayGamesUI();
@@ -270,24 +291,24 @@ public class MenuScreen extends AbstractScreen
     private void initTitle()
     {
         titleLabel = new Label("SPITFIRE", redLabelStyle);
-        titleLabel.setFontScale(hugeFontSize);
+        titleLabel.setFontScale(FONT_SIZE_7);
+
+        versionLabel = new Label(StringHelper.VERSION, blueLabelStyle);
+        versionLabel.setFontScale(FONT_SIZE_1);
 
         creatorLabel = new Label("created by Baftek", whiteLabelStyle);
-        creatorLabel.setFontScale(picoFontSize);
-
-        versionTypeLabel = new Label(StringHelper.VERSION_NAME + StringHelper.VERSION, blueLabelStyle);
-        versionTypeLabel.setFontScale(ultraSmallFontSize);
+        creatorLabel.setFontScale(FONT_SIZE_0);
     }
 
     private void updatePlayGamesUI()
     {
         String string;
-        if (SpitfireGame.gameServiceClient.isSessionActive())
+        if (game.gameServiceClient.isSessionActive())
         {
             string = StringHelper.SIGNED_IN;
             signLabel.setText(string);
             signLabel.setStyle(greenLabelStyle);
-            playerButton.setText(SpitfireGame.gameServiceClient.getPlayerDisplayName());
+            playerButton.setText(game.gameServiceClient.getPlayerDisplayName());
         } else
         {
             string = StringHelper.SIGNED_OUT;
@@ -308,7 +329,7 @@ public class MenuScreen extends AbstractScreen
     private void initBonusButton()
     {
         bonusButton = new TextButton("DAILY BONUS!", orangeButtonStyle);
-        bonusButton.getLabel().setFontScale(AbstractScreen.smallFontSize);
+        bonusButton.getLabel().setFontScale(AbstractScreen.FONT_SIZE_3);
         bonusButton.addListener(new ClickListener()
         {
             @Override
@@ -319,7 +340,7 @@ public class MenuScreen extends AbstractScreen
                     @Override
                     protected void result(Object object)
                     {
-                        if (object.equals(true))
+                        if (object.equals(Boolean.TRUE))
                         {
                             game.setScreen(new GameplayScreen(game));
                         }
@@ -327,7 +348,7 @@ public class MenuScreen extends AbstractScreen
                     }
                 };
 
-                MyTextButton playButton = new MyTextButton("PLAY!", smallFontSize);
+                MyTextButton playButton = new MyTextButton("PLAY!", FONT_SIZE_3);
                 dialog.button(playButton, true);
 
                 dialog.show(stage);
@@ -341,16 +362,5 @@ public class MenuScreen extends AbstractScreen
             stage.addActor(bonusButton);
             bonusButton.setPosition(SpitfireGame.WIDTH / 2 - bonusButton.getWidth() / 2, SpitfireGame.HEIGHT / 2 + 110);
         }
-    }
-
-    @Override
-    public void dispose()
-    {
-        leaderboardTexture.dispose();
-        achievementsTexture.dispose();
-        playGamesTexture.dispose();
-        moneyTexture.dispose();
-
-        super.dispose();
     }
 }

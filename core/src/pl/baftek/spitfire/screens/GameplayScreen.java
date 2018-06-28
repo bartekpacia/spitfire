@@ -1,10 +1,7 @@
 package pl.baftek.spitfire.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -35,11 +32,18 @@ import pl.baftek.spitfire.enums.EnemyType;
 import pl.baftek.spitfire.enums.GameState;
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
+import pl.baftek.spitfire.game.SpitfireGame.ResHelper;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
 
 import static com.badlogic.gdx.math.MathUtils.random;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.cyanLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.yellowLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.SCORE;
 
 public class GameplayScreen extends AbstractScreen
@@ -67,17 +71,6 @@ public class GameplayScreen extends AbstractScreen
     private Button buttonRight;
     private Image buttonPause;
 
-    private Sound explosionSound;
-    private Sound maydaySound;
-    private Sound bonusSound;
-    private Sound bigExplosionSound;
-    private Sound missileLaunch;
-
-    private ParticleEffect explosion;
-    private ParticleEffect bigExplosion;
-    private ParticleEffect bonusExplosion;
-    private ParticleEffect ultraExplosion;
-
     private Iterator<Projectile> projectiletIter;
     private Iterator<Enemy> enemyIter;
     private Iterator<BonusDrop> bonusDropIter;
@@ -89,14 +82,14 @@ public class GameplayScreen extends AbstractScreen
     private long lastEnemySpawnTime;
     private int enemySpawnCooldownTime = 650000000;
 
-    private final int BUTTON_HEIGHT = 1030;
+    private final int BUTTON_HEIGHT = 970;
     private final int EXPLOSION_OFFSET = 15;
-    private int currentScore = 0;
-    private int currentMoney = 0;
-    private int currentXp = 0;
-    private int mgBoosts = SpitfireGame.getDefaultMGBoostsCount();
-    private int nukes = SpitfireGame.getDefaultNukeCount();
-    private int engineBoosts = SpitfireGame.getDefaultEngineBoostsCount();
+    private int currentScore;
+    private int currentMoney;
+    private int currentXp;
+    private int mgBoosts;
+    private int nukes;
+    private int engineBoosts;
     private int counterHelper;
 
     private boolean spawnEnemies = true;
@@ -105,17 +98,22 @@ public class GameplayScreen extends AbstractScreen
 
     private boolean leftButtonPressed;
     private boolean rightButtonPressed;
-    private boolean gameEnded = false;
     private boolean nukeUsed = false;
     private boolean mgBoostUsed = false;
     private boolean engineBoostUsed = false;
     private boolean nukeActive = false;
 
+    /**
+     * Used to invoke {@link #gameOver()} only once.
+     */
+    private boolean gameOverCompleted = false;
+
     private Table table;
 
     private HorizontalGroup upHG;
     private HorizontalGroup midHG;
-    private HorizontalGroup downHG;
+    private HorizontalGroup boostsIconsHG;
+    private HorizontalGroup boostsCountHG;
     private VerticalGroup deadVG;
     private VerticalGroup pauseVG;
 
@@ -124,18 +122,10 @@ public class GameplayScreen extends AbstractScreen
 
     private boolean bomberSpawned;
 
-    private Texture bgTexture;
-    private Texture moneyTexture;
-    private Texture mgBoostTexture;
-    private Texture nukeTexture;
-    private Texture engineBoostTexture;
-    private Texture playTextureTemp;
-    private Texture pauseTextureTemp;
-
     private TextureRegionDrawable playDrawable;
     private TextureRegionDrawable pauseDrawable;
 
-    private float bgY = 0;
+    private float bgY;
 
     GameplayScreen(SpitfireGame game)
     {
@@ -161,6 +151,10 @@ public class GameplayScreen extends AbstractScreen
         refreshAchievementsAndLeaderboards();
 
         SpitfireGame.setGameState(GameState.RUN);
+
+        mgBoosts = game.playerManager.getMgBoosts();
+        nukes = game.playerManager.getNukes();
+        engineBoosts = game.playerManager.getEngineBoosts();
     }
 
     @Override
@@ -174,14 +168,17 @@ public class GameplayScreen extends AbstractScreen
 
         midHG = new HorizontalGroup();
 
-        downHG = new HorizontalGroup();
-        downHG.space(40);
+        boostsIconsHG = new HorizontalGroup();
+        boostsIconsHG.space(130);
+
+        boostsCountHG = new HorizontalGroup();
+        boostsCountHG.space(240);
 
         deadVG = new VerticalGroup();
         deadVG.space(30);
         deadVG.center();
 
-        MyTextButton buttonMenu = new MyTextButton(StringHelper.GO_TO_MENU, mediumFontSize);
+        MyTextButton buttonMenu = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_4);
         buttonMenu.setPosition(SpitfireGame.WIDTH / 2, SpitfireGame.HEIGHT / 2 - 50);
         buttonMenu.addListener(new ClickListener()
         {
@@ -218,16 +215,20 @@ public class GameplayScreen extends AbstractScreen
         midHG.addActor(buttonLeft);
         midHG.addActor(buttonRight);
 
-        downHG.addActor(mgImage);
-        downHG.addActor(mgLabel);
-        downHG.addActor(nukeImage);
-        downHG.addActor(nukeLabel);
-        downHG.addActor(engineBoostImage);
-        downHG.addActor(engineBoostLabel);
+        //add boosts icons
+        boostsIconsHG.addActor(mgImage);
+        boostsIconsHG.addActor(nukeImage);
+        boostsIconsHG.addActor(engineBoostImage);
+
+        //add boosts count
+        boostsCountHG.addActor(mgLabel);
+        boostsCountHG.addActor(nukeLabel);
+        boostsCountHG.addActor(engineBoostLabel);
 
         table.add(upHG).row();
         table.add(midHG).row();
-        table.add(downHG).row();
+        table.add(boostsIconsHG).row();
+        table.add(boostsCountHG).row();
         table.top();
         table.setFillParent(true);
 
@@ -246,7 +247,8 @@ public class GameplayScreen extends AbstractScreen
             drawAndMoveBackground(true);
             update();
             updatePlayer();
-        } else
+        }
+        else
         {
             drawAndMoveBackground(false);
         }
@@ -258,10 +260,10 @@ public class GameplayScreen extends AbstractScreen
         String text = SCORE + ": " + currentScore;
         scoreLabel.setText(text);
 
-        explosion.draw(spriteBatch, delta);
-        bigExplosion.draw(spriteBatch, delta);
-        bonusExplosion.draw(spriteBatch, delta);
-        ultraExplosion.draw(spriteBatch, delta);
+        ResHelper.explosion.draw(spriteBatch, delta);
+        ResHelper.bigExplosion.draw(spriteBatch, delta);
+        ResHelper.bonusExplosion.draw(spriteBatch, delta);
+        ResHelper.ultraExplosion.draw(spriteBatch, delta);
 
         spriteBatch.end();
 
@@ -283,21 +285,11 @@ public class GameplayScreen extends AbstractScreen
             @Override
             public void run()
             {
-                Gdx.app.log(TAG, "refreshing achievements and leaderboard");
+                Gdx.app.log(TAG, "Refreshing achievements and leaderboards");
 
-                if (game.getDestroyedEnemies() > 0)
+                if (currentScore > 0)
                 {
                     game.unlockAchievement(Achievement.FIRST_BLOOD);
-                }
-
-                if (game.getDestroyedEnemies() == 100)
-                {
-                    game.unlockAchievement(Achievement.ACE);
-                }
-
-                if (game.getEarnedMoney() >= 1000)
-                {
-                    game.unlockAchievement(Achievement.CROESUS);
                 }
 
                 if (mgBoostUsed)
@@ -322,7 +314,7 @@ public class GameplayScreen extends AbstractScreen
 
     private void initShootTask()
     {
-        if (game.getCurrentPlayerType() == PlayerType.IL2)
+        if (game.getCurrentPlayerType() == PlayerType.SZTURMOVIK)
         {
             shootTimer.scheduleTask(new Timer.Task()
             {
@@ -351,47 +343,8 @@ public class GameplayScreen extends AbstractScreen
 
     private void initAssets()
     {
-        //explosions
-        //don't forget to draw explosions in render()
-
-        explosion = new ParticleEffect();
-        explosion.load(Gdx.files.internal("particles/explosion.p"), Gdx.files.internal(""));
-        explosion.start();
-
-        bigExplosion = new ParticleEffect();
-        bigExplosion.load(Gdx.files.internal("particles/big_explosion.p"), Gdx.files.internal(""));
-        bigExplosion.start();
-
-        bonusExplosion = new ParticleEffect();
-        bonusExplosion.load(Gdx.files.internal("particles/bonus_explosion.p"), Gdx.files.internal(""));
-        bonusExplosion.start();
-
-        ultraExplosion = new ParticleEffect();
-        ultraExplosion.load(Gdx.files.internal("particles/ultra_explosion.p"), Gdx.files.internal(""));
-        ultraExplosion.start();
-
-        //sound
-
-        explosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/explosion.mp3"));
-        maydaySound = Gdx.audio.newSound(Gdx.files.internal("audio/mayday.mp3"));
-        bonusSound = Gdx.audio.newSound(Gdx.files.internal("audio/bonus.mp3"));
-        bigExplosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/big_explosion.mp3"));
-        missileLaunch = Gdx.audio.newSound(Gdx.files.internal("audio/missile_launch.mp3"));
-
-        //textures
-
-        bgTexture = new Texture("bgsky.jpg");
-        moneyTexture = new Texture("money_tiny.png");
-
-        mgBoostTexture = new Texture("mg_boost.png");
-        nukeTexture = new Texture("nuke.png");
-        engineBoostTexture = new Texture("engine_boost.png");
-
-        playTextureTemp = new Texture(Gdx.files.internal("play.png"));
-        pauseTextureTemp = new Texture(Gdx.files.internal("pause.png"));
-
-        playDrawable = new TextureRegionDrawable(new TextureRegion(playTextureTemp));
-        pauseDrawable = new TextureRegionDrawable(new TextureRegion(pauseTextureTemp));
+        playDrawable = new TextureRegionDrawable(new TextureRegion(ResHelper.play));
+        pauseDrawable = new TextureRegionDrawable(new TextureRegion(ResHelper.pause));
     }
 
     private void drawGameObjects()
@@ -425,7 +378,7 @@ public class GameplayScreen extends AbstractScreen
         scoreLabel = new Label(StringHelper.SCORE + ": " + currentScore, whiteLabelStyle);
         scoreLabel.setFontScale(0.4f);
 
-        highScoreLabel = new Label(StringHelper.HIGH + ": " + game.getHighScore(), whiteLabelStyle);
+        highScoreLabel = new Label(StringHelper.HIGH + ": " + game.playerManager.getHighScore(), whiteLabelStyle);
         highScoreLabel.setFontScale(0.4f);
 
         buttonPause = new Image(pauseDrawable);
@@ -441,12 +394,14 @@ public class GameplayScreen extends AbstractScreen
                     counterHelper = 0;
                     pauseVG.remove();
 
-                } else if (SpitfireGame.getGameState() == GameState.RUN)
+                }
+                else if (SpitfireGame.getGameState() == GameState.RUN)
                 {
                     SpitfireGame.setGameState(GameState.PAUSE);
                     new PopupLabel(StringHelper.GAME_PAUSED, Color.CHARTREUSE, stage);
                     stage.addActor(pauseVG);
                 }
+
                 super.clicked(event, x, y);
             }
         });
@@ -457,16 +412,16 @@ public class GameplayScreen extends AbstractScreen
         if (SpitfireGame.getGameState() == GameState.PAUSE)
         {
             buttonPause.setDrawable(playDrawable);
-        } else if (SpitfireGame.getGameState() == GameState.RUN)
+        }
+        else if (SpitfireGame.getGameState() == GameState.RUN)
         {
             buttonPause.setDrawable(pauseDrawable);
         }
-
     }
 
     private void drawAndMoveBackground(boolean moveBackground)
     {
-        spriteBatch.draw(bgTexture, 0, bgY);
+        spriteBatch.draw(ResHelper.sky, 0, bgY);
 
         if (moveBackground)
         {
@@ -482,7 +437,7 @@ public class GameplayScreen extends AbstractScreen
 
     private void refreshAchievementsAndLeaderboards()
     {
-        if (SpitfireGame.gameServiceClient != null)
+        if (game.gameServiceClient != null)
         {
             playServicesRefreshTask.run();
         }
@@ -531,11 +486,12 @@ public class GameplayScreen extends AbstractScreen
                     enemyBrokeThrough = true;
                     enemyIter.remove();
                     continue;
-                } else if (enemy.overlaps(player))
+                }
+                else if (enemy.overlaps(player))
                 {
-                    SpitfireGame.playSound(maydaySound, 0.75f);
-                    bigExplosion.reset();
-                    bigExplosion.getEmitters().first().setPosition(player.x + player.getTexture().getWidth() / 2, player.y + player.getTexture().getWidth() / 2);
+                    game.playSound(ResHelper.maydaySound, 0.75f);
+                    ResHelper.bigExplosion.reset();
+                    ResHelper.bigExplosion.getEmitters().first().setPosition(player.x + player.getTexture().getWidth() / 2, player.y + player.getTexture().getWidth() / 2);
 
                     SpitfireGame.setGameState(GameState.GAMEOVER);
 
@@ -556,9 +512,9 @@ public class GameplayScreen extends AbstractScreen
 
                     if (projectile.overlaps(enemy))
                     {
-                        SpitfireGame.playSound(explosionSound, 0.6f);
-                        explosion.reset();
-                        explosion.getEmitters().first().setPosition(projectile.getX(), projectile.getY() + EXPLOSION_OFFSET);
+                        game.playSound(ResHelper.explosionSound, 0.6f);
+                        ResHelper.explosion.reset();
+                        ResHelper.explosion.getEmitters().first().setPosition(projectile.getX(), projectile.getY() + EXPLOSION_OFFSET);
 
                         projectiletIter.remove();
                         enemy.setHp(enemy.getHp() - projectile.getDamage());
@@ -585,11 +541,11 @@ public class GameplayScreen extends AbstractScreen
                 //number just for setting heigth of the bonusScoreLabel
                 int random = random(200, 400);
 
-                if (bonusDrop.getBonusDropType().equals(BonusDropType.POINTS_DROP))
+                if (bonusDrop.getBonusDropType().equals(BonusDropType.SCORE_DROP))
                 {
-                    SpitfireGame.playSound(bonusSound, 1f);
-                    bonusExplosion.reset();
-                    bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
+                    game.playSound(ResHelper.bonusSound, 1f);
+                    ResHelper.bonusExplosion.reset();
+                    ResHelper.bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
 
                     //score that will be added to currentScore
                     int bonusScore = random(20, 50);
@@ -609,11 +565,12 @@ public class GameplayScreen extends AbstractScreen
                             bonusScoreLabel.remove();
                         }
                     }, 1.5f);
-                } else if (bonusDrop.getBonusDropType() == BonusDropType.FIRERATE_DROP)
+                }
+                else if (bonusDrop.getBonusDropType() == BonusDropType.MG_DROP)
                 {
-                    SpitfireGame.playSound(bonusSound, 1f);
-                    bonusExplosion.reset();
-                    bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
+                    game.playSound(ResHelper.bonusSound, 1f);
+                    ResHelper.bonusExplosion.reset();
+                    ResHelper.bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
 
                     mgBoosts++;
                     mgLabel.setText(Integer.toString(mgBoosts));
@@ -631,16 +588,17 @@ public class GameplayScreen extends AbstractScreen
                             bonusScoreLabel.remove();
                         }
                     }, 1.5f);
-                } else if (bonusDrop.getBonusDropType() == BonusDropType.SPEED_DROP)
+                }
+                else if (bonusDrop.getBonusDropType() == BonusDropType.ENGINE_DROP)
                 {
-                    SpitfireGame.playSound(bonusSound, 1f);
-                    bonusExplosion.reset();
-                    bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
+                    game.playSound(ResHelper.bonusSound, 1f);
+                    ResHelper.bonusExplosion.reset();
+                    ResHelper.bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
 
                     engineBoosts++;
                     engineBoostLabel.setText(Integer.toString(engineBoosts));
 
-                    bonusScoreLabel.setStyle(blueLabelStyle);
+                    bonusScoreLabel.setStyle(cyanLabelStyle);
                     bonusScoreLabel.setText("+ ENG");
                     bonusScoreLabel.setPosition(player.x - random, player.y + random);
                     stage.addActor(bonusScoreLabel);
@@ -654,11 +612,12 @@ public class GameplayScreen extends AbstractScreen
                             bonusScoreLabel.remove();
                         }
                     }, 1.5f);
-                } else if (bonusDrop.getBonusDropType() == BonusDropType.NUKE_DROP)
+                }
+                else if (bonusDrop.getBonusDropType() == BonusDropType.NUKE_DROP)
                 {
-                    SpitfireGame.playSound(bonusSound, 0.7f);
-                    bonusExplosion.reset();
-                    bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
+                    game.playSound(ResHelper.bonusSound, 0.7f);
+                    ResHelper.bonusExplosion.reset();
+                    ResHelper.bonusExplosion.getEmitters().first().setPosition(bonusDrop.x + bonusDrop.getTexture().getWidth() / 2, bonusDrop.y + bonusDrop.getTexture().getWidth() / 2);
 
                     nukes++;
                     nukeLabel.setText(Integer.toString(nukes));
@@ -677,9 +636,10 @@ public class GameplayScreen extends AbstractScreen
                             bonusScoreLabel.remove();
                         }
                     }, 1.5f);
-                } else if (bonusDrop.getBonusDropType() == BonusDropType.FAKE)
+                }
+                else if (bonusDrop.getBonusDropType() == BonusDropType.FAKE)
                 {
-                    SpitfireGame.playSound(explosionSound, 1f);
+                    game.playSound(ResHelper.explosionSound, 1f);
                     playerDead = true;
                 }
 
@@ -701,27 +661,13 @@ public class GameplayScreen extends AbstractScreen
         bonusDrops.add(bonusDrop);
     }
 
-    private void addCurrentScore(float scoreToAdd)
-    {
-        currentScore += scoreToAdd;
-        game.addScore((int) scoreToAdd);
-
-        if (currentScore > game.getHighScore())
-        {
-            game.setHighScore(currentScore);
-            //this way, it produces less garbage
-            String scoreString = Integer.toString(game.getHighScore());
-            String bestScoreString = StringHelper.HIGH + scoreString;
-            highScoreLabel.setText(bestScoreString);
-        }
-    }
-
     private void updatePlayer()
     {
         if (enemyBrokeThrough || playerDead)
         {
             SpitfireGame.setGameState(GameState.GAMEOVER);
-        } else
+        }
+        else
         {
             if (leftButtonPressed)
             {
@@ -753,26 +699,28 @@ public class GameplayScreen extends AbstractScreen
             {
                 int height = 75;
 
-                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
-                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
+                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
+                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
 
                 projectiles.add(bullet1);
                 projectiles.add(bullet2);
-            } else if (game.getCurrentPlayerType() == PlayerType.MUSTANG)
+            }
+            else if (game.getCurrentPlayerType() == PlayerType.MUSTANG)
             {
                 int height = 70;
 
-                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
-                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
+                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
+                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
 
                 projectiles.add(bullet1);
                 projectiles.add(bullet2);
-            } else if (game.getCurrentPlayerType() == PlayerType.IL2)
+            }
+            else if (game.getCurrentPlayerType() == PlayerType.SZTURMOVIK)
             {
                 int height = 50;
 
-                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
-                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType());
+                Projectile bullet1 = new Bullet(player.x + player.getTexture().getWidth() / 2 - player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
+                Projectile bullet2 = new Bullet(player.x + player.getTexture().getWidth() / 2 + player.getTexture().getWidth() / 6, player.y + height, game.getCurrentPlayerType(), game);
 
                 projectiles.add(bullet1);
                 projectiles.add(bullet2);
@@ -784,7 +732,7 @@ public class GameplayScreen extends AbstractScreen
     {
         if (SpitfireGame.getGameState() == GameState.RUN)
         {
-            if (game.getCurrentPlayerType() == PlayerType.IL2)
+            if (game.getCurrentPlayerType() == PlayerType.SZTURMOVIK)
             {
                 Projectile missile;
 
@@ -794,12 +742,13 @@ public class GameplayScreen extends AbstractScreen
                 if (random == 0)
                 {
                     missile = new Missile(player.x + player.getTexture().getWidth() / 2 - 50, player.y + height);
-                } else
+                }
+                else
                 {
                     missile = new Missile(player.x + player.getTexture().getWidth() / 2 + 50, player.y + height);
                 }
 
-                SpitfireGame.playSound(missileLaunch, 1f);
+                game.playSound(ResHelper.missileLaunch, 1f);
 
                 projectiles.add(missile);
             }
@@ -816,10 +765,12 @@ public class GameplayScreen extends AbstractScreen
         if (i > 0 && i <= 80)
         {
             enemyType = EnemyType.BF109;
-        } else if (i > 80 && i <= 90)
+        }
+        else if (i > 80 && i <= 90)
         {
             enemyType = EnemyType.ME262;
-        } else if (i > 50 && i < 94)
+        }
+        else if (i > 50 && i < 94)
         {
             if (bomberAllowed)
             {
@@ -856,11 +807,13 @@ public class GameplayScreen extends AbstractScreen
                     }
                 }, 0.5f);
 
-            } else
+            }
+            else
             {
                 enemyType = EnemyType.ME262;
             }
-        } else
+        }
+        else
         {
             enemyType = EnemyType.JAPAN155;
         }
@@ -956,6 +909,21 @@ public class GameplayScreen extends AbstractScreen
         {
             enemySpawnCooldownTime = 290000000;
         }
+
+        if (currentScore > 2200)
+        {
+            enemySpawnCooldownTime = 270000000;
+        }
+
+        if (currentScore > 2500)
+        {
+            enemySpawnCooldownTime = 260000000;
+        }
+
+        if (currentScore > 3000)
+        {
+            enemySpawnCooldownTime = 245000000;
+        }
     }
 
     private void initButtonLeft()
@@ -1010,19 +978,19 @@ public class GameplayScreen extends AbstractScreen
 
     private void initBoostsGroup()
     {
-        mgLabel = new Label("MG", yellowLabelStyle);
+        mgLabel = new Label(Integer.toString(mgBoosts), yellowLabelStyle);
         mgLabel.setFontScale(0.5f);
-        mgLabel.setText(Integer.toString(mgBoosts));
+        //mgLabel.setText(Integer.toString(mgBoosts));
 
-        nukeLabel = new Label("NUKE", redLabelStyle);
+        nukeLabel = new Label(Integer.toString(nukes), redLabelStyle);
         nukeLabel.setFontScale(0.5f);
-        nukeLabel.setText(Integer.toString(nukes));
+        //nukeLabel.setText(Integer.toString(nukes));
 
-        engineBoostLabel = new Label("ENG", blueLabelStyle);
+        engineBoostLabel = new Label(Integer.toString(engineBoosts), cyanLabelStyle);
         engineBoostLabel.setFontScale(0.5f);
-        engineBoostLabel.setText(Integer.toString(engineBoosts));
+        //engineBoostLabel.setText(Integer.toString(engineBoosts));
 
-        mgImage = new Image(mgBoostTexture);
+        mgImage = new Image(ResHelper.mgBoost);
         mgImage.addListener(new ClickListener()
         {
             @Override
@@ -1034,7 +1002,7 @@ public class GameplayScreen extends AbstractScreen
             }
         });
 
-        nukeImage = new Image(nukeTexture);
+        nukeImage = new Image(ResHelper.nuke);
         nukeImage.addListener(new ClickListener()
         {
             @Override
@@ -1046,7 +1014,7 @@ public class GameplayScreen extends AbstractScreen
             }
         });
 
-        engineBoostImage = new Image(engineBoostTexture);
+        engineBoostImage = new Image(ResHelper.engineBoost);
         engineBoostImage.addListener(new ClickListener()
         {
             @Override
@@ -1130,9 +1098,9 @@ public class GameplayScreen extends AbstractScreen
                 if (!nukeActive)
                 {
                     nukeActive = true;
-                    SpitfireGame.playSound(bigExplosionSound, 1f);
-                    ultraExplosion.getEmitters().first().setPosition(SpitfireGame.WIDTH / 2, SpitfireGame.HEIGHT / 2);
-                    ultraExplosion.reset();
+                    game.playSound(ResHelper.bigExplosionSound, 1f);
+                    ResHelper.ultraExplosion.getEmitters().first().setPosition(SpitfireGame.WIDTH / 2, SpitfireGame.HEIGHT / 2);
+                    ResHelper.ultraExplosion.reset();
 
                     //kills all enemies! wohoo!
                     nukes--;
@@ -1143,8 +1111,8 @@ public class GameplayScreen extends AbstractScreen
                         int pointsToAdd = (int) enemy.getHp();
                         addCurrentScore(pointsToAdd);
 
-                        bigExplosion.getEmitters().first().setPosition(enemy.x + enemy.getTexture().getWidth() / 2, enemy.y + enemy.getTexture().getHeight() / 2);
-                        explosion.reset();
+                        ResHelper.bigExplosion.getEmitters().first().setPosition(enemy.x + enemy.getTexture().getWidth() / 2, enemy.y + enemy.getTexture().getHeight() / 2);
+                        ResHelper.explosion.reset();
 
                         destroyEnemy(enemy);
                     }
@@ -1169,11 +1137,10 @@ public class GameplayScreen extends AbstractScreen
 
     private void gameOver()
     {
-        if (!gameEnded)
+        if (SpitfireGame.getGameState() == GameState.GAMEOVER && !gameOverCompleted)
         {
             timer.stop();
             shootTimer.stop();
-            gameEnded = true;
             spawnEnemies = false;
 
             SpitfireGame.setGameState(GameState.GAMEOVER);
@@ -1184,6 +1151,42 @@ public class GameplayScreen extends AbstractScreen
 
             drawGameOverUI();
         }
+    }
+
+    private void addCurrentScore(float scoreToAdd)
+    {
+        currentScore += scoreToAdd;
+
+        game.playerManager.addScore((int) scoreToAdd);
+
+        if (currentScore > game.playerManager.getHighScore())
+        {
+            game.playerManager.setHighScore(currentScore);
+
+            highScoreLabel.setText("HIGH: " + game.playerManager.getHighScore());
+        }
+    }
+
+    private void addMoneyAndXp()
+    {
+        currentMoney = calculateMoney();
+        game.playerManager.addMoney(currentMoney);
+        game.playerManager.addXp(currentXp);
+    }
+
+    private int calculateMoney()
+    {
+        float randomvar = random(0.75f, 1.25f);
+        currentMoney = (int) (currentScore / 3f * randomvar);
+
+        if (SpitfireGame.isDailyBonusAvailable())
+        {
+            currentMoney = currentMoney * SpitfireGame.BONUS_MULTIPLIER;
+            System.out.println("DAILY BONUS WAS AVAILABLE");
+            new PopupLabel("Bonus " + Boolean.toString(SpitfireGame.isDailyBonusAvailable()), Color.GREEN, stage);
+        }
+
+        return currentMoney;
     }
 
     private void drawGameOverUI()
@@ -1200,12 +1203,12 @@ public class GameplayScreen extends AbstractScreen
         VerticalGroup lootGroup = new VerticalGroup();
 
         Label gameOverLabel = new Label("GAME OVER", redLabelStyle);
-        gameOverLabel.setFontScale(normalFontSize);
+        gameOverLabel.setFontScale(FONT_SIZE_6);
 
         orLabel = new Label("OR", whiteLabelStyle);
-        orLabel.setFontScale(ultraSmallFontSize);
+        orLabel.setFontScale(FONT_SIZE_1);
 
-        MyTextButton retryButton = new MyTextButton("RETRY", mediumFontSize);
+        MyTextButton retryButton = new MyTextButton("RETRY", FONT_SIZE_4);
         retryButton.addListener(new ClickListener()
         {
             @Override
@@ -1216,7 +1219,7 @@ public class GameplayScreen extends AbstractScreen
             }
         });
 
-        MyTextButton menuButton = new MyTextButton(StringHelper.GO_TO_MENU, mediumFontSize);
+        MyTextButton menuButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_4);
         menuButton.addListener(new ClickListener()
         {
             @Override
@@ -1229,15 +1232,15 @@ public class GameplayScreen extends AbstractScreen
 
 
         labelYouGet = new Label("You get", whiteLabelStyle);
-        labelYouGet.setFontScale(mediumFontSize);
+        labelYouGet.setFontScale(FONT_SIZE_4);
 
         labelMoney = new Label("+ " + currentMoney, greenLabelStyle);
-        labelMoney.setFontScale(smallFontSize);
+        labelMoney.setFontScale(FONT_SIZE_3);
 
         labelXp = new Label("+ " + currentXp + " XP", greenLabelStyle);
-        labelXp.setFontScale(smallFontSize);
+        labelXp.setFontScale(FONT_SIZE_3);
 
-        moneyImage = new Image(moneyTexture);
+        moneyImage = new Image(ResHelper.money);
 
         moneyGroup.addActor(labelMoney);
         moneyGroup.addActor(moneyImage);
@@ -1261,9 +1264,9 @@ public class GameplayScreen extends AbstractScreen
         {
             HorizontalGroup bonusHG = new HorizontalGroup();
 
-            Image image2 = new Image(moneyTexture);
+            Image image2 = new Image(ResHelper.money);
             Label dailyBonusInfo = new Label("Daily bonus 2x", orangeLabelStyle);
-            dailyBonusInfo.setFontScale(smallFontSize);
+            dailyBonusInfo.setFontScale(FONT_SIZE_3);
 
             bonusHG.addActor(dailyBonusInfo);
             bonusHG.addActor(image2);
@@ -1275,58 +1278,38 @@ public class GameplayScreen extends AbstractScreen
 
         table.setFillParent(true);
         stage.addActor(table);
-    }
-
-    private void addMoneyAndXp()
-    {
-        currentMoney = calculateMoney();
-        SpitfireGame.addMoney(currentMoney);
-        game.addEarnedMoney(currentMoney);
-        game.addXp(currentXp);
+        gameOverCompleted = true;
     }
 
     private void destroyEnemy(Enemy enemy)
     {
-        //if destroyed enemy is bomber, playDrawable additional explosion and spawn BonusDrop
+        //if destroyed enemy is bomber, play additional explosion and spawn BonusDrop
         if (enemy.getType() == EnemyType.HE111)
         {
-            bigExplosion.getEmitters().first().setPosition(enemy.x, enemy.y);
-            bigExplosion.reset();
+            ResHelper.bigExplosion.getEmitters().first().setPosition(enemy.x, enemy.y);
+            ResHelper.bigExplosion.reset();
             spawnBonusDrop(enemy.x + enemy.getTexture().getWidth() / 2, enemy.y);
             addCurrentXp(5);
             addCurrentScore(Enemy.hpHE111);
-        } else if (enemy.getType() == EnemyType.JAPAN155)
+        }
+        else if (enemy.getType() == EnemyType.JAPAN155)
         {
             addCurrentXp(2);
             addCurrentScore(Enemy.hpJapan155);
-        } else if (enemy.getType() == EnemyType.ME262)
+        }
+        else if (enemy.getType() == EnemyType.ME262)
         {
             addCurrentXp(1);
             addCurrentScore(Enemy.hpME262);
-        } else if (enemy.getType() == EnemyType.BF109)
+        }
+        else if (enemy.getType() == EnemyType.BF109)
         {
             addCurrentScore(Enemy.hpBF109);
         }
 
-        bigExplosion.getEmitters().first().setPosition(enemy.x + enemy.getTexture().getWidth() / 2, enemy.y + enemy.getTexture().getHeight() / 2);
-        bigExplosion.reset();
-        game.addDestroyedEnemy();
+        ResHelper.bigExplosion.getEmitters().first().setPosition(enemy.x + enemy.getTexture().getWidth() / 2, enemy.y + enemy.getTexture().getHeight() / 2);
+        ResHelper.bigExplosion.reset();
         enemyIter.remove();
-    }
-
-    private int calculateMoney()
-    {
-        float randomvar = random(0.75f, 1.25f);
-        currentMoney = (int) (currentScore / 3f * randomvar);
-
-        if (SpitfireGame.isDailyBonusAvailable())
-        {
-            currentMoney = currentMoney * SpitfireGame.BONUS_MULTIPLIER;
-            System.out.println("DAILY BONUS WAS AVAILABLE");
-            new PopupLabel("Bonus " + Boolean.toString(SpitfireGame.isDailyBonusAvailable()), Color.GREEN, stage);
-        }
-
-        return currentMoney;
     }
 
     private void initButtons()
@@ -1361,24 +1344,6 @@ public class GameplayScreen extends AbstractScreen
     @Override
     public void dispose()
     {
-        explosion.dispose();
-        bigExplosion.dispose();
-        ultraExplosion.dispose();
-        bonusExplosion.dispose();
-
-        explosionSound.dispose();
-        bigExplosionSound.dispose();
-        bonusSound.dispose();
-        maydaySound.dispose();
-
-        bgTexture.dispose();
-        moneyTexture.dispose();
-        mgBoostTexture.dispose();
-        nukeTexture.dispose();
-        engineBoostTexture.dispose();
-        playTextureTemp.dispose();
-        pauseTextureTemp.dispose();
-
         timer = null;
         shootTimer = null;
 

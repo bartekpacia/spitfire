@@ -11,6 +11,9 @@ import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenButtonStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redButtonStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.SETTINGS;
 
 public class SettingsScreen extends AbstractScreen
@@ -38,7 +41,7 @@ public class SettingsScreen extends AbstractScreen
 
         titleLabel = new Label(SETTINGS, whiteLabelStyle);
 
-        menuButton = new MyTextButton(StringHelper.GO_TO_MENU, normalFontSize);
+        menuButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_6);
         menuButton.addListener(new ClickListener()
         {
             @Override
@@ -50,7 +53,7 @@ public class SettingsScreen extends AbstractScreen
         });
 
         soundToggleButton = new TextButton("SOUND", greenButtonStyle);
-        soundToggleButton.getLabel().setFontScale(normalFontSize);
+        soundToggleButton.getLabel().setFontScale(FONT_SIZE_6);
         refreshSoundToggleButton();
         soundToggleButton.addListener(new ClickListener()
         {

@@ -14,17 +14,21 @@ import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 
-import static pl.baftek.spitfire.game.StringHelper.DESTROYED_ENEMIES;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.blueLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.yellowLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.HIGH_SCORE;
-import static pl.baftek.spitfire.game.StringHelper.MONEY_EARNED;
 import static pl.baftek.spitfire.game.StringHelper.SCORE;
 
 public class ProfileScreen extends AbstractScreen
 {
     private MyTextButton menuButton;
 
-    private HorizontalGroup upHG;
-    private HorizontalGroup containerHG;
+    private VerticalGroup upVG;
+    private HorizontalGroup statsContainerHG;
     private VerticalGroup equipmentVG;
     private VerticalGroup leftGroup;
     private VerticalGroup rightGroup;
@@ -47,8 +51,8 @@ public class ProfileScreen extends AbstractScreen
     protected void buildUI()
     {
         Table table = new Table();
-        containerHG = new HorizontalGroup();
-        containerHG.space(15);
+        statsContainerHG = new HorizontalGroup();
+        statsContainerHG.space(15);
 
         initUpHorizontalGroup();
         initXpLabel();
@@ -57,13 +61,13 @@ public class ProfileScreen extends AbstractScreen
         initEquipmentGroup();
         initMenuButton();
 
-        containerHG.addActor(leftGroup);
-        containerHG.addActor(rightGroup);
+        statsContainerHG.addActor(leftGroup);
+        statsContainerHG.addActor(rightGroup);
 
-        table.add(upHG).padBottom(30).row();
+        table.add(upVG).row();
         table.add(xpLabel).padBottom(30).row();
         table.add(statsLabel).padBottom(30).row();
-        table.add(containerHG).padBottom(50).row();
+        table.add(statsContainerHG).padBottom(50).row();
         table.add(equipmentVG).padBottom(150).row();
         table.add(menuButton).padBottom(50).row();
         table.setFillParent(true);
@@ -83,36 +87,36 @@ public class ProfileScreen extends AbstractScreen
         nextLevelRewardHG.space(20);
 
         Label nextLevelRewardLabel = new Label("Next level reward", whiteLabelStyle);
-        nextLevelRewardLabel.setFontScale(verySmallFontSize);
+        nextLevelRewardLabel.setFontScale(FONT_SIZE_2);
 
-        Label rewardLabel = new Label(SpitfireGame.getNextLevelReward().toString(), whiteLabelStyle);
-        rewardLabel.setFontScale(verySmallFontSize);
+        Label rewardLabel = new Label(game.playerManager.getNextLevelReward().toString(), whiteLabelStyle);
+        rewardLabel.setFontScale(FONT_SIZE_2);
 
-        if (SpitfireGame.getNextLevelReward() == BoostType.MG_BOOST)
+        if (game.playerManager.getNextLevelReward() == BoostType.MG_BOOST)
         {
             rewardLabel.setText(StringHelper.MG_BOOST);
             rewardLabel.setStyle(yellowLabelStyle);
-        } else if (SpitfireGame.getNextLevelReward() == BoostType.NUKE)
+        } else if (game.playerManager.getNextLevelReward() == BoostType.NUKE)
         {
             rewardLabel.setText(StringHelper.NUKE);
             rewardLabel.setStyle(redLabelStyle);
-        } else if (SpitfireGame.getNextLevelReward() == BoostType.ENGINE_BOOST)
+        } else if (game.playerManager.getNextLevelReward() == BoostType.ENGINE_BOOST)
         {
             rewardLabel.setText(StringHelper.ENGINE_BOOST);
             rewardLabel.setStyle(blueLabelStyle);
         }
 
         Label currentEquipmentLabel = new Label("Equipment", whiteLabelStyle);
-        currentEquipmentLabel.setFontScale(mediumFontSize);
+        currentEquipmentLabel.setFontScale(FONT_SIZE_4);
 
-        Label mgLabel = new Label("MG BOOSTS " + SpitfireGame.getDefaultMGBoostsCount(), yellowLabelStyle);
-        mgLabel.setFontScale(ultraSmallFontSize);
+        Label mgLabel = new Label("MG BOOSTS " + game.playerManager.getMgBoosts(), yellowLabelStyle);
+        mgLabel.setFontScale(FONT_SIZE_1);
 
-        Label nukeLabel = new Label("NUKES " + SpitfireGame.getDefaultNukeCount(), redLabelStyle);
-        nukeLabel.setFontScale(ultraSmallFontSize);
+        Label nukeLabel = new Label("NUKES " + game.playerManager.getNukes(), redLabelStyle);
+        nukeLabel.setFontScale(FONT_SIZE_1);
 
-        Label engineLabel = new Label("ENGINE BOOSTS " + SpitfireGame.getDefaultEngineBoostsCount(), blueLabelStyle);
-        engineLabel.setFontScale(ultraSmallFontSize);
+        Label engineLabel = new Label("ENGINE BOOSTS " + game.playerManager.getEngineBoosts(), blueLabelStyle);
+        engineLabel.setFontScale(FONT_SIZE_1);
 
         nextLevelRewardHG.addActor(nextLevelRewardLabel);
         nextLevelRewardHG.addActor(rewardLabel);
@@ -124,7 +128,7 @@ public class ProfileScreen extends AbstractScreen
         equipmentVG.addActor(currentEquipmentLabel);
         equipmentVG.addActor(currentEquipmentVG);
 
-        if (game.getPlayerLevel() < SpitfireGame.LEVEL_FULLY_EQUIPPED)
+        if (game.playerManager.getLevel() < SpitfireGame.LEVEL_FULLY_EQUIPPED)
         {
             equipmentVG.addActor(nextLevelRewardHG);
         }
@@ -132,13 +136,13 @@ public class ProfileScreen extends AbstractScreen
 
     private void initXpLabel()
     {
-        String longString = Integer.toString(game.getXp()) + " / " + Integer.toString(game.getXpForNextLevel()) + " XP";
+        String longString = Integer.toString(game.playerManager.getXp()) + " / " + Integer.toString(game.playerManager.getXpForNextLevel()) + " XP";
 
         xpLabel = new Label(longString, greenLabelStyle);
-        xpLabel.setFontScale(smallFontSize);
+        xpLabel.setFontScale(FONT_SIZE_3);
 
         statsLabel = new Label("Your stats", whiteLabelStyle);
-        statsLabel.setFontScale(mediumFontSize);
+        statsLabel.setFontScale(FONT_SIZE_4);
     }
 
     private void initLeftGroup()
@@ -148,21 +152,13 @@ public class ProfileScreen extends AbstractScreen
         leftGroup.space(40);
 
         Label highScoreLabel = new Label(HIGH_SCORE, whiteLabelStyle);
-        highScoreLabel.setFontScale(smallFontSize);
+        highScoreLabel.setFontScale(FONT_SIZE_3);
 
         Label scoreLabel = new Label(SCORE, whiteLabelStyle);
-        scoreLabel.setFontScale(smallFontSize);
-
-        Label destroyedEnemiesLabel = new Label(DESTROYED_ENEMIES, whiteLabelStyle);
-        destroyedEnemiesLabel.setFontScale(smallFontSize);
-
-        Label moneyEarnedLabel = new Label(MONEY_EARNED, whiteLabelStyle);
-        moneyEarnedLabel.setFontScale(smallFontSize);
+        scoreLabel.setFontScale(FONT_SIZE_3);
 
         leftGroup.addActor(highScoreLabel);
         leftGroup.addActor(scoreLabel);
-        leftGroup.addActor(destroyedEnemiesLabel);
-        leftGroup.addActor(moneyEarnedLabel);
     }
 
     private void initRightGroup()
@@ -171,45 +167,37 @@ public class ProfileScreen extends AbstractScreen
         rightGroup.columnAlign(Align.left);
         rightGroup.space(40);
 
-        Label highScoreCountLabel = new Label(Integer.toString(game.getHighScore()), whiteLabelStyle);
-        highScoreCountLabel.setFontScale(smallFontSize);
+        Label highScoreCountLabel = new Label(Integer.toString(game.playerManager.getHighScore()), whiteLabelStyle);
+        highScoreCountLabel.setFontScale(FONT_SIZE_3);
 
-        Label scoreCountLabel = new Label(Integer.toString(game.getScore()), whiteLabelStyle);
-        scoreCountLabel.setFontScale(smallFontSize);
-
-        Label destroyedEnemiesCountLabel = new Label(Integer.toString(game.getDestroyedEnemies()), whiteLabelStyle);
-        destroyedEnemiesCountLabel.setFontScale(smallFontSize);
-
-        Label moneyEarnedCountLabel = new Label(Integer.toString(game.getEarnedMoney()), whiteLabelStyle);
-        moneyEarnedCountLabel.setFontScale(smallFontSize);
+        Label scoreCountLabel = new Label(Integer.toString(game.playerManager.getScore()), whiteLabelStyle);
+        scoreCountLabel.setFontScale(FONT_SIZE_3);
 
         rightGroup.addActor(highScoreCountLabel);
         rightGroup.addActor(scoreCountLabel);
-        rightGroup.addActor(destroyedEnemiesCountLabel);
-        rightGroup.addActor(moneyEarnedCountLabel);
     }
 
     private void initUpHorizontalGroup()
     {
-        upHG = new HorizontalGroup();
-        upHG.space(40);
+        upVG = new VerticalGroup();
+        upVG.space(30);
 
-        String playerName = SpitfireGame.gameServiceClient.getPlayerDisplayName();
+        String playerName = game.gameServiceClient.getPlayerDisplayName();
 
         Label textLabel = new Label(playerName, orangeLabelStyle);
-        textLabel.setFontScale(mediumFontSize);
+        textLabel.setFontScale(FONT_SIZE_4);
 
-        Label countLabel = new Label("LVL " + Integer.toString(game.getPlayerLevel()), greenLabelStyle);
-        countLabel.setFontScale(normalFontSize);
+        Label countLabel = new Label("LVL " + Integer.toString(game.playerManager.getLevel()), greenLabelStyle);
+        countLabel.setFontScale(FONT_SIZE_6);
 
-        upHG.addActor(textLabel);
-        upHG.addActor(countLabel);
+        upVG.addActor(textLabel);
+        upVG.addActor(countLabel);
 
     }
 
     private void initMenuButton()
     {
-        menuButton = new MyTextButton(StringHelper.GO_TO_MENU, smallFontSize);
+        menuButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
         menuButton.addListener(new ClickListener()
         {
             @Override

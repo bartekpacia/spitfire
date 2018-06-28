@@ -8,20 +8,4 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="app_id" translatable="false">694460082561</string>
     <!-- package_name -->
     <string name="package_name" translatable="false">pl.baftek.spitfire</string>
-    <!-- achievement First blood -->
-    <string name="achievement_first_blood" translatable="false">CgkIgdOviJsUEAIQAg</string>
-    <!-- achievement Ace -->
-    <string name="achievement_ace" translatable="false">CgkIgdOviJsUEAIQAw</string>
-    <!-- achievement Croesus -->
-    <string name="achievement_croesus" translatable="false">CgkIgdOviJsUEAIQBQ</string>
-    <!-- achievement Big Boy -->
-    <string name="achievement_big_boy" translatable="false">CgkIgdOviJsUEAIQBw</string>
-    <!-- achievement Ratatatata -->
-    <string name="achievement_ratatatata" translatable="false">CgkIgdOviJsUEAIQCA</string>
-    <!-- achievement Top gear -->
-    <string name="achievement_top_gear" translatable="false">CgkIgdOviJsUEAIQCQ</string>
-    <!-- leaderboard High score -->
-    <string name="leaderboard_high_score" translatable="false">CgkIgdOviJsUEAIQAQ</string>
-    <!-- leaderboard Score -->
-    <string name="leaderboard_score" translatable="false">CgkIgdOviJsUEAIQCg</string>
 </resources>

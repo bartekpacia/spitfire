@@ -31,17 +31,17 @@ public class Player extends GameObject
 
         if (playerType == PlayerType.SPITFIRE)
         {
-            texture = new Texture("spitfire_tiny.png");
+            texture = SpitfireGame.ResHelper.smallSpitfire;
         }
 
         else if (playerType == PlayerType.MUSTANG)
         {
-            texture = new Texture("mustang_tiny.png");
+            texture = SpitfireGame.ResHelper.smallMustang;
         }
 
-        else if (playerType == PlayerType.IL2)
+        else if (playerType == PlayerType.SZTURMOVIK)
         {
-            texture = new Texture("il2_tiny.png");
+            texture = SpitfireGame.ResHelper.smallSzturmovik;
         }
 
         loadStats(playerType);

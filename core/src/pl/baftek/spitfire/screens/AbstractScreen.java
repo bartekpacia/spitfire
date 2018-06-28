@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.enums.GameState;
@@ -25,34 +27,20 @@ public abstract class AbstractScreen implements Screen
     private OrthographicCamera camera;
     protected SpriteBatch spriteBatch;
 
-    public static Skin skin;
-    protected TextButtonStyle whiteButtonStyle;
-    protected TextButtonStyle redButtonStyle;
-    protected TextButtonStyle orangeButtonStyle;
-    protected TextButtonStyle greenButtonStyle;
-
-    public static LabelStyle whiteLabelStyle;
-    protected LabelStyle redLabelStyle;
-    protected LabelStyle blueLabelStyle;
-    protected LabelStyle orangeLabelStyle;
-    protected LabelStyle yellowLabelStyle;
-    protected LabelStyle greenLabelStyle;
-
-    public static final float picoFontSize = 0.2f;
-    public static final float ultraSmallFontSize = 0.3f;
-    public static final float verySmallFontSize = 0.35f;
-    public static final float smallFontSize = 0.45f;
-    public static final float mediumFontSize = 0.6f;
-    public static final float normalFontSize = 0.75f;
-    public static final float bigFontSize = 0.9f;
-    public static final float hugeFontSize = 1.5f;
+    public static final float FONT_SIZE_0 = 0.2f;
+    public static final float FONT_SIZE_1 = 0.3f;
+    public static final float FONT_SIZE_2 = 0.35f;
+    public static final float FONT_SIZE_3 = 0.45f;
+    public static final float FONT_SIZE_4 = 0.6f;
+    public static final float FONT_SIZE_5 = 0.75f;
+    public static final float FONT_SIZE_6 = 0.9f;
+    public static final float FONT_SIZE_7 = 1.5f;
 
     public AbstractScreen(SpitfireGame game)
     {
         this.game = game;
 
         createCamera();
-        createStyles();
 
         stage = new Stage(new StretchViewport(SpitfireGame.WIDTH, SpitfireGame.HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
@@ -63,7 +51,7 @@ public abstract class AbstractScreen implements Screen
     }
 
     /**
-     * This is where assets and everything non-layout relatedshould be initialized.
+     * This is where assets and everything non-layout related should be initialized.
      */
     protected abstract void init();
 
@@ -71,50 +59,6 @@ public abstract class AbstractScreen implements Screen
      * This is where UI should be initialized. It gets invoked just after {@link #init()} ()}.
      */
     protected abstract void buildUI();
-
-    private void createStyles()
-    {
-        skin = new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH));
-
-        whiteButtonStyle = new TextButtonStyle();
-        redButtonStyle = new TextButtonStyle();
-        orangeButtonStyle = new TextButtonStyle();
-        greenButtonStyle = new TextButtonStyle();
-
-        whiteLabelStyle = new LabelStyle();
-        redLabelStyle = new LabelStyle();
-        blueLabelStyle = new LabelStyle();
-        orangeLabelStyle = new LabelStyle();
-        yellowLabelStyle = new LabelStyle();
-        greenLabelStyle = new LabelStyle();
-
-        whiteButtonStyle.font = game.font;
-        whiteLabelStyle.font = game.font;
-
-        redButtonStyle.font = game.font;
-        redButtonStyle.fontColor = Color.RED;
-
-        orangeButtonStyle.font = game.font;
-        orangeButtonStyle.fontColor = Color.ORANGE;
-
-        greenButtonStyle.font = game.font;
-        greenButtonStyle.fontColor = Color.GREEN;
-
-        redLabelStyle.font = game.font;
-        redLabelStyle.fontColor = Color.RED;
-
-        blueLabelStyle.font = game.font;
-        blueLabelStyle.fontColor = Color.BLUE;
-
-        orangeLabelStyle.font = game.font;
-        orangeLabelStyle.fontColor = Color.ORANGE;
-
-        yellowLabelStyle.font = game.font;
-        yellowLabelStyle.fontColor = Color.YELLOW;
-
-        greenLabelStyle.font = game.font;
-        greenLabelStyle.fontColor = Color.GREEN;
-    }
 
     private void createCamera()
     {
@@ -147,7 +91,7 @@ public abstract class AbstractScreen implements Screen
     @Override
     public void pause()
     {
-        System.out.println("pause");
+        Gdx.app.log(TAG, "pause()");
 
         if (SpitfireGame.getGameState() == GameState.RUN)
         {
@@ -158,7 +102,6 @@ public abstract class AbstractScreen implements Screen
     @Override
     public void dispose()
     {
-        skin.dispose();
         game.dispose();
         spriteBatch.dispose();
         stage.dispose();

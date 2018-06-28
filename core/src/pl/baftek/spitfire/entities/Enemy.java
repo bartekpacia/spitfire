@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 import pl.baftek.spitfire.enums.EnemyType;
+import pl.baftek.spitfire.game.SpitfireGame;
 
 public class Enemy extends GameObject
 {
@@ -33,7 +34,7 @@ public class Enemy extends GameObject
             this.enemyType = enemyType;
             this.speed = speedBF109;
             this.hp = hpBF109;
-            texture = new Texture("bf109.png");
+            texture = SpitfireGame.ResHelper.bf109;
         }
 
         else if (enemyType == EnemyType.ME262)
@@ -41,7 +42,7 @@ public class Enemy extends GameObject
             this.enemyType = enemyType;
             this.speed = speedME262;
             this.hp = hpME262;
-            texture = new Texture("me262.png");
+            texture = SpitfireGame.ResHelper.me262;
         }
 
         else if (enemyType == EnemyType.HE111)
@@ -49,7 +50,7 @@ public class Enemy extends GameObject
             this.enemyType = enemyType;
             this.speed = speedHE111;
             this.hp = hpHE111;
-            texture = new Texture("he111.png");
+            texture = SpitfireGame.ResHelper.he111;
         }
 
         else if (enemyType == EnemyType.JAPAN155)
@@ -57,7 +58,7 @@ public class Enemy extends GameObject
             this.enemyType = enemyType;
             this.speed = speedJapan155;
             this.hp = hpJapan155;
-            texture = new Texture("japan155.png");
+            texture = SpitfireGame.ResHelper.japan155;
         }
 
         else
@@ -77,7 +78,6 @@ public class Enemy extends GameObject
         if (gameRun)
         {
             this.y = this.y - speed * Gdx.graphics.getDeltaTime();
-
         }
     }
 

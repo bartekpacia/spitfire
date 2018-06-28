@@ -3,12 +3,8 @@ package pl.baftek.spitfire.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 
 import pl.baftek.spitfire.enums.BonusDropType;
-import pl.baftek.spitfire.enums.GameState;
-
-import static com.badlogic.gdx.Input.Keys.T;
 
 public class BonusDrop extends GameObject
 {
@@ -24,19 +20,19 @@ public class BonusDrop extends GameObject
 
         if(random > 0 && random <= 60)
         {
-            bonusDropType = BonusDropType.POINTS_DROP;
+            bonusDropType = BonusDropType.SCORE_DROP;
             texture = new Texture("bonus_green.png");
         }
 
         else if (random > 60 && random <= 75)
         {
-            bonusDropType = BonusDropType.FIRERATE_DROP;
+            bonusDropType = BonusDropType.MG_DROP;
             texture = new Texture("bonus_yellow.png");
         }
 
         else if(random > 75 && random <= 90 )
         {
-            bonusDropType = BonusDropType.SPEED_DROP;
+            bonusDropType = BonusDropType.ENGINE_DROP;
             texture = new Texture("bonus_blue.png");
         }
 

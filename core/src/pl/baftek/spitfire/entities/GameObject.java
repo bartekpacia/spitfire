@@ -9,7 +9,6 @@ import pl.baftek.spitfire.enums.GameState;
 public abstract class GameObject extends Rectangle
 {
     boolean gameRun;
-
     protected int speed;
 
     /**
