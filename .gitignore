@@ -110,6 +110,9 @@ gradle-app.setting
 /ios/build/
 /ios-moe/build/
 
+## Keystore sensitive data
+/keystore.properties
+
 ## OS Specific
 .DS_Store
 Thumbs.db
