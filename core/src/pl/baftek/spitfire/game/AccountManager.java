@@ -169,7 +169,10 @@ public class AccountManager
         private static final int XP_LEVEL_8 = 1200;
         private static final int XP_LEVEL_9 = 2400;
         private static final int XP_LEVEL_10 = 4000;
-        private static final int XP_LEVEL_11 = 6000;
+        private static final int XP_LEVEL_11 = 5000;
+        private static final int XP_LEVEL_12 = 7000;
+        private static final int XP_LEVEL_13 = 9000;
+        private static final int XP_LEVEL_14 = 13000;
 
         private int getLevel()
         {
@@ -250,7 +253,7 @@ public class AccountManager
                 mgBoosts = 3;
                 nukes = 3;
                 engineBoosts = 3;
-                NEXT_LEVEL_REWARD = BoostType.NOTHING;
+                NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
                 return 8;
             }
@@ -258,27 +261,72 @@ public class AccountManager
             {
                 level = 9;
                 xpForNextLevel = XP_LEVEL_10;
-                mgBoosts = 3;
+                mgBoosts = 4;
                 nukes = 3;
                 engineBoosts = 3;
 
-                NEXT_LEVEL_REWARD = BoostType.NOTHING;
+                NEXT_LEVEL_REWARD = BoostType.NUKE;
 
-                return 9;
+                return 10;
             }
             else if (xp < XP_LEVEL_11)
             {
                 level = 10;
                 xpForNextLevel = XP_LEVEL_11;
-                mgBoosts = 3;
-                nukes = 3;
+                mgBoosts = 4;
+                nukes = 4;
                 engineBoosts = 3;
-                NEXT_LEVEL_REWARD = BoostType.NOTHING;
+                NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
-                return 10;
+                return 11;
             }
 
-            else return 999;
+            else if (xp < XP_LEVEL_12)
+            {
+                level = 11;
+                xpForNextLevel = XP_LEVEL_12;
+                mgBoosts = 5;
+                nukes = 4;
+                engineBoosts = 3;
+                NEXT_LEVEL_REWARD = BoostType.ENGINE_BOOST;
+
+                return 12;
+            }
+
+            else if (xp < XP_LEVEL_13)
+            {
+                level = 12;
+                xpForNextLevel = XP_LEVEL_13;
+                mgBoosts = 5;
+                nukes = 4;
+                engineBoosts = 4;
+                NEXT_LEVEL_REWARD = BoostType.NUKE;
+
+                return 13;
+            }
+
+            else if (xp < XP_LEVEL_14)
+            {
+                level = 13;
+                xpForNextLevel = XP_LEVEL_14;
+                mgBoosts = 5;
+                nukes = 5;
+                engineBoosts = 4;
+                NEXT_LEVEL_REWARD = BoostType.NOTHING;
+
+                return 14;
+            }
+
+            else {
+                level = 999;
+                xpForNextLevel = 99999999;
+                mgBoosts = 5;
+                nukes = 5;
+                engineBoosts = 4;
+                NEXT_LEVEL_REWARD = BoostType.NOTHING;
+
+                return 999;
+            }
         }
     }
 }
