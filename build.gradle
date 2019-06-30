@@ -20,7 +20,7 @@ allprojects {
     ext {
         appName = "Spitfire"
         gdxVersion = '1.9.9'
-        gamesvcsVersion = '0.2.4'
+        gamesvcsVersion = '1.0.0'
         roboVMVersion = '2.3.5'
         visuiVersion = '1.3.0'
     }
@@ -70,7 +70,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
         // Play Games
-        implementation "com.google.android.gms:play-services-games:16.0.0"
+        implementation "com.google.android.gms:play-services-games:18.0.0"
         // Game Services
         implementation "de.golfgl.gdxgamesvcs:gdx-gamesvcs-android-gpgs:$gamesvcsVersion"
     }

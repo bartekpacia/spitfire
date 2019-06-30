@@ -51,7 +51,7 @@ public final class StringHelper
     public static final String NUKE = "NUKE";
     public static final String ENGINE_BOOST = "ENGINE BOOST";
 
-    public static final String CREDITS_TEXT = "Created with libGDX 1.9.6" +
+    public static final String CREDITS_TEXT = "Created with libGDX 1.9.9" +
             "\nUses gdx-gamesvcs by MrStahlfelge " +
             "\n" +
             "\nTesters: " +
