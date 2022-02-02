@@ -40,8 +40,8 @@ public class SpitfireGame extends Game {
     private static Preferences preferences;
     public static int LEVEL_FULLY_EQUIPPED = 8;
 
-    private int mustangPrice = 750;
-    private int IL2price = 1500;
+    private final int mustangPrice = 750;
+    private final int IL2price = 1500;
 
     private static final int UPGRADE_LEVEL_2 = 15;
     private static final int UPGRADE_LEVEL_3 = 30;

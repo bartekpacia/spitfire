@@ -1,22 +1,22 @@
 package pl.baftek.spitfire.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.golfgl.gdxgamesvcs.NoGameServiceClient;
 import pl.baftek.spitfire.game.SpitfireGame;
 
-public class DesktopLauncher
-{
-	public static void main (String[] arg)
-    {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+public class DesktopLauncher {
+    public static void main(String[] arg) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
-		config.title = SpitfireGame.TITLE;
-		config.width = SpitfireGame.WIDTH;
-        config.height = SpitfireGame.HEIGHT;
-        config.resizable = false;
+        config.setTitle(SpitfireGame.TITLE);
+        config.setWindowSizeLimits(SpitfireGame.WIDTH,
+                SpitfireGame.HEIGHT,
+                SpitfireGame.WIDTH,
+                SpitfireGame.HEIGHT);
+        config.setResizable(false);
 
-		new LwjglApplication(new SpitfireGame(new NoGameServiceClient()), config);
-	}
+        new Lwjgl3Application(new SpitfireGame(new NoGameServiceClient()),
+                config);
+    }
 }

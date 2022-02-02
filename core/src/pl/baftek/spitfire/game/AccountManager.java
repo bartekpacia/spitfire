@@ -10,9 +10,9 @@ import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
 public class AccountManager {
     private static final String TAG = "AccountManager";
 
-    private SpitfireGame game;
-    private Preferences preferences;
-    private LevelHelper levelHelper;
+    private final SpitfireGame game;
+    private final Preferences preferences;
+    private final LevelHelper levelHelper;
 
     //preferences
     private static final String GAME_PREFS = "pl.baftek.spitfire.preferences";
