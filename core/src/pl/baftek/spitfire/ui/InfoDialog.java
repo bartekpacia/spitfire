@@ -4,21 +4,17 @@ package pl.baftek.spitfire.ui;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-
-import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.SpitfireGame.ResHelper;
 import pl.baftek.spitfire.screens.AbstractScreen;
 
 import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.SKIN;
 
 /**
- *Dialog with one button, which result is false. You can other buttons with you own result, but then override
- *result() method.
+ * Dialog with one button, which result is false. You can other buttons with you own result, but then override
+ * result() method.
  */
-public class InfoDialog extends Dialog
-{
-    public InfoDialog(String title, String text, String firstButtonText)
-    {
+public class InfoDialog extends Dialog {
+    public InfoDialog(String title, String text, String firstButtonText) {
         super(title, SKIN);
         setMovable(false);
 
@@ -36,8 +32,7 @@ public class InfoDialog extends Dialog
     }
 
     @Override
-    protected void result(Object object)
-    {
+    protected void result(Object object) {
         System.out.println("Alert dialog result " + object);
         super.result(object);
     }

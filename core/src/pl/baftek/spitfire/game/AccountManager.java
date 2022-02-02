@@ -2,14 +2,12 @@ package pl.baftek.spitfire.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-
 import pl.baftek.spitfire.enums.BoostType;
 
 import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
 import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
 
-public class AccountManager
-{
+public class AccountManager {
     private static final String TAG = "AccountManager";
 
     private SpitfireGame game;
@@ -40,8 +38,7 @@ public class AccountManager
 
     private BoostType NEXT_LEVEL_REWARD;
 
-    AccountManager(SpitfireGame game)
-    {
+    AccountManager(SpitfireGame game) {
         this.game = game;
         preferences = Gdx.app.getPreferences(GAME_PREFS);
         levelHelper = new LevelHelper();
@@ -49,8 +46,7 @@ public class AccountManager
         reloadStats();
     }
 
-    private void reloadStats()
-    {
+    private void reloadStats() {
         money = preferences.getInteger(MONEY_PREFS);
         xp = preferences.getInteger(XP_PREFS);
         score = preferences.getInteger(SCORE_PREFS);
@@ -59,34 +55,29 @@ public class AccountManager
         level = levelHelper.getLevel();
     }
 
-    public int getMoney()
-    {
+    public int getMoney() {
         return money;
     }
 
-    public void addMoney(int addedMoney)
-    {
+    public void addMoney(int addedMoney) {
         money = money + addedMoney;
         preferences.putInteger(MONEY_PREFS, money);
         preferences.flush();
         reloadStats();
     }
 
-    public void subtractMoney(int subtractedMoney)
-    {
+    public void subtractMoney(int subtractedMoney) {
         money = money - subtractedMoney;
         preferences.putInteger(MONEY_PREFS, money);
         preferences.flush();
         reloadStats();
     }
 
-    public int getXp()
-    {
+    public int getXp() {
         return xp;
     }
 
-    public void addXp(int xpToAdd)
-    {
+    public void addXp(int xpToAdd) {
         xp = xp + xpToAdd;
         preferences.putInteger(XP_PREFS, xp);
         preferences.flush();
@@ -95,13 +86,11 @@ public class AccountManager
         Gdx.app.log(TAG, "Added " + xpToAdd + " XP. Now XP = " + xp);
     }
 
-    public int getScore()
-    {
+    public int getScore() {
         return score;
     }
 
-    public void addScore(int scoreToAdd)
-    {
+    public void addScore(int scoreToAdd) {
         score = score + scoreToAdd;
         preferences.putInteger(SCORE_PREFS, score);
         preferences.flush();
@@ -110,15 +99,12 @@ public class AccountManager
         game.gameServiceClient.submitToLeaderboard(LEADERBOARD_SCORE, score, null);
     }
 
-    public int getHighScore()
-    {
+    public int getHighScore() {
         return highScore;
     }
 
-    public void setHighScore(int newHighScore)
-    {
-        if (newHighScore > highScore)
-        {
+    public void setHighScore(int newHighScore) {
+        if (newHighScore > highScore) {
             highScore = newHighScore;
             preferences.putInteger(HIGH_SCORE_PREFS, highScore);
             preferences.flush();
@@ -128,38 +114,31 @@ public class AccountManager
         }
     }
 
-    public int getLevel()
-    {
+    public int getLevel() {
         return level;
     }
 
-    public int getMgBoosts()
-    {
+    public int getMgBoosts() {
         return mgBoosts;
     }
 
-    public int getNukes()
-    {
+    public int getNukes() {
         return nukes;
     }
 
-    public int getEngineBoosts()
-    {
+    public int getEngineBoosts() {
         return engineBoosts;
     }
 
-    public int getXpForNextLevel()
-    {
+    public int getXpForNextLevel() {
         return xpForNextLevel;
     }
 
-    public BoostType getNextLevelReward()
-    {
+    public BoostType getNextLevelReward() {
         return NEXT_LEVEL_REWARD;
     }
 
-    private class LevelHelper
-    {
+    private class LevelHelper {
         private static final int XP_LEVEL_2 = 20;
         private static final int XP_LEVEL_3 = 50;
         private static final int XP_LEVEL_4 = 200;
@@ -174,10 +153,8 @@ public class AccountManager
         private static final int XP_LEVEL_13 = 9000;
         private static final int XP_LEVEL_14 = 13000;
 
-        private int getLevel()
-        {
-            if (xp < XP_LEVEL_2)
-            {
+        private int getLevel() {
+            if (xp < XP_LEVEL_2) {
                 xpForNextLevel = XP_LEVEL_2;
                 mgBoosts = 1;
                 nukes = 0;
@@ -185,9 +162,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NUKE;
 
                 return 1;
-            }
-            else if (xp < XP_LEVEL_3)
-            {
+            } else if (xp < XP_LEVEL_3) {
                 xpForNextLevel = XP_LEVEL_3;
                 mgBoosts = 1;
                 nukes = 1;
@@ -195,9 +170,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
                 return 2;
-            }
-            else if (xp < XP_LEVEL_4)
-            {
+            } else if (xp < XP_LEVEL_4) {
                 xpForNextLevel = XP_LEVEL_4;
                 mgBoosts = 2;
                 nukes = 1;
@@ -205,9 +178,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.ENGINE_BOOST;
 
                 return 3;
-            }
-            else if (xp < XP_LEVEL_5)
-            {
+            } else if (xp < XP_LEVEL_5) {
                 xpForNextLevel = XP_LEVEL_5;
                 mgBoosts = 2;
                 nukes = 1;
@@ -215,9 +186,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
                 return 4;
-            }
-            else if (xp < XP_LEVEL_6)
-            {
+            } else if (xp < XP_LEVEL_6) {
                 xpForNextLevel = XP_LEVEL_6;
                 mgBoosts = 3;
                 nukes = 1;
@@ -225,9 +194,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.ENGINE_BOOST;
 
                 return 5;
-            }
-            else if (xp < XP_LEVEL_7)
-            {
+            } else if (xp < XP_LEVEL_7) {
                 xpForNextLevel = XP_LEVEL_7;
                 mgBoosts = 3;
                 nukes = 1;
@@ -235,9 +202,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NUKE;
 
                 return 6;
-            }
-            else if (xp < XP_LEVEL_8)
-            {
+            } else if (xp < XP_LEVEL_8) {
                 level = 7;
                 xpForNextLevel = XP_LEVEL_8;
                 mgBoosts = 3;
@@ -246,9 +211,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NUKE;
 
                 return 7;
-            }
-            else if (xp < XP_LEVEL_9)
-            {
+            } else if (xp < XP_LEVEL_9) {
                 xpForNextLevel = XP_LEVEL_9;
                 mgBoosts = 3;
                 nukes = 3;
@@ -256,9 +219,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
                 return 8;
-            }
-            else if (xp < XP_LEVEL_10)
-            {
+            } else if (xp < XP_LEVEL_10) {
                 level = 9;
                 xpForNextLevel = XP_LEVEL_10;
                 mgBoosts = 4;
@@ -268,9 +229,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NUKE;
 
                 return 10;
-            }
-            else if (xp < XP_LEVEL_11)
-            {
+            } else if (xp < XP_LEVEL_11) {
                 level = 10;
                 xpForNextLevel = XP_LEVEL_11;
                 mgBoosts = 4;
@@ -279,10 +238,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.MG_BOOST;
 
                 return 11;
-            }
-
-            else if (xp < XP_LEVEL_12)
-            {
+            } else if (xp < XP_LEVEL_12) {
                 level = 11;
                 xpForNextLevel = XP_LEVEL_12;
                 mgBoosts = 5;
@@ -291,10 +247,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.ENGINE_BOOST;
 
                 return 12;
-            }
-
-            else if (xp < XP_LEVEL_13)
-            {
+            } else if (xp < XP_LEVEL_13) {
                 level = 12;
                 xpForNextLevel = XP_LEVEL_13;
                 mgBoosts = 5;
@@ -303,10 +256,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NUKE;
 
                 return 13;
-            }
-
-            else if (xp < XP_LEVEL_14)
-            {
+            } else if (xp < XP_LEVEL_14) {
                 level = 13;
                 xpForNextLevel = XP_LEVEL_14;
                 mgBoosts = 5;
@@ -315,9 +265,7 @@ public class AccountManager
                 NEXT_LEVEL_REWARD = BoostType.NOTHING;
 
                 return 14;
-            }
-
-            else {
+            } else {
                 level = 999;
                 xpForNextLevel = 99999999;
                 mgBoosts = 5;

@@ -1,8 +1,7 @@
 package pl.baftek.spitfire.game;
 
 
-public final class StringHelper
-{
+public final class StringHelper {
     public static final String UI_SKIN_PATH = "skin/neutralizer-ui.json";
 
     public static final String VERSION = "version 1.1";

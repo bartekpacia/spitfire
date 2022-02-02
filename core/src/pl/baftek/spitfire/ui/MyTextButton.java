@@ -7,19 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-
 import pl.baftek.spitfire.game.StringHelper;
 
 import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 
 
-public class MyTextButton extends TextButton
-{
+public class MyTextButton extends TextButton {
     private final int MOVE_AMOUNT_X = 15;
     private final int MOVE_AMOUNT_Y = 15;
 
-    public MyTextButton(String text, float fontScale)
-    {
+    public MyTextButton(String text, float fontScale) {
         super(text, new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH)));
         LabelStyle style = new LabelStyle(whiteLabelStyle);
 
@@ -34,21 +31,17 @@ public class MyTextButton extends TextButton
         initOnClickResize();
     }
 
-    private void initOnClickResize()
-    {
-        addListener(new ClickListener()
-        {
+    private void initOnClickResize() {
+        addListener(new ClickListener() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
-            {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 MyTextButton.this.setSize(getWidth() - MOVE_AMOUNT_X, getHeight() - MOVE_AMOUNT_Y);
 
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
-            {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 MyTextButton.this.setSize(getWidth() + MOVE_AMOUNT_X, getHeight() + MOVE_AMOUNT_Y);
 
                 super.touchUp(event, x, y, pointer, button);
