@@ -115,6 +115,11 @@ public class SpitfireGame extends Game {
     private static final int MUSTANG_AVAILABILITY_LEVEL = 3;
     private static final int IL2_AVAILABILITY_LEVEL = 6;
 
+    public SpitfireGame() {
+    }
+
+    ;
+
     public SpitfireGame(IGameServiceClient gameServiceClient) {
         this.gameServiceClient = gameServiceClient;
     }
@@ -151,11 +156,13 @@ public class SpitfireGame extends Game {
         if (gameServiceClient != null) {
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    Gdx.app.log(TAG, "Player: " + gameServiceClient.getPlayerDisplayName());
-                }
-            }, 0.5f);
+                                   @Override
+                                   public void run() {
+                                       Gdx.app.log(TAG,
+                                               "Player: " + gameServiceClient.getPlayerDisplayName());
+                                   }
+                               },
+                    0.5f);
         }
     }
 
@@ -207,7 +214,8 @@ public class SpitfireGame extends Game {
 
         private static ParticleEffect loadExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
@@ -215,7 +223,8 @@ public class SpitfireGame extends Game {
 
         private static ParticleEffect loadBigExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/big_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/big_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
@@ -223,7 +232,8 @@ public class SpitfireGame extends Game {
 
         private static ParticleEffect loadBonusExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/bonus_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/bonus_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
@@ -231,7 +241,8 @@ public class SpitfireGame extends Game {
 
         private static ParticleEffect loadUltraExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/ultra_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/ultra_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
@@ -253,7 +264,8 @@ public class SpitfireGame extends Game {
         private static TextButtonStyle createWhiteButtonStyle() {
             TextButtonStyle style = new TextButtonStyle();
             style.font = font;
-            Gdx.app.log(TAG_AM, "Creating whiteButtonStyle!");
+            Gdx.app.log(TAG_AM,
+                    "Creating whiteButtonStyle!");
 
             return style;
         }
@@ -374,16 +386,19 @@ public class SpitfireGame extends Game {
         //only on startup
         if (last == 0) {
             last = calendar.get(Calendar.DAY_OF_YEAR);
-            preferences.putInteger(DATE_PREFS, last);
+            preferences.putInteger(DATE_PREFS,
+                    last);
             preferences.flush();
         }
 
         //new day
         if (today != last) {
             dailyBonusAvailability = true;
-            preferences.putBoolean(DAILY_BONUS_PREFS, dailyBonusAvailability);
+            preferences.putBoolean(DAILY_BONUS_PREFS,
+                    dailyBonusAvailability);
             last = today;
-            preferences.putInteger(DATE_PREFS, last);
+            preferences.putInteger(DATE_PREFS,
+                    last);
             preferences.flush();
         }
 
@@ -397,55 +412,77 @@ public class SpitfireGame extends Game {
     }
 
     public static void setDailyBonusAvailability(boolean dailyBonusAvailability) {
-        preferences.putBoolean(DAILY_BONUS_PREFS, dailyBonusAvailability);
+        preferences.putBoolean(DAILY_BONUS_PREFS,
+                dailyBonusAvailability);
         preferences.flush();
         loadDailyBonus();
     }
 
     public void buyPlane(PlayerType playerType, Stage stage) {
-        Gdx.app.log(TAG, "buyPlane() called!");
+        Gdx.app.log(TAG,
+                "buyPlane() called!");
 
         switch (playerType) {
             case MUSTANG: {
-                Gdx.app.log(TAG, "case mustang");
+                Gdx.app.log(TAG,
+                        "case mustang");
 
                 if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.MUSTANG)) {
-                    Gdx.app.log(TAG, "player level is ok");
+                    Gdx.app.log(TAG,
+                            "player level is ok");
 
                     if (playerManager.getMoney() >= mustangPrice) {
                         mustangBought = true;
-                        preferences.putBoolean(MUSTANG_BOUGHT_PREFS, mustangBought);
+                        preferences.putBoolean(MUSTANG_BOUGHT_PREFS,
+                                mustangBought);
                         playerManager.subtractMoney(mustangPrice);
-                        Gdx.app.log(TAG, "money is ok, Mustang should be bought");
-                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY, Color.GREEN, stage);
+                        Gdx.app.log(TAG,
+                                "money is ok, Mustang should be bought");
+                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY,
+                                Color.GREEN,
+                                stage);
                     } else {
-                        new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
+                        new PopupLabel(StringHelper.NO_MONEY,
+                                Color.RED,
+                                stage);
                     }
                 } else {
-                    new PopupLabel(StringHelper.TOO_LOW_LEVEL, Color.RED, stage);
+                    new PopupLabel(StringHelper.TOO_LOW_LEVEL,
+                            Color.RED,
+                            stage);
                 }
 
                 break;
             }
 
             case SZTURMOVIK: {
-                Gdx.app.log(TAG, "case il2");
+                Gdx.app.log(TAG,
+                        "case il2");
 
                 if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.SZTURMOVIK)) {
-                    Gdx.app.log(TAG, "player level is ok");
+                    Gdx.app.log(TAG,
+                            "player level is ok");
 
                     if (playerManager.getMoney() >= IL2price) {
                         il2bought = true;
-                        preferences.putBoolean(IL2_BOUGHT_PREFS, il2bought);
+                        preferences.putBoolean(IL2_BOUGHT_PREFS,
+                                il2bought);
                         playerManager.subtractMoney(IL2price);
-                        Gdx.app.log(TAG, "money is ok, il2m should be bought");
+                        Gdx.app.log(TAG,
+                                "money is ok, il2m should be bought");
 
-                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY, Color.GREEN, stage);
+                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY,
+                                Color.GREEN,
+                                stage);
                     } else {
-                        new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
+                        new PopupLabel(StringHelper.NO_MONEY,
+                                Color.RED,
+                                stage);
                     }
                 } else {
-                    new PopupLabel(StringHelper.TOO_LOW_LEVEL, Color.RED, stage);
+                    new PopupLabel(StringHelper.TOO_LOW_LEVEL,
+                            Color.RED,
+                            stage);
                 }
 
                 break;
@@ -454,14 +491,16 @@ public class SpitfireGame extends Game {
     }
 
     private void loadBoughtPlanes() {
-        preferences.putBoolean(SPITFIRE_BOUGHT_PREFS, true);
+        preferences.putBoolean(SPITFIRE_BOUGHT_PREFS,
+                true);
         preferences.flush();
 
         spitfireBought = preferences.getBoolean(SPITFIRE_BOUGHT_PREFS);
         mustangBought = preferences.getBoolean(MUSTANG_BOUGHT_PREFS);
         il2bought = preferences.getBoolean(IL2_BOUGHT_PREFS);
 
-        Gdx.app.log(TAG, "Spitfire bought " + spitfireBought + "; Mustang bought " + mustangBought + "; SZTURMOVIK bought " + il2bought);
+        Gdx.app.log(TAG,
+                "Spitfire bought " + spitfireBought + "; Mustang bought " + mustangBought + "; SZTURMOVIK bought " + il2bought);
     }
 
     public void playSound(Sound sound, float volume) {
@@ -475,7 +514,8 @@ public class SpitfireGame extends Game {
         if (preferences.getString(CURRENT_PLANE).isEmpty() || preferences.getString(CURRENT_PLANE).equals(StringHelper.SPITIFRE)) {
             currentPlayerType = PlayerType.SPITFIRE;
             currentPlayerTypeString = StringHelper.SPITIFRE;
-            preferences.putString(CURRENT_PLANE, StringHelper.SPITIFRE);
+            preferences.putString(CURRENT_PLANE,
+                    StringHelper.SPITIFRE);
             preferences.flush();
         } else if (preferences.getString(CURRENT_PLANE).equals(StringHelper.MUSTANG)) {
             currentPlayerType = PlayerType.MUSTANG;
@@ -485,8 +525,10 @@ public class SpitfireGame extends Game {
             currentPlayerTypeString = StringHelper.IL2;
         }
 
-        Gdx.app.log(TAG, "refreshCurrentPlayerType(): current plane enum: " + currentPlayerType);
-        Gdx.app.log(TAG, "refreshCurrentPlayerType(): current plane string: " + preferences.getString(CURRENT_PLANE));
+        Gdx.app.log(TAG,
+                "refreshCurrentPlayerType(): current plane enum: " + currentPlayerType);
+        Gdx.app.log(TAG,
+                "refreshCurrentPlayerType(): current plane string: " + preferences.getString(CURRENT_PLANE));
     }
 
     private void loadMustangStats() {
@@ -494,7 +536,8 @@ public class SpitfireGame extends Game {
          *MG
          */
         if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 0) {
-            preferences.putInteger(MUSTANG_MG_LEVEL_PREFS, 1);
+            preferences.putInteger(MUSTANG_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -535,7 +578,8 @@ public class SpitfireGame extends Game {
          */
 
         if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 0) {
-            preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS, 1);
+            preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -577,7 +621,8 @@ public class SpitfireGame extends Game {
          *MG
          */
         if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 0) {
-            preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS, 1);
+            preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -618,7 +663,8 @@ public class SpitfireGame extends Game {
          */
 
         if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 0) {
-            preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS, 1);
+            preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -660,7 +706,8 @@ public class SpitfireGame extends Game {
          *MG
          */
         if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 0) {
-            preferences.putInteger(IL2_MG_LEVEL_PREFS, 1);
+            preferences.putInteger(IL2_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -700,7 +747,8 @@ public class SpitfireGame extends Game {
          *ENGINE
          */
         if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 0) {
-            preferences.putInteger(IL2_ENGINE_LEVEL_PREFS, 1);
+            preferences.putInteger(IL2_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -759,7 +807,8 @@ public class SpitfireGame extends Game {
          */
 
         if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 0) {
-            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS, 1);
+            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
@@ -832,21 +881,24 @@ public class SpitfireGame extends Game {
     public void setMGLevel(PlayerType playerType, int level) {
         switch (playerType) {
             case SPITFIRE: {
-                preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS, level);
+                preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadSpitfireStats();
                 break;
             }
 
             case MUSTANG: {
-                preferences.putInteger(MUSTANG_MG_LEVEL_PREFS, level);
+                preferences.putInteger(MUSTANG_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadMustangStats();
                 break;
             }
 
             case SZTURMOVIK: {
-                preferences.putInteger(IL2_MG_LEVEL_PREFS, level);
+                preferences.putInteger(IL2_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadIL2Stats();
                 break;
@@ -877,21 +929,24 @@ public class SpitfireGame extends Game {
     public void setEngineLevel(PlayerType playerType, int level) {
         switch (playerType) {
             case SPITFIRE: {
-                preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS, level);
+                preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadSpitfireStats();
                 break;
             }
 
             case MUSTANG: {
-                preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS, level);
+                preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadMustangStats();
                 break;
             }
 
             case SZTURMOVIK: {
-                preferences.putInteger(IL2_ENGINE_LEVEL_PREFS, level);
+                preferences.putInteger(IL2_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadIL2Stats();
                 break;
@@ -949,7 +1004,8 @@ public class SpitfireGame extends Game {
 
     public void setMissileLevel(PlayerType playerType, int level) {
         if (playerType == PlayerType.SZTURMOVIK) {
-            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS, level);
+            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS,
+                    level);
             preferences.flush();
             loadIL2Stats();
         }
@@ -964,12 +1020,14 @@ public class SpitfireGame extends Game {
     }
 
     private void loadSoundEnabled() {
-        soundEnabled = preferences.getBoolean(SOUND_PREFS, true);
+        soundEnabled = preferences.getBoolean(SOUND_PREFS,
+                true);
     }
 
     public void setSoundEnabled(boolean soundEnabled) {
         SpitfireGame.soundEnabled = soundEnabled;
-        preferences.putBoolean(SOUND_PREFS, SpitfireGame.soundEnabled);
+        preferences.putBoolean(SOUND_PREFS,
+                SpitfireGame.soundEnabled);
         preferences.flush();
     }
 
@@ -984,17 +1042,21 @@ public class SpitfireGame extends Game {
     public void setCurrentPlayerType(PlayerType playerType) {
         switch (playerType) {
             case SPITFIRE: {
-                preferences.putString(CURRENT_PLANE, StringHelper.SPITIFRE);
+                preferences.putString(CURRENT_PLANE,
+                        StringHelper.SPITIFRE);
                 preferences.flush();
-                Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.SPITIFRE);
+                Gdx.app.log(TAG,
+                        "setCurrentPlayerType(): player type string " + StringHelper.SPITIFRE);
                 break;
             }
 
             case MUSTANG: {
                 if (isBought(PlayerType.MUSTANG)) {
-                    preferences.putString(CURRENT_PLANE, StringHelper.MUSTANG);
+                    preferences.putString(CURRENT_PLANE,
+                            StringHelper.MUSTANG);
                     preferences.flush();
-                    Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.MUSTANG);
+                    Gdx.app.log(TAG,
+                            "setCurrentPlayerType(): player type string " + StringHelper.MUSTANG);
                 }
 
                 break;
@@ -1002,9 +1064,11 @@ public class SpitfireGame extends Game {
 
             case SZTURMOVIK: {
                 if (isBought(PlayerType.SZTURMOVIK)) {
-                    preferences.putString(CURRENT_PLANE, StringHelper.IL2);
+                    preferences.putString(CURRENT_PLANE,
+                            StringHelper.IL2);
                     preferences.flush();
-                    Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.IL2);
+                    Gdx.app.log(TAG,
+                            "setCurrentPlayerType(): player type string " + StringHelper.IL2);
                 }
 
                 break;
@@ -1155,7 +1219,8 @@ public class SpitfireGame extends Game {
             case FIRST_BLOOD: {
                 if (!isAchievementUnlocked(FIRST_BLOOD)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_FIRST_BLOOD);
-                    preferences.putBoolean(FIRST_BLOOD_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(FIRST_BLOOD_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
@@ -1164,7 +1229,8 @@ public class SpitfireGame extends Game {
             case RATATA: {
                 if (!isAchievementUnlocked(RATATA)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_RATATA);
-                    preferences.putBoolean(RATATA_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(RATATA_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
@@ -1173,7 +1239,8 @@ public class SpitfireGame extends Game {
             case BIG_BOY: {
                 if (!isAchievementUnlocked(BIG_BOY)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_BIGBOY);
-                    preferences.putBoolean(BIG_BOY_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(BIG_BOY_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
@@ -1182,7 +1249,8 @@ public class SpitfireGame extends Game {
             case TOP_GEAR: {
                 if (!isAchievementUnlocked(TOP_GEAR)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_TOP_GEAR);
-                    preferences.putBoolean(TOP_GEAR_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(TOP_GEAR_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
@@ -1190,7 +1258,8 @@ public class SpitfireGame extends Game {
         }
 
 
-        Gdx.app.log(TAG, "Unlocking achievement " + achievement.toString());
+        Gdx.app.log(TAG,
+                "Unlocking achievement " + achievement.toString());
     }
 
     @Override
