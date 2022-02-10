@@ -2,25 +2,15 @@ package pl.baftek.spitfire.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-
-import org.omg.CORBA.PUBLIC_MEMBER;
-
-import pl.baftek.spitfire.game.SpitfireGame;
-import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.enums.GameState;
+import pl.baftek.spitfire.game.SpitfireGame;
 
-public abstract class AbstractScreen implements Screen
-{
+public abstract class AbstractScreen implements Screen {
     private static final String TAG = "AbstractScreen";
     protected SpitfireGame game;
     protected Stage stage;
@@ -36,8 +26,7 @@ public abstract class AbstractScreen implements Screen
     public static final float FONT_SIZE_6 = 0.9f;
     public static final float FONT_SIZE_7 = 1.5f;
 
-    public AbstractScreen(SpitfireGame game)
-    {
+    public AbstractScreen(SpitfireGame game) {
         this.game = game;
 
         createCamera();
@@ -60,68 +49,58 @@ public abstract class AbstractScreen implements Screen
      */
     protected abstract void buildUI();
 
-    private void createCamera()
-    {
+    private void createCamera() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SpitfireGame.WIDTH, SpitfireGame.HEIGHT);
         camera.update();
     }
 
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         clearScreen();
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
         stage.act(delta);
     }
 
-    private void clearScreen()
-    {
+    private void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         Gdx.app.log(TAG, "resume()");
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
         Gdx.app.log(TAG, "pause()");
 
-        if (SpitfireGame.getGameState() == GameState.RUN)
-        {
+        if (SpitfireGame.getGameState() == GameState.RUN) {
             SpitfireGame.setGameState(GameState.PAUSE);
         }
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         game.dispose();
         spriteBatch.dispose();
         stage.dispose();
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
 
     }
 
     @Override
-    public void show()
-    {
+    public void show() {
 
     }
 
     @Override
-    public void resize(int width, int height)
-    {
+    public void resize(int width, int height) {
 
     }
 }

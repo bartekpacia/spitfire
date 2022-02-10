@@ -3,13 +3,10 @@ package pl.baftek.spitfire.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Disposable;
-
-import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.enums.PlayerType;
+import pl.baftek.spitfire.game.SpitfireGame;
 
-public class Bullet extends GameObject implements Projectile
-{
+public class Bullet extends GameObject implements Projectile {
     private static Texture texture;
     private float soundVolume;
     private Sound sound;
@@ -21,28 +18,20 @@ public class Bullet extends GameObject implements Projectile
     private static int bulletSpeed;
     private float damage;
 
-    public Bullet(float x, float y, PlayerType playerType, SpitfireGame game)
-    {
-        if (playerType == PlayerType.SPITFIRE)
-        {
+    public Bullet(float x, float y, PlayerType playerType, SpitfireGame game) {
+        if (playerType == PlayerType.SPITFIRE) {
             damage = DAMAGE_SPITFIRE;
             sound = SpitfireGame.ResHelper.normalShootSound;
             soundVolume = 0.5f;
             texture = new Texture("bullet1.png");
             bulletSpeed = 1700;
-        }
-
-        else if (playerType == PlayerType.MUSTANG)
-        {
+        } else if (playerType == PlayerType.MUSTANG) {
             damage = DAMAGE_MUSTANG;
             sound = SpitfireGame.ResHelper.strongShootSound;
             soundVolume = 0.25f;
             texture = new Texture("bullet2.png");
             bulletSpeed = 2200;
-        }
-
-        else if (playerType == PlayerType.SZTURMOVIK)
-        {
+        } else if (playerType == PlayerType.SZTURMOVIK) {
             damage = DAMAGE_IL2;
             sound = SpitfireGame.ResHelper.normalShootSound;
             soundVolume = 0.5f;
@@ -59,23 +48,19 @@ public class Bullet extends GameObject implements Projectile
         game.playSound(sound, soundVolume);
     }
 
-    public void move()
-    {
+    public void move() {
         super.move();
 
-        if (gameRun)
-        {
+        if (gameRun) {
             this.y = this.y + bulletSpeed * Gdx.graphics.getDeltaTime();
         }
     }
 
-    public Texture getTexture()
-    {
+    public Texture getTexture() {
         return texture;
     }
 
-    public float getDamage()
-    {
+    public float getDamage() {
         return damage;
     }
 }

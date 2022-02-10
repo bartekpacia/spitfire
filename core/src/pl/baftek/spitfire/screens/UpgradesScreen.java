@@ -3,15 +3,9 @@ package pl.baftek.spitfire.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
@@ -22,8 +16,7 @@ import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.LEVEL;
 import static pl.baftek.spitfire.game.StringHelper.UPGRADE;
 
-public class UpgradesScreen extends AbstractScreen
-{
+public class UpgradesScreen extends AbstractScreen {
     private final int ROW_HORIZONTAL_SPACING = 15;
     private Table table;
 
@@ -39,20 +32,17 @@ public class UpgradesScreen extends AbstractScreen
     private Image moneyImage;
     private MyTextButton backButton;
 
-    UpgradesScreen(SpitfireGame game)
-    {
+    UpgradesScreen(SpitfireGame game) {
         super(game);
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
 
     }
 
     @Override
-    protected void buildUI()
-    {
+    protected void buildUI() {
         table = new Table();
         table.pad(5, 5, 5, 5);
 
@@ -64,8 +54,7 @@ public class UpgradesScreen extends AbstractScreen
         contentVG.addActor(machineGunHG);
         contentVG.addActor(engineHG);
 
-        if(game.getCurrentPlayerType() == PlayerType.SZTURMOVIK)
-        {
+        if (game.getCurrentPlayerType() == PlayerType.SZTURMOVIK) {
             contentVG.addActor(missileHG);
         }
 
@@ -80,8 +69,7 @@ public class UpgradesScreen extends AbstractScreen
         stage.addActor(table);
     }
 
-    private void initContentVG()
-    {
+    private void initContentVG() {
         contentVG = new VerticalGroup();
         contentVG.space(10);
 
@@ -90,8 +78,7 @@ public class UpgradesScreen extends AbstractScreen
         initMissileHG();
     }
 
-    private void initMachineGunHG()
-    {
+    private void initMachineGunHG() {
         machineGunHG = new HorizontalGroup();
         machineGunHG.space(ROW_HORIZONTAL_SPACING);
 
@@ -111,76 +98,46 @@ public class UpgradesScreen extends AbstractScreen
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
-        upgradeButton.addListener(new ClickListener()
-        {
+        upgradeButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                if (game.getMGLevel(game.getCurrentPlayerType()) == 1)
-                {
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.getMGLevel(game.getCurrentPlayerType()) == 1) {
 
                     upgradeMG(2, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 2)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 2) {
 
                     upgradeMG(3, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 3)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 3) {
 
                     upgradeMG(4, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 4)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 4) {
 
                     upgradeMG(5, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 5)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 5) {
 
                     upgradeMG(6, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 6)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 6) {
 
                     upgradeMG(7, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 7)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 7) {
 
                     upgradeMG(8, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 8)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 8) {
 
                     upgradeMG(9, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 9)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 9) {
 
                     upgradeMG(10, upgradeButton, level);
 
-                }
-
-                else if (game.getMGLevel(game.getCurrentPlayerType()) == 10)
-                {
+                } else if (game.getMGLevel(game.getCurrentPlayerType()) == 10) {
                     new PopupLabel(StringHelper.MAXED_OUT_LC, Color.GREEN, stage);
                 }
 
@@ -188,8 +145,7 @@ public class UpgradesScreen extends AbstractScreen
             }
         });
 
-        if (game.getMGLevel(game.getCurrentPlayerType()) == 10)
-        {
+        if (game.getMGLevel(game.getCurrentPlayerType()) == 10) {
             upgradeButton.setVisible(false);
         }
 
@@ -203,8 +159,7 @@ public class UpgradesScreen extends AbstractScreen
         level.setWidth(title.getWidth());
     }
 
-    private void initEngineHG()
-    {
+    private void initEngineHG() {
         engineHG = new HorizontalGroup();
         engineHG.space(ROW_HORIZONTAL_SPACING);
 
@@ -224,67 +179,37 @@ public class UpgradesScreen extends AbstractScreen
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
-        upgradeButton.addListener(new ClickListener()
-        {
+        upgradeButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                if (game.getEngineLevel(game.getCurrentPlayerType()) == 1)
-                {
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.getEngineLevel(game.getCurrentPlayerType()) == 1) {
                     upgradeEngine(2, upgradeButton, level);
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 2)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 2) {
                     upgradeEngine(3, upgradeButton, level);
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 3)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 3) {
                     upgradeEngine(4, upgradeButton, level);
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 4)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 4) {
                     upgradeEngine(5, upgradeButton, level);
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 5)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 5) {
 
                     upgradeEngine(6, upgradeButton, level);
 
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 6)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 6) {
 
                     upgradeEngine(7, upgradeButton, level);
 
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 7)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 7) {
 
                     upgradeEngine(8, upgradeButton, level);
 
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 8)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 8) {
                     upgradeEngine(9, upgradeButton, level);
 
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 9)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 9) {
 
                     upgradeEngine(10, upgradeButton, level);
 
-                }
-
-                else if (game.getEngineLevel(game.getCurrentPlayerType()) == 10)
-                {
+                } else if (game.getEngineLevel(game.getCurrentPlayerType()) == 10) {
                     new PopupLabel(StringHelper.MAXED_OUT_LC, Color.GREEN, stage);
                 }
 
@@ -292,8 +217,7 @@ public class UpgradesScreen extends AbstractScreen
             }
         });
 
-        if (game.getEngineLevel(game.getCurrentPlayerType()) == 10)
-        {
+        if (game.getEngineLevel(game.getCurrentPlayerType()) == 10) {
             upgradeButton.setVisible(false);
         }
 
@@ -307,8 +231,7 @@ public class UpgradesScreen extends AbstractScreen
         level.setWidth(title.getWidth());
     }
 
-    private void initMissileHG()
-    {
+    private void initMissileHG() {
         missileHG = new HorizontalGroup();
         missileHG.space(ROW_HORIZONTAL_SPACING);
 
@@ -328,76 +251,46 @@ public class UpgradesScreen extends AbstractScreen
         upgradeButton.add(moneyImg).align(Align.right).space(10);
         upgradeButton.getLabel().setAlignment(Align.center);
 
-        upgradeButton.addListener(new ClickListener()
-        {
+        upgradeButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                if (game.getMissileLevel(game.getCurrentPlayerType()) == 1)
-                {
+            public void clicked(InputEvent event, float x, float y) {
+                if (game.getMissileLevel(game.getCurrentPlayerType()) == 1) {
 
                     upgradeMissile(2, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 2)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 2) {
 
                     upgradeMissile(3, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 3)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 3) {
 
                     upgradeMissile(4, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 4)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 4) {
 
                     upgradeMissile(5, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 5)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 5) {
 
                     upgradeMissile(6, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 6)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 6) {
 
                     upgradeMissile(7, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 7)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 7) {
 
                     upgradeMissile(8, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 8)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 8) {
 
                     upgradeMissile(9, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 9)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 9) {
 
                     upgradeMissile(10, upgradeButton, level);
 
-                }
-
-                else if (game.getMissileLevel(game.getCurrentPlayerType()) == 10)
-                {
+                } else if (game.getMissileLevel(game.getCurrentPlayerType()) == 10) {
                     new PopupLabel(StringHelper.MAXED_OUT_LC, Color.GREEN, stage);
                 }
 
@@ -405,8 +298,7 @@ public class UpgradesScreen extends AbstractScreen
             }
         });
 
-        if (game.getMissileLevel(game.getCurrentPlayerType()) == 10)
-        {
+        if (game.getMissileLevel(game.getCurrentPlayerType()) == 10) {
             upgradeButton.setVisible(false);
         }
 
@@ -420,10 +312,8 @@ public class UpgradesScreen extends AbstractScreen
         level.setWidth(title.getWidth());
     }
 
-    private void upgradeMG(int newLevel, TextButton upgradeButton, Label levelLabel)
-    {
-        if (game.playerManager.getMoney() >= game.getMGUpgradeCost(game.getCurrentPlayerType()))
-        {
+    private void upgradeMG(int newLevel, TextButton upgradeButton, Label levelLabel) {
+        if (game.playerManager.getMoney() >= game.getMGUpgradeCost(game.getCurrentPlayerType())) {
             int olderUpgradeCost = game.getMGUpgradeCost(game.getCurrentPlayerType());
             game.playerManager.subtractMoney(game.getMGUpgradeCost(game.getCurrentPlayerType()));
             game.setMGLevel(game.getCurrentPlayerType(), newLevel);
@@ -434,18 +324,13 @@ public class UpgradesScreen extends AbstractScreen
             moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
-        }
-
-        else
-        {
+        } else {
             new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
         }
     }
 
-    private void upgradeEngine(int newLevel, TextButton upgradeButton, Label levelLabel)
-    {
-        if (game.playerManager.getMoney() >= game.getEngineUpgradeCost(game.getCurrentPlayerType()))
-        {
+    private void upgradeEngine(int newLevel, TextButton upgradeButton, Label levelLabel) {
+        if (game.playerManager.getMoney() >= game.getEngineUpgradeCost(game.getCurrentPlayerType())) {
             int olderUpgradeCost = game.getEngineUpgradeCost(game.getCurrentPlayerType());
             game.playerManager.subtractMoney(game.getEngineUpgradeCost(game.getCurrentPlayerType()));
             game.setEngineLevel(game.getCurrentPlayerType(), newLevel);
@@ -456,18 +341,13 @@ public class UpgradesScreen extends AbstractScreen
             moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
-        }
-
-        else
-        {
+        } else {
             new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
         }
     }
 
-    private void upgradeMissile(int newLevel, TextButton upgradeButton, Label levelLabel)
-    {
-        if (game.playerManager.getMoney() >= game.getMissileUpgradeCost(game.getCurrentPlayerType()))
-        {
+    private void upgradeMissile(int newLevel, TextButton upgradeButton, Label levelLabel) {
+        if (game.playerManager.getMoney() >= game.getMissileUpgradeCost(game.getCurrentPlayerType())) {
             int olderUpgradeCost = game.getMissileUpgradeCost(game.getCurrentPlayerType());
             game.playerManager.subtractMoney(game.getMissileUpgradeCost(game.getCurrentPlayerType()));
             game.setMissileLevel(game.getCurrentPlayerType(), newLevel);
@@ -478,30 +358,23 @@ public class UpgradesScreen extends AbstractScreen
             moneyLabel.setText(Integer.toString(game.playerManager.getMoney()));
 
             new PopupLabel(StringHelper.UPGRADE_SUCCESSFULL, Color.GREEN, stage);
-        }
-
-        else
-        {
+        } else {
             new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
         }
     }
 
-    private void initBackButton()
-    {
+    private void initBackButton() {
         backButton = new MyTextButton(StringHelper.BACK, FONT_SIZE_3);
-        backButton.addListener(new ClickListener()
-        {
+        backButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new HangarScreen(game));
                 super.clicked(event, x, y);
             }
         });
     }
 
-    private void initMoneyHG()
-    {
+    private void initMoneyHG() {
         moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
 
         moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
@@ -513,8 +386,7 @@ public class UpgradesScreen extends AbstractScreen
         moneyHG.addActor(moneyImage);
     }
 
-    private void initTitle()
-    {
+    private void initTitle() {
         titleLabel = new Label("UPGRADES FOR", whiteLabelStyle);
         titleLabel.setFontScale(FONT_SIZE_6);
 
@@ -523,8 +395,7 @@ public class UpgradesScreen extends AbstractScreen
     }
 
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         super.render(delta);
 
         spriteBatch.begin();

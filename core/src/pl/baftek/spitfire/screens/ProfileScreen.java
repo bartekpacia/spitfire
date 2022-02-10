@@ -8,23 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-
 import pl.baftek.spitfire.enums.BoostType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.blueLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.yellowLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
 import static pl.baftek.spitfire.game.StringHelper.HIGH_SCORE;
 import static pl.baftek.spitfire.game.StringHelper.SCORE;
 
-public class ProfileScreen extends AbstractScreen
-{
+public class ProfileScreen extends AbstractScreen {
     private MyTextButton menuButton;
 
     private VerticalGroup upVG;
@@ -36,20 +29,17 @@ public class ProfileScreen extends AbstractScreen
     private Label xpLabel;
     private Label statsLabel;
 
-    ProfileScreen(SpitfireGame game)
-    {
+    ProfileScreen(SpitfireGame game) {
         super(game);
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
 
     }
 
     @Override
-    protected void buildUI()
-    {
+    protected void buildUI() {
         Table table = new Table();
         statsContainerHG = new HorizontalGroup();
         statsContainerHG.space(15);
@@ -74,8 +64,7 @@ public class ProfileScreen extends AbstractScreen
         stage.addActor(table);
     }
 
-    private void initEquipmentGroup()
-    {
+    private void initEquipmentGroup() {
         equipmentVG = new VerticalGroup();
         equipmentVG.space(20);
         equipmentVG.setDebug(true);
@@ -92,16 +81,13 @@ public class ProfileScreen extends AbstractScreen
         Label rewardLabel = new Label(game.playerManager.getNextLevelReward().toString(), whiteLabelStyle);
         rewardLabel.setFontScale(FONT_SIZE_2);
 
-        if (game.playerManager.getNextLevelReward() == BoostType.MG_BOOST)
-        {
+        if (game.playerManager.getNextLevelReward() == BoostType.MG_BOOST) {
             rewardLabel.setText(StringHelper.MG_BOOST);
             rewardLabel.setStyle(yellowLabelStyle);
-        } else if (game.playerManager.getNextLevelReward() == BoostType.NUKE)
-        {
+        } else if (game.playerManager.getNextLevelReward() == BoostType.NUKE) {
             rewardLabel.setText(StringHelper.NUKE);
             rewardLabel.setStyle(redLabelStyle);
-        } else if (game.playerManager.getNextLevelReward() == BoostType.ENGINE_BOOST)
-        {
+        } else if (game.playerManager.getNextLevelReward() == BoostType.ENGINE_BOOST) {
             rewardLabel.setText(StringHelper.ENGINE_BOOST);
             rewardLabel.setStyle(blueLabelStyle);
         }
@@ -128,14 +114,12 @@ public class ProfileScreen extends AbstractScreen
         equipmentVG.addActor(currentEquipmentLabel);
         equipmentVG.addActor(currentEquipmentVG);
 
-        if (game.playerManager.getLevel() < SpitfireGame.LEVEL_FULLY_EQUIPPED)
-        {
+        if (game.playerManager.getLevel() < SpitfireGame.LEVEL_FULLY_EQUIPPED) {
             equipmentVG.addActor(nextLevelRewardHG);
         }
     }
 
-    private void initXpLabel()
-    {
+    private void initXpLabel() {
         String longString = Integer.toString(game.playerManager.getXp()) + " / " + Integer.toString(game.playerManager.getXpForNextLevel()) + " XP";
 
         xpLabel = new Label(longString, greenLabelStyle);
@@ -145,8 +129,7 @@ public class ProfileScreen extends AbstractScreen
         statsLabel.setFontScale(FONT_SIZE_4);
     }
 
-    private void initLeftGroup()
-    {
+    private void initLeftGroup() {
         leftGroup = new VerticalGroup();
         leftGroup.columnAlign(Align.left);
         leftGroup.space(40);
@@ -161,8 +144,7 @@ public class ProfileScreen extends AbstractScreen
         leftGroup.addActor(scoreLabel);
     }
 
-    private void initRightGroup()
-    {
+    private void initRightGroup() {
         rightGroup = new VerticalGroup();
         rightGroup.columnAlign(Align.left);
         rightGroup.space(40);
@@ -177,8 +159,7 @@ public class ProfileScreen extends AbstractScreen
         rightGroup.addActor(scoreCountLabel);
     }
 
-    private void initUpHorizontalGroup()
-    {
+    private void initUpHorizontalGroup() {
         upVG = new VerticalGroup();
         upVG.space(30);
 
@@ -195,14 +176,11 @@ public class ProfileScreen extends AbstractScreen
 
     }
 
-    private void initMenuButton()
-    {
+    private void initMenuButton() {
         menuButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
-        menuButton.addListener(new ClickListener()
-        {
+        menuButton.addListener(new ClickListener() {
             @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MenuScreen(game));
                 super.clicked(event, x, y);
             }
@@ -210,8 +188,7 @@ public class ProfileScreen extends AbstractScreen
     }
 
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         super.render(delta);
         stage.draw();
     }

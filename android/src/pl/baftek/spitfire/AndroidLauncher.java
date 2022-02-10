@@ -9,13 +9,11 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import de.golfgl.gdxgamesvcs.GpgsClient;
 import pl.baftek.spitfire.game.SpitfireGame;
 
-public class AndroidLauncher extends AndroidApplication
-{
+public class AndroidLauncher extends AndroidApplication {
     private GpgsClient playGamesClient;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         playGamesClient = new GpgsClient().initialize(this, false);
@@ -27,11 +25,9 @@ public class AndroidLauncher extends AndroidApplication
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (playGamesClient != null)
-        {
+        if (playGamesClient != null) {
             playGamesClient.onGpgsActivityResult(requestCode, resultCode, data);
         }
     }

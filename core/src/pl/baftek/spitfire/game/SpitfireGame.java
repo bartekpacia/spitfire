@@ -15,9 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Timer;
 import com.kotcrab.vis.ui.VisUI;
-
-import java.util.Calendar;
-
 import de.golfgl.gdxgamesvcs.IGameServiceClient;
 import pl.baftek.spitfire.enums.Achievement;
 import pl.baftek.spitfire.enums.GameState;
@@ -25,17 +22,12 @@ import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.screens.MenuScreen;
 import pl.baftek.spitfire.ui.PopupLabel;
 
-import static pl.baftek.spitfire.enums.Achievement.BIG_BOY;
-import static pl.baftek.spitfire.enums.Achievement.FIRST_BLOOD;
-import static pl.baftek.spitfire.enums.Achievement.RATATA;
-import static pl.baftek.spitfire.enums.Achievement.TOP_GEAR;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_BIGBOY;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_FIRST_BLOOD;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_RATATA;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_TOP_GEAR;
+import java.util.Calendar;
 
-public class SpitfireGame extends Game
-{
+import static pl.baftek.spitfire.enums.Achievement.*;
+import static pl.baftek.spitfire.game.StringHelper.*;
+
+public class SpitfireGame extends Game {
     private static final String TAG = "SpitfireGame";
     public static final String TITLE = "Spitfire Game";
     public static final int WIDTH = 720;
@@ -48,8 +40,8 @@ public class SpitfireGame extends Game
     private static Preferences preferences;
     public static int LEVEL_FULLY_EQUIPPED = 8;
 
-    private int mustangPrice = 750;
-    private int IL2price = 1500;
+    private final int mustangPrice = 750;
+    private final int IL2price = 1500;
 
     private static final int UPGRADE_LEVEL_2 = 15;
     private static final int UPGRADE_LEVEL_3 = 30;
@@ -123,29 +115,30 @@ public class SpitfireGame extends Game
     private static final int MUSTANG_AVAILABILITY_LEVEL = 3;
     private static final int IL2_AVAILABILITY_LEVEL = 6;
 
-    public SpitfireGame(IGameServiceClient gameServiceClient)
-    {
+    public SpitfireGame() {
+    }
+
+    ;
+
+    public SpitfireGame(IGameServiceClient gameServiceClient) {
         this.gameServiceClient = gameServiceClient;
     }
 
     @Override
-    public void create()
-    {
+    public void create() {
         init();
 
         this.setScreen(new MenuScreen(this));
     }
 
-    private void init()
-    {
+    private void init() {
         preferences = Gdx.app.getPreferences(GAME_PREFS);
         playerManager = new AccountManager(this);
 
         load();
     }
 
-    private void load()
-    {
+    private void load() {
         loadBoughtPlanes();
         refreshCurrentPlayerType();
 
@@ -160,22 +153,20 @@ public class SpitfireGame extends Game
 
         VisUI.load();
 
-        if (gameServiceClient != null)
-        {
+        if (gameServiceClient != null) {
             Timer timer = new Timer();
-            timer.scheduleTask(new Timer.Task()
-            {
-                @Override
-                public void run()
-                {
-                    Gdx.app.log(TAG, "Player: " + gameServiceClient.getPlayerDisplayName());
-                }
-            }, 0.5f);
+            timer.scheduleTask(new Timer.Task() {
+                                   @Override
+                                   public void run() {
+                                       Gdx.app.log(TAG,
+                                               "Player: " + gameServiceClient.getPlayerDisplayName());
+                                   }
+                               },
+                    0.5f);
         }
     }
 
-    public static class ResHelper
-    {
+    public static class ResHelper {
         public static final String TAG_AM = "ResHelper";
 
         public static final Skin SKIN = new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH));
@@ -221,37 +212,37 @@ public class SpitfireGame extends Game
         public static final ParticleEffect bonusExplosion = loadBonusExplosion();
         public static final ParticleEffect ultraExplosion = loadUltraExplosion();
 
-        private static ParticleEffect loadExplosion()
-        {
+        private static ParticleEffect loadExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
         }
 
-        private static ParticleEffect loadBigExplosion()
-        {
+        private static ParticleEffect loadBigExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/big_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/big_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
         }
 
-        private static ParticleEffect loadBonusExplosion()
-        {
+        private static ParticleEffect loadBonusExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/bonus_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/bonus_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
         }
 
-        private static ParticleEffect loadUltraExplosion()
-        {
+        private static ParticleEffect loadUltraExplosion() {
             ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/ultra_explosion.p"), Gdx.files.internal(""));
+            effect.load(Gdx.files.internal("particles/ultra_explosion.p"),
+                    Gdx.files.internal(""));
             effect.start();
 
             return effect;
@@ -260,8 +251,7 @@ public class SpitfireGame extends Game
         //font
         public static final BitmapFont font = createFont();
 
-        private static BitmapFont createFont()
-        {
+        private static BitmapFont createFont() {
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = 120;
@@ -271,19 +261,18 @@ public class SpitfireGame extends Game
 
         public static final TextButtonStyle whiteButtonStyle = createWhiteButtonStyle();
 
-        private static TextButtonStyle createWhiteButtonStyle()
-        {
+        private static TextButtonStyle createWhiteButtonStyle() {
             TextButtonStyle style = new TextButtonStyle();
             style.font = font;
-            Gdx.app.log(TAG_AM, "Creating whiteButtonStyle!");
+            Gdx.app.log(TAG_AM,
+                    "Creating whiteButtonStyle!");
 
             return style;
         }
 
         public static final TextButtonStyle redButtonStyle = createButtonStyle();
 
-        private static TextButtonStyle createButtonStyle()
-        {
+        private static TextButtonStyle createButtonStyle() {
             TextButtonStyle style = new TextButtonStyle();
             style.font = font;
             style.fontColor = Color.RED;
@@ -293,8 +282,7 @@ public class SpitfireGame extends Game
 
         public static final TextButtonStyle orangeButtonStyle = createOrangeButtonStyle();
 
-        private static TextButtonStyle createOrangeButtonStyle()
-        {
+        private static TextButtonStyle createOrangeButtonStyle() {
             TextButtonStyle style = new TextButtonStyle();
             style.font = font;
             style.fontColor = Color.ORANGE;
@@ -304,8 +292,7 @@ public class SpitfireGame extends Game
 
         public static final TextButtonStyle greenButtonStyle = createGreenButtonStyle();
 
-        private static TextButtonStyle createGreenButtonStyle()
-        {
+        private static TextButtonStyle createGreenButtonStyle() {
             TextButtonStyle style = new TextButtonStyle();
             style.font = font;
             style.fontColor = Color.GREEN;
@@ -315,8 +302,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle whiteLabelStyle = createWhiteLabelStyle();
 
-        private static LabelStyle createWhiteLabelStyle()
-        {
+        private static LabelStyle createWhiteLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.WHITE;
@@ -326,8 +312,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle redLabelStyle = createRedLabelStyle();
 
-        private static LabelStyle createRedLabelStyle()
-        {
+        private static LabelStyle createRedLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.RED;
@@ -337,8 +322,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle blueLabelStyle = createBlueLabelStyle();
 
-        private static LabelStyle createBlueLabelStyle()
-        {
+        private static LabelStyle createBlueLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.BLUE;
@@ -348,8 +332,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle cyanLabelStyle = createCyanLabelStyle();
 
-        private static LabelStyle createCyanLabelStyle()
-        {
+        private static LabelStyle createCyanLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.CYAN;
@@ -359,8 +342,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle orangeLabelStyle = createOrangeLabelStyle();
 
-        private static LabelStyle createOrangeLabelStyle()
-        {
+        private static LabelStyle createOrangeLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.ORANGE;
@@ -370,8 +352,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle yellowLabelStyle = createYellowLabelStyle();
 
-        private static LabelStyle createYellowLabelStyle()
-        {
+        private static LabelStyle createYellowLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.ORANGE;
@@ -381,8 +362,7 @@ public class SpitfireGame extends Game
 
         public static final LabelStyle greenLabelStyle = createGreenLabelStyle();
 
-        private static LabelStyle createGreenLabelStyle()
-        {
+        private static LabelStyle createGreenLabelStyle() {
             LabelStyle style = new LabelStyle();
             style.font = font;
             style.fontColor = Color.GREEN;
@@ -391,13 +371,11 @@ public class SpitfireGame extends Game
         }
     }
 
-    private static void loadDailyBonus()
-    {
+    private static void loadDailyBonus() {
         dailyBonusAvailability = preferences.getBoolean(DAILY_BONUS_PREFS);
     }
 
-    private void loadDate()
-    {
+    private void loadDate() {
         Calendar calendar = Calendar.getInstance();
 
         int last = preferences.getInteger(DATE_PREFS);
@@ -406,20 +384,21 @@ public class SpitfireGame extends Game
         //Gdx.app.log(TAG, "PRE-CHANGES Last day: " + last + " Today: " + today + " Bonus available: " + dailyBonusAvailability);
 
         //only on startup
-        if (last == 0)
-        {
+        if (last == 0) {
             last = calendar.get(Calendar.DAY_OF_YEAR);
-            preferences.putInteger(DATE_PREFS, last);
+            preferences.putInteger(DATE_PREFS,
+                    last);
             preferences.flush();
         }
 
         //new day
-        if (today != last)
-        {
+        if (today != last) {
             dailyBonusAvailability = true;
-            preferences.putBoolean(DAILY_BONUS_PREFS, dailyBonusAvailability);
+            preferences.putBoolean(DAILY_BONUS_PREFS,
+                    dailyBonusAvailability);
             last = today;
-            preferences.putInteger(DATE_PREFS, last);
+            preferences.putInteger(DATE_PREFS,
+                    last);
             preferences.flush();
         }
 
@@ -428,78 +407,82 @@ public class SpitfireGame extends Game
         //Gdx.app.log(TAG, "AFTER-CHANGES Last day: " + last + " Today: " + today + " Bonus available: " + dailyBonusAvailability);
     }
 
-    public static boolean isDailyBonusAvailable()
-    {
+    public static boolean isDailyBonusAvailable() {
         return dailyBonusAvailability;
     }
 
-    public static void setDailyBonusAvailability(boolean dailyBonusAvailability)
-    {
-        preferences.putBoolean(DAILY_BONUS_PREFS, dailyBonusAvailability);
+    public static void setDailyBonusAvailability(boolean dailyBonusAvailability) {
+        preferences.putBoolean(DAILY_BONUS_PREFS,
+                dailyBonusAvailability);
         preferences.flush();
         loadDailyBonus();
     }
 
-    public void buyPlane(PlayerType playerType, Stage stage)
-    {
-        Gdx.app.log(TAG, "buyPlane() called!");
+    public void buyPlane(PlayerType playerType, Stage stage) {
+        Gdx.app.log(TAG,
+                "buyPlane() called!");
 
-        switch (playerType)
-        {
-            case MUSTANG:
-            {
-                Gdx.app.log(TAG, "case mustang");
+        switch (playerType) {
+            case MUSTANG: {
+                Gdx.app.log(TAG,
+                        "case mustang");
 
-                if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.MUSTANG))
-                {
-                    Gdx.app.log(TAG, "player level is ok");
+                if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.MUSTANG)) {
+                    Gdx.app.log(TAG,
+                            "player level is ok");
 
-                    if (playerManager.getMoney() >= mustangPrice)
-                    {
+                    if (playerManager.getMoney() >= mustangPrice) {
                         mustangBought = true;
-                        preferences.putBoolean(MUSTANG_BOUGHT_PREFS, mustangBought);
+                        preferences.putBoolean(MUSTANG_BOUGHT_PREFS,
+                                mustangBought);
                         playerManager.subtractMoney(mustangPrice);
-                        Gdx.app.log(TAG, "money is ok, Mustang should be bought");
-                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY, Color.GREEN, stage);
+                        Gdx.app.log(TAG,
+                                "money is ok, Mustang should be bought");
+                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY,
+                                Color.GREEN,
+                                stage);
+                    } else {
+                        new PopupLabel(StringHelper.NO_MONEY,
+                                Color.RED,
+                                stage);
                     }
-                    else
-                    {
-                        new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
-                    }
-                }
-                else
-                {
-                    new PopupLabel(StringHelper.TOO_LOW_LEVEL, Color.RED, stage);
+                } else {
+                    new PopupLabel(StringHelper.TOO_LOW_LEVEL,
+                            Color.RED,
+                            stage);
                 }
 
                 break;
             }
 
-            case SZTURMOVIK:
-            {
-                Gdx.app.log(TAG, "case il2");
+            case SZTURMOVIK: {
+                Gdx.app.log(TAG,
+                        "case il2");
 
-                if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.SZTURMOVIK))
-                {
-                    Gdx.app.log(TAG, "player level is ok");
+                if (playerManager.getLevel() >= getCurrentPlaneAvailabilityLevel(PlayerType.SZTURMOVIK)) {
+                    Gdx.app.log(TAG,
+                            "player level is ok");
 
-                    if (playerManager.getMoney() >= IL2price)
-                    {
+                    if (playerManager.getMoney() >= IL2price) {
                         il2bought = true;
-                        preferences.putBoolean(IL2_BOUGHT_PREFS, il2bought);
+                        preferences.putBoolean(IL2_BOUGHT_PREFS,
+                                il2bought);
                         playerManager.subtractMoney(IL2price);
-                        Gdx.app.log(TAG, "money is ok, il2m should be bought");
+                        Gdx.app.log(TAG,
+                                "money is ok, il2m should be bought");
 
-                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY, Color.GREEN, stage);
+                        new PopupLabel(StringHelper.BOUGHT_SUCCESSFULLY,
+                                Color.GREEN,
+                                stage);
+                    } else {
+                        new PopupLabel(StringHelper.NO_MONEY,
+                                Color.RED,
+                                stage);
                     }
-                    else
-                    {
-                        new PopupLabel(StringHelper.NO_MONEY, Color.RED, stage);
-                    }
-                }
-                else
-                {
-                    new PopupLabel(StringHelper.TOO_LOW_LEVEL, Color.RED, stage);
+                } else {
+                    new PopupLabel(StringHelper.TOO_LOW_LEVEL,
+                            Color.RED,
+                            stage);
                 }
 
                 break;
@@ -507,109 +490,85 @@ public class SpitfireGame extends Game
         }
     }
 
-    private void loadBoughtPlanes()
-    {
-        preferences.putBoolean(SPITFIRE_BOUGHT_PREFS, true);
+    private void loadBoughtPlanes() {
+        preferences.putBoolean(SPITFIRE_BOUGHT_PREFS,
+                true);
         preferences.flush();
 
         spitfireBought = preferences.getBoolean(SPITFIRE_BOUGHT_PREFS);
         mustangBought = preferences.getBoolean(MUSTANG_BOUGHT_PREFS);
         il2bought = preferences.getBoolean(IL2_BOUGHT_PREFS);
 
-        Gdx.app.log(TAG, "Spitfire bought " + spitfireBought + "; Mustang bought " + mustangBought + "; SZTURMOVIK bought " + il2bought);
+        Gdx.app.log(TAG,
+                "Spitfire bought " + spitfireBought + "; Mustang bought " + mustangBought + "; SZTURMOVIK bought " + il2bought);
     }
 
-    public void playSound(Sound sound, float volume)
-    {
-        if (soundEnabled)
-        {
+    public void playSound(Sound sound, float volume) {
+        if (soundEnabled) {
             //Gdx.app.log("playSound()", "playing " + sound.toString());
             sound.play(volume);
         }
     }
 
-    private void refreshCurrentPlayerType()
-    {
-        if (preferences.getString(CURRENT_PLANE).isEmpty() || preferences.getString(CURRENT_PLANE).equals(StringHelper.SPITIFRE))
-        {
+    private void refreshCurrentPlayerType() {
+        if (preferences.getString(CURRENT_PLANE).isEmpty() || preferences.getString(CURRENT_PLANE).equals(StringHelper.SPITIFRE)) {
             currentPlayerType = PlayerType.SPITFIRE;
             currentPlayerTypeString = StringHelper.SPITIFRE;
-            preferences.putString(CURRENT_PLANE, StringHelper.SPITIFRE);
+            preferences.putString(CURRENT_PLANE,
+                    StringHelper.SPITIFRE);
             preferences.flush();
-        }
-        else if (preferences.getString(CURRENT_PLANE).equals(StringHelper.MUSTANG))
-        {
+        } else if (preferences.getString(CURRENT_PLANE).equals(StringHelper.MUSTANG)) {
             currentPlayerType = PlayerType.MUSTANG;
             currentPlayerTypeString = StringHelper.MUSTANG;
-        }
-        else if (preferences.getString(CURRENT_PLANE).equals(StringHelper.IL2))
-        {
+        } else if (preferences.getString(CURRENT_PLANE).equals(StringHelper.IL2)) {
             currentPlayerType = PlayerType.SZTURMOVIK;
             currentPlayerTypeString = StringHelper.IL2;
         }
 
-        Gdx.app.log(TAG, "refreshCurrentPlayerType(): current plane enum: " + currentPlayerType);
-        Gdx.app.log(TAG, "refreshCurrentPlayerType(): current plane string: " + preferences.getString(CURRENT_PLANE));
+        Gdx.app.log(TAG,
+                "refreshCurrentPlayerType(): current plane enum: " + currentPlayerType);
+        Gdx.app.log(TAG,
+                "refreshCurrentPlayerType(): current plane string: " + preferences.getString(CURRENT_PLANE));
     }
 
-    private void loadMustangStats()
-    {
+    private void loadMustangStats() {
         /*
          *MG
          */
-        if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(MUSTANG_MG_LEVEL_PREFS, 1);
+        if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 0) {
+            preferences.putInteger(MUSTANG_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 1) {
             mustangMGShootCooldown = 0.6f;
             mustangMGUpgradeCost = 40;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 2) {
             mustangMGShootCooldown = 0.55f;
             mustangMGUpgradeCost = 100;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 3) {
             mustangMGShootCooldown = 0.52f;
             mustangMGUpgradeCost = 200;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 4) {
             mustangMGShootCooldown = 0.5f;
             mustangMGUpgradeCost = 300;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 5) {
             mustangMGShootCooldown = 0.48f;
             mustangMGUpgradeCost = 400;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 6) {
             mustangMGShootCooldown = 0.46f;
             mustangMGUpgradeCost = 450;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 7) {
             mustangMGShootCooldown = 0.45f;
             mustangMGUpgradeCost = 500;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 8) {
             mustangMGShootCooldown = 0.44f;
             mustangMGUpgradeCost = 650;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 9) {
             mustangMGShootCooldown = 0.42f;
             mustangMGUpgradeCost = 750;
-        }
-        else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(MUSTANG_MG_LEVEL_PREFS) == 10) {
             mustangMGShootCooldown = 0.4f;
             mustangMGUpgradeCost = 900;
         }
@@ -618,122 +577,83 @@ public class SpitfireGame extends Game
          *ENGINE
          */
 
-        if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS, 1);
+        if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 0) {
+            preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 1) {
             mustangEngineSpeed = 460;
             mustangEngineUpgradeCost = 40;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 2) {
             mustangEngineSpeed = 480;
             mustangEngineUpgradeCost = 80;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 3) {
             mustangEngineSpeed = 500;
             mustangEngineUpgradeCost = 80;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 4) {
             mustangEngineSpeed = 520;
             mustangEngineUpgradeCost = 180;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 5) {
             mustangEngineSpeed = 545;
             mustangEngineUpgradeCost = 300;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 6) {
             mustangEngineSpeed = 580;
             mustangEngineUpgradeCost = 400;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 7) {
             mustangEngineSpeed = 610;
             mustangEngineUpgradeCost = 500;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 8) {
             mustangEngineSpeed = 640;
             mustangEngineUpgradeCost = 600;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 9) {
             mustangEngineSpeed = 670;
             mustangEngineUpgradeCost = 700;
-        }
-        else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS) == 10) {
             mustangEngineSpeed = 700;
             mustangEngineUpgradeCost = 800;
         }
     }
 
-    private void loadSpitfireStats()
-    {
+    private void loadSpitfireStats() {
         /*
          *MG
          */
-        if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS, 1);
+        if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 0) {
+            preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 1) {
             spitfireMGShootCooldown = 0.48f;
             spitfireMGUpgradeCost = 10;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 2) {
             spitfireMGShootCooldown = 0.44f;
             spitfireMGUpgradeCost = 20;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 3) {
             spitfireMGShootCooldown = 0.41f;
             spitfireMGUpgradeCost = 50;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 4) {
             spitfireMGShootCooldown = 0.38f;
             spitfireMGUpgradeCost = 100;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 5) {
             spitfireMGShootCooldown = 0.36f;
             spitfireMGUpgradeCost = 150;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 6) {
             spitfireMGShootCooldown = 0.34f;
             spitfireMGUpgradeCost = 200;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 7) {
             spitfireMGShootCooldown = 0.32f;
             spitfireMGUpgradeCost = 265;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 8) {
             spitfireMGShootCooldown = 0.3f;
             spitfireMGUpgradeCost = 400;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 9) {
             spitfireMGShootCooldown = 0.28f;
             spitfireMGUpgradeCost = 600;
-        }
-        else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS) == 10) {
             spitfireMGShootCooldown = 0.26f;
             spitfireMGUpgradeCost = 750;
         }
@@ -742,122 +662,83 @@ public class SpitfireGame extends Game
          * ENGINE
          */
 
-        if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS, 1);
+        if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 0) {
+            preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 1) {
             spitfireEngineSpeed = 420;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_2;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 2) {
             spitfireEngineSpeed = 440;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_3;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 3) {
             spitfireEngineSpeed = 460;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_4;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 4) {
             spitfireEngineSpeed = 480;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_5;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 5) {
             spitfireEngineSpeed = 500;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_6;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 6) {
             spitfireEngineSpeed = 530;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_7;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 7) {
             spitfireEngineSpeed = 550;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_8;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 8) {
             spitfireEngineSpeed = 570;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_9;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 9) {
             spitfireEngineSpeed = 590;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_10;
-        }
-        else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS) == 10) {
             spitfireEngineSpeed = 610;
             spitfireEngineUpgradeCost = UPGRADE_LEVEL_10;
         }
     }
 
-    private void loadIL2Stats()
-    {
+    private void loadIL2Stats() {
         /*
          *MG
          */
-        if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(IL2_MG_LEVEL_PREFS, 1);
+        if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 0) {
+            preferences.putInteger(IL2_MG_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 1) {
             IL2MGshootCooldown = 0.48f;
             IL2MGupgradeCost = 50;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 2) {
             IL2MGshootCooldown = 0.46f;
             IL2MGupgradeCost = 100;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 3) {
             IL2MGshootCooldown = 0.44f;
             IL2MGupgradeCost = 200;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 4) {
             IL2MGshootCooldown = 0.42f;
             IL2MGupgradeCost = 300;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 5) {
             IL2MGshootCooldown = 0.41f;
             IL2MGupgradeCost = 350;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 6) {
             IL2MGshootCooldown = 0.39f;
             IL2MGupgradeCost = 400;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 7) {
             IL2MGshootCooldown = 0.38f;
             IL2MGupgradeCost = 450;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 8) {
             IL2MGshootCooldown = 0.36f;
             IL2MGupgradeCost = 600;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 9) {
             IL2MGshootCooldown = 0.35f;
             IL2MGupgradeCost = 650;
-        }
-        else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(IL2_MG_LEVEL_PREFS) == 10) {
             IL2MGshootCooldown = 0.33f;
             IL2MGupgradeCost = 800;
         }
@@ -865,68 +746,58 @@ public class SpitfireGame extends Game
         /*
          *ENGINE
          */
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(IL2_ENGINE_LEVEL_PREFS, 1);
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 0) {
+            preferences.putInteger(IL2_ENGINE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 1) {
             IL2engineSpeed = 380;
             IL2engineUpgradeCost = 50;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 2)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 2) {
             IL2engineSpeed = 400;
             IL2engineUpgradeCost = 100;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 3)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 3) {
             IL2engineSpeed = 420;
             IL2engineUpgradeCost = 200;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 4)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 4) {
             IL2engineSpeed = 440;
             IL2engineUpgradeCost = 400;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 5)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 5) {
             IL2engineSpeed = 460;
             IL2engineUpgradeCost = 600;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 6)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 6) {
             IL2engineSpeed = 480;
             IL2engineUpgradeCost = 730;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 7)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 7) {
             IL2engineSpeed = 495;
             IL2engineUpgradeCost = 950;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 8)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 8) {
             IL2engineSpeed = 510;
             IL2engineUpgradeCost = 1000;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 9)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 9) {
             IL2engineSpeed = 520;
             IL2engineUpgradeCost = 1100;
         }
 
-        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 10)
-        {
+        if (preferences.getInteger(IL2_ENGINE_LEVEL_PREFS) == 10) {
             IL2engineSpeed = 540;
             IL2engineUpgradeCost = 1200;
         }
@@ -935,59 +806,40 @@ public class SpitfireGame extends Game
          *MISSILES
          */
 
-        if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 0)
-        {
-            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS, 1);
+        if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 0) {
+            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS,
+                    1);
             preferences.flush();
         }
 
-        if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 1)
-        {
+        if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 1) {
             IL2missileShootCooldown = 5f;
             IL2missileUpgradeCost = 50;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 2)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 2) {
             IL2missileShootCooldown = 4.5f;
             IL2missileUpgradeCost = 100;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 3)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 3) {
             IL2missileShootCooldown = 4.3f;
             IL2missileUpgradeCost = 150;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 4)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 4) {
             IL2missileShootCooldown = 4f;
             IL2missileUpgradeCost = 200;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 5)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 5) {
             IL2missileShootCooldown = 3.5f;
             IL2missileUpgradeCost = 300;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 6)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 6) {
             IL2missileShootCooldown = 3f;
             IL2missileUpgradeCost = 400;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 7)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 7) {
             IL2missileShootCooldown = 2.6f;
             IL2missileUpgradeCost = 400;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 8)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 8) {
             IL2missileShootCooldown = 2.2f;
             IL2missileUpgradeCost = 500;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 9)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 9) {
             IL2missileShootCooldown = 1.8f;
             IL2missileUpgradeCost = 800;
-        }
-        else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 10)
-        {
+        } else if (preferences.getInteger(IL2_MISSILE_LEVEL_PREFS) == 10) {
             IL2missileShootCooldown = 1.4f;
             IL2missileUpgradeCost = 1000;
         }
@@ -998,65 +850,55 @@ public class SpitfireGame extends Game
      * tons of getters and setters
      */
 
-    public static GameState getGameState()
-    {
+    public static GameState getGameState() {
         return gameState;
     }
 
-    public static void setGameState(GameState gameState)
-    {
+    public static void setGameState(GameState gameState) {
         SpitfireGame.gameState = gameState;
     }
 
-    public int getMGLevel(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public int getMGLevel(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return preferences.getInteger(SPITFIRE_MG_LEVEL_PREFS);
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return preferences.getInteger(MUSTANG_MG_LEVEL_PREFS);
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return preferences.getInteger(IL2_MG_LEVEL_PREFS);
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public void setMGLevel(PlayerType playerType, int level)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
-                preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS, level);
+    public void setMGLevel(PlayerType playerType, int level) {
+        switch (playerType) {
+            case SPITFIRE: {
+                preferences.putInteger(SPITFIRE_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadSpitfireStats();
                 break;
             }
 
-            case MUSTANG:
-            {
-                preferences.putInteger(MUSTANG_MG_LEVEL_PREFS, level);
+            case MUSTANG: {
+                preferences.putInteger(MUSTANG_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadMustangStats();
                 break;
             }
 
-            case SZTURMOVIK:
-            {
-                preferences.putInteger(IL2_MG_LEVEL_PREFS, level);
+            case SZTURMOVIK: {
+                preferences.putInteger(IL2_MG_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadIL2Stats();
                 break;
@@ -1064,55 +906,47 @@ public class SpitfireGame extends Game
         }
     }
 
-    public int getEngineLevel(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public int getEngineLevel(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return preferences.getInteger(SPITFIRE_ENGINE_LEVEL_PREFS);
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return preferences.getInteger(MUSTANG_ENGINE_LEVEL_PREFS);
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return preferences.getInteger(IL2_ENGINE_LEVEL_PREFS);
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public void setEngineLevel(PlayerType playerType, int level)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
-                preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS, level);
+    public void setEngineLevel(PlayerType playerType, int level) {
+        switch (playerType) {
+            case SPITFIRE: {
+                preferences.putInteger(SPITFIRE_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadSpitfireStats();
                 break;
             }
 
-            case MUSTANG:
-            {
-                preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS, level);
+            case MUSTANG: {
+                preferences.putInteger(MUSTANG_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadMustangStats();
                 break;
             }
 
-            case SZTURMOVIK:
-            {
-                preferences.putInteger(IL2_ENGINE_LEVEL_PREFS, level);
+            case SZTURMOVIK: {
+                preferences.putInteger(IL2_ENGINE_LEVEL_PREFS,
+                        level);
                 preferences.flush();
                 loadIL2Stats();
                 break;
@@ -1120,145 +954,121 @@ public class SpitfireGame extends Game
         }
     }
 
-    public int getEngineUpgradeCost(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public int getEngineUpgradeCost(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return spitfireEngineUpgradeCost;
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return mustangEngineUpgradeCost;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2engineUpgradeCost;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public int getMGUpgradeCost(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public int getMGUpgradeCost(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return spitfireMGUpgradeCost;
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return mustangMGUpgradeCost;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2engineUpgradeCost;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public int getMissileLevel(PlayerType playerType)
-    {
-        if (playerType == PlayerType.SZTURMOVIK)
-        {
+    public int getMissileLevel(PlayerType playerType) {
+        if (playerType == PlayerType.SZTURMOVIK) {
             return preferences.getInteger(IL2_MISSILE_LEVEL_PREFS);
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
 
-    public void setMissileLevel(PlayerType playerType, int level)
-    {
-        if (playerType == PlayerType.SZTURMOVIK)
-        {
-            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS, level);
+    public void setMissileLevel(PlayerType playerType, int level) {
+        if (playerType == PlayerType.SZTURMOVIK) {
+            preferences.putInteger(IL2_MISSILE_LEVEL_PREFS,
+                    level);
             preferences.flush();
             loadIL2Stats();
         }
     }
 
-    public int getMissileUpgradeCost(PlayerType playerType)
-    {
-        if (playerType == PlayerType.SZTURMOVIK)
-        {
+    public int getMissileUpgradeCost(PlayerType playerType) {
+        if (playerType == PlayerType.SZTURMOVIK) {
             return IL2missileUpgradeCost;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
 
-    private void loadSoundEnabled()
-    {
-        soundEnabled = preferences.getBoolean(SOUND_PREFS, true);
+    private void loadSoundEnabled() {
+        soundEnabled = preferences.getBoolean(SOUND_PREFS,
+                true);
     }
 
-    public void setSoundEnabled(boolean soundEnabled)
-    {
+    public void setSoundEnabled(boolean soundEnabled) {
         SpitfireGame.soundEnabled = soundEnabled;
-        preferences.putBoolean(SOUND_PREFS, SpitfireGame.soundEnabled);
+        preferences.putBoolean(SOUND_PREFS,
+                SpitfireGame.soundEnabled);
         preferences.flush();
     }
 
-    public boolean isSoundEnabled()
-    {
+    public boolean isSoundEnabled() {
         return soundEnabled;
     }
 
-    public PlayerType getCurrentPlayerType()
-    {
+    public PlayerType getCurrentPlayerType() {
         return currentPlayerType;
     }
 
-    public void setCurrentPlayerType(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
-                preferences.putString(CURRENT_PLANE, StringHelper.SPITIFRE);
+    public void setCurrentPlayerType(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
+                preferences.putString(CURRENT_PLANE,
+                        StringHelper.SPITIFRE);
                 preferences.flush();
-                Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.SPITIFRE);
+                Gdx.app.log(TAG,
+                        "setCurrentPlayerType(): player type string " + StringHelper.SPITIFRE);
                 break;
             }
 
-            case MUSTANG:
-            {
-                if (isBought(PlayerType.MUSTANG))
-                {
-                    preferences.putString(CURRENT_PLANE, StringHelper.MUSTANG);
+            case MUSTANG: {
+                if (isBought(PlayerType.MUSTANG)) {
+                    preferences.putString(CURRENT_PLANE,
+                            StringHelper.MUSTANG);
                     preferences.flush();
-                    Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.MUSTANG);
+                    Gdx.app.log(TAG,
+                            "setCurrentPlayerType(): player type string " + StringHelper.MUSTANG);
                 }
 
                 break;
             }
 
-            case SZTURMOVIK:
-            {
-                if (isBought(PlayerType.SZTURMOVIK))
-                {
-                    preferences.putString(CURRENT_PLANE, StringHelper.IL2);
+            case SZTURMOVIK: {
+                if (isBought(PlayerType.SZTURMOVIK)) {
+                    preferences.putString(CURRENT_PLANE,
+                            StringHelper.IL2);
                     preferences.flush();
-                    Gdx.app.log(TAG, "setCurrentPlayerType(): player type string " + StringHelper.IL2);
+                    Gdx.app.log(TAG,
+                            "setCurrentPlayerType(): player type string " + StringHelper.IL2);
                 }
 
                 break;
@@ -1268,34 +1078,27 @@ public class SpitfireGame extends Game
         refreshCurrentPlayerType();
     }
 
-    public String getCurrentPlayerTypeString()
-    {
+    public String getCurrentPlayerTypeString() {
         refreshCurrentPlayerType();
 
         return preferences.getString(CURRENT_PLANE);
     }
 
-    public static int getSpeed(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public static int getSpeed(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return spitfireEngineSpeed;
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return mustangEngineSpeed;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2engineSpeed;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
 
@@ -1303,191 +1106,151 @@ public class SpitfireGame extends Game
         }
     }
 
-    public static float getShootCooldown(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public static float getShootCooldown(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return spitfireMGShootCooldown;
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return mustangMGShootCooldown;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2MGshootCooldown;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public static float getMissileShootCooldown(PlayerType playerType)
-    {
-        if (playerType == PlayerType.SZTURMOVIK)
-        {
+    public static float getMissileShootCooldown(PlayerType playerType) {
+        if (playerType == PlayerType.SZTURMOVIK) {
             return IL2missileShootCooldown;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
 
-    public boolean isBought(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public boolean isBought(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return preferences.getBoolean(SPITFIRE_BOUGHT_PREFS);
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return preferences.getBoolean(MUSTANG_BOUGHT_PREFS);
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return preferences.getBoolean(IL2_BOUGHT_PREFS);
             }
 
-            default:
-            {
+            default: {
                 return false;
             }
         }
     }
 
-    public int getPlanePrice(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case MUSTANG:
-            {
+    public int getPlanePrice(PlayerType playerType) {
+        switch (playerType) {
+            case MUSTANG: {
                 return mustangPrice;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2price;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    public int getCurrentPlaneAvailabilityLevel(PlayerType playerType)
-    {
-        switch (playerType)
-        {
-            case SPITFIRE:
-            {
+    public int getCurrentPlaneAvailabilityLevel(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
                 return SPITFIRE_AVAILABILITY_LEVEL;
             }
 
-            case MUSTANG:
-            {
+            case MUSTANG: {
                 return MUSTANG_AVAILABILITY_LEVEL;
             }
 
-            case SZTURMOVIK:
-            {
+            case SZTURMOVIK: {
                 return IL2_AVAILABILITY_LEVEL;
             }
 
-            default:
-            {
+            default: {
                 return 0;
             }
         }
     }
 
-    private Boolean isAchievementUnlocked(Achievement achievement)
-    {
-        switch (achievement)
-        {
-            case FIRST_BLOOD:
-            {
+    private Boolean isAchievementUnlocked(Achievement achievement) {
+        switch (achievement) {
+            case FIRST_BLOOD: {
                 return preferences.getBoolean(FIRST_BLOOD_UNLOCKED_PREFS);
             }
 
-            case RATATA:
-            {
+            case RATATA: {
                 return preferences.getBoolean(RATATA_UNLOCKED_PREFS);
             }
 
-            case BIG_BOY:
-            {
+            case BIG_BOY: {
                 return preferences.getBoolean(BIG_BOY_UNLOCKED_PREFS);
             }
 
-            case TOP_GEAR:
-            {
+            case TOP_GEAR: {
                 return preferences.getBoolean(TOP_GEAR_UNLOCKED_PREFS);
             }
 
-            default:
-            {
+            default: {
                 return false;
             }
         }
     }
 
-    public void unlockAchievement(Achievement achievement)
-    {
-        switch (achievement)
-        {
-            case FIRST_BLOOD:
-            {
-                if (!isAchievementUnlocked(FIRST_BLOOD))
-                {
+    public void unlockAchievement(Achievement achievement) {
+        switch (achievement) {
+            case FIRST_BLOOD: {
+                if (!isAchievementUnlocked(FIRST_BLOOD)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_FIRST_BLOOD);
-                    preferences.putBoolean(FIRST_BLOOD_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(FIRST_BLOOD_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
             }
 
-            case RATATA:
-            {
-                if (!isAchievementUnlocked(RATATA))
-                {
+            case RATATA: {
+                if (!isAchievementUnlocked(RATATA)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_RATATA);
-                    preferences.putBoolean(RATATA_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(RATATA_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
             }
 
-            case BIG_BOY:
-            {
-                if (!isAchievementUnlocked(BIG_BOY))
-                {
+            case BIG_BOY: {
+                if (!isAchievementUnlocked(BIG_BOY)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_BIGBOY);
-                    preferences.putBoolean(BIG_BOY_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(BIG_BOY_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
             }
 
-            case TOP_GEAR:
-            {
-                if (!isAchievementUnlocked(TOP_GEAR))
-                {
+            case TOP_GEAR: {
+                if (!isAchievementUnlocked(TOP_GEAR)) {
                     gameServiceClient.unlockAchievement(ACHIEVEMENT_TOP_GEAR);
-                    preferences.putBoolean(TOP_GEAR_UNLOCKED_PREFS, true);
+                    preferences.putBoolean(TOP_GEAR_UNLOCKED_PREFS,
+                            true);
                     preferences.flush();
                     break;
                 }
@@ -1495,12 +1258,12 @@ public class SpitfireGame extends Game
         }
 
 
-        Gdx.app.log(TAG, "Unlocking achievement " + achievement.toString());
+        Gdx.app.log(TAG,
+                "Unlocking achievement " + achievement.toString());
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         VisUI.dispose();
         ResHelper.font.dispose();
 
