@@ -2,22 +2,20 @@ package pl.baftek.spitfire.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+
 import pl.baftek.spitfire.enums.EnemyType;
 import pl.baftek.spitfire.game.SpitfireGame;
 
 public class Enemy extends GameObject {
-    private EnemyType enemyType;
-
-    private static int speedBF109 = 380;
-    private static int speedME262 = 530;
-    private static int speedJapan155 = 240;
-    private static int speedHE111 = 150;
-
     public static float hpBF109 = 1;
     public static float hpME262 = 1;
     public static float hpHE111 = 15;
     public static float hpJapan155 = 2.5f;
-
+    private static int speedBF109 = 380;
+    private static int speedME262 = 530;
+    private static int speedJapan155 = 240;
+    private static int speedHE111 = 150;
+    private EnemyType enemyType;
     private float hp;
 
     private Texture texture;

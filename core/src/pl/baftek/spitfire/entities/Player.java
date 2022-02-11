@@ -2,6 +2,7 @@ package pl.baftek.spitfire.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 
@@ -11,17 +12,13 @@ public class Player extends GameObject {
 
     private final int BOOSTED_SPEED = 950;
     private final float BOOSTED_SHOOT_COOLDOWN = 0.13f;
-
+    private final PlayerType playerType;
     private float shootCooldown;
     private int speed;
     private float missileShootCooldown;
-
     private boolean MGBoostActive;
     private boolean engineBoostActive;
-
     private Texture texture;
-
-    private final PlayerType playerType;
 
     public Player(PlayerType playerType) {
         this.playerType = playerType;
@@ -93,12 +90,12 @@ public class Player extends GameObject {
         }
     }
 
-    public void setShootCooldown(float shootCooldown) {
-        this.shootCooldown = shootCooldown;
-    }
-
     public float getShootCooldown() {
         return shootCooldown;
+    }
+
+    public void setShootCooldown(float shootCooldown) {
+        this.shootCooldown = shootCooldown;
     }
 
     public float getMissileShootCooldown() {

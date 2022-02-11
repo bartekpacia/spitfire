@@ -1,67 +1,79 @@
 package pl.baftek.spitfire.screens;
 
+import static com.badlogic.gdx.math.MathUtils.random;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.cyanLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.yellowLabelStyle;
+import static pl.baftek.spitfire.game.StringHelper.SCORE;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
-import pl.baftek.spitfire.entities.*;
-import pl.baftek.spitfire.enums.*;
+
+import java.util.Iterator;
+
+import pl.baftek.spitfire.entities.BonusDrop;
+import pl.baftek.spitfire.entities.Bullet;
+import pl.baftek.spitfire.entities.Enemy;
+import pl.baftek.spitfire.entities.Missile;
+import pl.baftek.spitfire.entities.Player;
+import pl.baftek.spitfire.entities.Projectile;
+import pl.baftek.spitfire.enums.Achievement;
+import pl.baftek.spitfire.enums.BonusDropType;
+import pl.baftek.spitfire.enums.EnemyType;
+import pl.baftek.spitfire.enums.GameState;
+import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.SpitfireGame.ResHelper;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
 
-import java.util.Iterator;
-
-import static com.badlogic.gdx.math.MathUtils.random;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
-import static pl.baftek.spitfire.game.StringHelper.SCORE;
-
 public class GameplayScreen extends AbstractScreen {
     private static final String TAG = "GameplayScreen";
+    private final int BUTTON_HEIGHT = 970;
+    private final int EXPLOSION_OFFSET = 15;
     private Timer.Task playServicesRefreshTask;
-
     private Player player;
     private Enemy enemy;
     private BonusDrop bonusDrop;
-
     private Label scoreLabel;
     private Label highScoreLabel;
     private Label bonusScoreLabel;
     private Label mgLabel;
     private Label engineBoostLabel;
     private Label nukeLabel;
-
     private Image mgImage;
     private Image engineBoostImage;
     private Image nukeImage;
-
     private Button buttonLeft;
     private Button buttonRight;
     private Image buttonPause;
-
     private Iterator<Projectile> projectiletIter;
     private Iterator<Enemy> enemyIter;
     private Iterator<BonusDrop> bonusDropIter;
-
     private Array<Projectile> projectiles;
     private Array<Enemy> enemies;
     private Array<BonusDrop> bonusDrops;
-
     private long lastEnemySpawnTime;
     private int enemySpawnCooldownTime = 650000000;
-
-    private final int BUTTON_HEIGHT = 970;
-    private final int EXPLOSION_OFFSET = 15;
     private int currentScore;
     private int currentMoney;
     private int currentXp;

@@ -1,5 +1,14 @@
 package pl.baftek.spitfire.game;
 
+import static pl.baftek.spitfire.enums.Achievement.BIG_BOY;
+import static pl.baftek.spitfire.enums.Achievement.FIRST_BLOOD;
+import static pl.baftek.spitfire.enums.Achievement.RATATA;
+import static pl.baftek.spitfire.enums.Achievement.TOP_GEAR;
+import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_BIGBOY;
+import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_FIRST_BLOOD;
+import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_RATATA;
+import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_TOP_GEAR;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -15,6 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Timer;
 import com.kotcrab.vis.ui.VisUI;
+
+import java.util.Calendar;
+
 import de.golfgl.gdxgamesvcs.IGameServiceClient;
 import pl.baftek.spitfire.enums.Achievement;
 import pl.baftek.spitfire.enums.GameState;
@@ -22,27 +34,12 @@ import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.screens.MenuScreen;
 import pl.baftek.spitfire.ui.PopupLabel;
 
-import java.util.Calendar;
-
-import static pl.baftek.spitfire.enums.Achievement.*;
-import static pl.baftek.spitfire.game.StringHelper.*;
-
 public class SpitfireGame extends Game {
-    private static final String TAG = "SpitfireGame";
     public static final String TITLE = "Spitfire Game";
     public static final int WIDTH = 720;
     public static final int HEIGHT = 1280;
-
-    public IGameServiceClient gameServiceClient;
-
-    public AccountManager playerManager;
-
-    private static Preferences preferences;
-    public static int LEVEL_FULLY_EQUIPPED = 8;
-
-    private final int mustangPrice = 750;
-    private final int IL2price = 1500;
-
+    public static final int BONUS_MULTIPLIER = 2;
+    private static final String TAG = "SpitfireGame";
     private static final int UPGRADE_LEVEL_2 = 15;
     private static final int UPGRADE_LEVEL_3 = 30;
     private static final int UPGRADE_LEVEL_4 = 50;
@@ -52,68 +49,57 @@ public class SpitfireGame extends Game {
     private static final int UPGRADE_LEVEL_8 = 300;
     private static final int UPGRADE_LEVEL_9 = 500;
     private static final int UPGRADE_LEVEL_10 = 700;
-
-    public static final int BONUS_MULTIPLIER = 2;
-
     @Deprecated
     private static final String GAME_PREFS = "pl.baftek.spitfire.preferences";
-
     private static final String SPITFIRE_MG_LEVEL_PREFS = "pl.baftek.spitfire.preferences.spitfire.mglevel";
     private static final String SPITFIRE_ENGINE_LEVEL_PREFS = "pl.baftek.spitfire.preferences.spitfire.enginelevel";
-
     private static final String MUSTANG_MG_LEVEL_PREFS = "pl.baftek.spitfire.preferences.mustang.mglevel";
     private static final String MUSTANG_ENGINE_LEVEL_PREFS = "pl.baftek.spitfire.preferences.mustang.enginelevel";
-
     private static final String IL2_MG_LEVEL_PREFS = "pl.baftek.spitfire.preferences.il2.mglevel";
     private static final String IL2_ENGINE_LEVEL_PREFS = "pl.baftek.spitfire.preferences.il2.enginelevel";
     private static final String IL2_MISSILE_LEVEL_PREFS = "pl.baftek.spitfire.preferences.il2.missilelevel";
-
     private static final String SPITFIRE_BOUGHT_PREFS = "pl.baftek.spitfire.preferences.spitfirebought";
     private static final String MUSTANG_BOUGHT_PREFS = "pl.baftek.spitfire.preferences.mustangbought";
     private static final String IL2_BOUGHT_PREFS = "pl.baftek.spitfire.preferences.il2bought";
-
     private static final String CURRENT_PLANE = "pl.baftek.spitfire.preferences.currentplane";
-
     private static final String SOUND_PREFS = "pl.baftek.spitfire.preferences.sound";
     private static final String FIRST_BLOOD_UNLOCKED_PREFS = "pl.baftek.spitfire.preferences.achievements.firstblood";
     private static final String RATATA_UNLOCKED_PREFS = "pl.baftek.spitfire.preferences.achievements.ratata";
     private static final String BIG_BOY_UNLOCKED_PREFS = "pl.baftek.spitfire.preferences.achievements.bigboy";
     private static final String TOP_GEAR_UNLOCKED_PREFS = "pl.baftek.spitfire.preferences.achievements.topgear";
-
     private static final String DATE_PREFS = "pl.baftek.spitfire.preferences.lastday";
     private static final String DAILY_BONUS_PREFS = "pl.baftek.spitfire.preferences.dailybonus";
+    private static final int SPITFIRE_AVAILABILITY_LEVEL = 1;
+    private static final int MUSTANG_AVAILABILITY_LEVEL = 3;
+    private static final int IL2_AVAILABILITY_LEVEL = 6;
+    public static int LEVEL_FULLY_EQUIPPED = 8;
+    private static Preferences preferences;
     private static boolean dailyBonusAvailability;
-
-    private boolean spitfireBought;
-    private boolean mustangBought;
-    private boolean il2bought;
-
     private static float spitfireMGShootCooldown;
     private static int spitfireMGUpgradeCost;
     private static int spitfireEngineSpeed;
     private static int spitfireEngineUpgradeCost;
-
     private static float mustangMGShootCooldown;
     private static int mustangMGUpgradeCost;
     private static int mustangEngineSpeed;
     private static int mustangEngineUpgradeCost;
-
     private static float IL2MGshootCooldown;
     private static int IL2MGupgradeCost;
     private static int IL2engineSpeed;
     private static int IL2engineUpgradeCost;
     private static float IL2missileShootCooldown;
     private static int IL2missileUpgradeCost;
-
     private static GameState gameState;
     private static boolean soundEnabled;
-
+    private final int mustangPrice = 750;
+    private final int IL2price = 1500;
+    public IGameServiceClient gameServiceClient;
+    public AccountManager playerManager;
     public PlayerType currentPlayerType;
     public String currentPlayerTypeString;
-
-    private static final int SPITFIRE_AVAILABILITY_LEVEL = 1;
-    private static final int MUSTANG_AVAILABILITY_LEVEL = 3;
-    private static final int IL2_AVAILABILITY_LEVEL = 6;
+    private boolean spitfireBought;
+    private boolean mustangBought;
+    private boolean il2bought;
 
     public SpitfireGame() {
     }
@@ -122,6 +108,84 @@ public class SpitfireGame extends Game {
 
     public SpitfireGame(IGameServiceClient gameServiceClient) {
         this.gameServiceClient = gameServiceClient;
+    }
+
+    private static void loadDailyBonus() {
+        dailyBonusAvailability = preferences.getBoolean(DAILY_BONUS_PREFS);
+    }
+
+    public static boolean isDailyBonusAvailable() {
+        return dailyBonusAvailability;
+    }
+
+    public static void setDailyBonusAvailability(boolean dailyBonusAvailability) {
+        preferences.putBoolean(DAILY_BONUS_PREFS,
+                dailyBonusAvailability);
+        preferences.flush();
+        loadDailyBonus();
+    }
+
+    /**
+     * -------------------
+     * tons of getters and setters
+     */
+
+    public static GameState getGameState() {
+        return gameState;
+    }
+
+    public static void setGameState(GameState gameState) {
+        SpitfireGame.gameState = gameState;
+    }
+
+    public static int getSpeed(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
+                return spitfireEngineSpeed;
+            }
+
+            case MUSTANG: {
+                return mustangEngineSpeed;
+            }
+
+            case SZTURMOVIK: {
+                return IL2engineSpeed;
+            }
+
+            default: {
+                return 0;
+            }
+
+
+        }
+    }
+
+    public static float getShootCooldown(PlayerType playerType) {
+        switch (playerType) {
+            case SPITFIRE: {
+                return spitfireMGShootCooldown;
+            }
+
+            case MUSTANG: {
+                return mustangMGShootCooldown;
+            }
+
+            case SZTURMOVIK: {
+                return IL2MGshootCooldown;
+            }
+
+            default: {
+                return 0;
+            }
+        }
+    }
+
+    public static float getMissileShootCooldown(PlayerType playerType) {
+        if (playerType == PlayerType.SZTURMOVIK) {
+            return IL2missileShootCooldown;
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -166,215 +230,6 @@ public class SpitfireGame extends Game {
         }
     }
 
-    public static class ResHelper {
-        public static final String TAG_AM = "ResHelper";
-
-        public static final Skin SKIN = new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH));
-
-        public static final Texture spitfire = new Texture("spitfire.png");
-        public static final Texture smallSpitfire = new Texture("spitfire_small.png");
-        public static final Texture mustang = new Texture("mustang.png");
-        public static final Texture smallMustang = new Texture("mustang_small.png");
-        public static final Texture szturmovik = new Texture("szturmovik.png");
-        public static final Texture smallSzturmovik = new Texture("szturmovik_small.png");
-        public static final Texture bf109 = new Texture("bf109.png");
-        public static final Texture me262 = new Texture("me262.png");
-        public static final Texture he111 = new Texture("he111.png");
-        public static final Texture japan155 = new Texture("japan155.png");
-
-        public static final Texture leaderboard = new Texture("leaderboards.png");
-        public static final Texture achievements = new Texture("achievement.png");
-        public static final Texture playGames = new Texture("play_games.png");
-        public static final Texture money = new Texture("money.png");
-        public static final Texture smallMoney = new Texture("money_tiny.png");
-        public static final Texture engine = new Texture("engine.png");
-        public static final Texture machineGun = new Texture("machine_gun.png");
-        public static final Texture missile = new Texture("missile_icon.png");
-        public static final Texture mgBoost = new Texture("mg_boost.png");
-        public static final Texture engineBoost = new Texture("engine_boost.png");
-        public static final Texture nuke = new Texture("nuke.png");
-        public static final Texture play = new Texture("play.png");
-        public static final Texture pause = new Texture("pause.png");
-
-        public static final Texture sky = new Texture("bgsky.jpg");
-        public static final Texture hangar = new Texture("hangar.jpg");
-
-        public static final Sound normalShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.mp3"));
-        public static final Sound strongShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/hmg_shoot.mp3"));
-        public static final Sound explosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/explosion.mp3"));
-        public static final Sound maydaySound = Gdx.audio.newSound(Gdx.files.internal("audio/mayday.mp3"));
-        public static final Sound bonusSound = Gdx.audio.newSound(Gdx.files.internal("audio/bonus.mp3"));
-        public static final Sound bigExplosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/big_explosion.mp3"));
-        public static final Sound missileLaunch = Gdx.audio.newSound(Gdx.files.internal("audio/missile_launch.mp3"));
-
-        public static final ParticleEffect explosion = loadExplosion();
-        public static final ParticleEffect bigExplosion = loadBigExplosion();
-        public static final ParticleEffect bonusExplosion = loadBonusExplosion();
-        public static final ParticleEffect ultraExplosion = loadUltraExplosion();
-
-        private static ParticleEffect loadExplosion() {
-            ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/explosion.p"),
-                    Gdx.files.internal(""));
-            effect.start();
-
-            return effect;
-        }
-
-        private static ParticleEffect loadBigExplosion() {
-            ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/big_explosion.p"),
-                    Gdx.files.internal(""));
-            effect.start();
-
-            return effect;
-        }
-
-        private static ParticleEffect loadBonusExplosion() {
-            ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/bonus_explosion.p"),
-                    Gdx.files.internal(""));
-            effect.start();
-
-            return effect;
-        }
-
-        private static ParticleEffect loadUltraExplosion() {
-            ParticleEffect effect = new ParticleEffect();
-            effect.load(Gdx.files.internal("particles/ultra_explosion.p"),
-                    Gdx.files.internal(""));
-            effect.start();
-
-            return effect;
-        }
-
-        //font
-        public static final BitmapFont font = createFont();
-
-        private static BitmapFont createFont() {
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
-            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            parameter.size = 120;
-
-            return generator.generateFont(parameter);
-        }
-
-        public static final TextButtonStyle whiteButtonStyle = createWhiteButtonStyle();
-
-        private static TextButtonStyle createWhiteButtonStyle() {
-            TextButtonStyle style = new TextButtonStyle();
-            style.font = font;
-            Gdx.app.log(TAG_AM,
-                    "Creating whiteButtonStyle!");
-
-            return style;
-        }
-
-        public static final TextButtonStyle redButtonStyle = createButtonStyle();
-
-        private static TextButtonStyle createButtonStyle() {
-            TextButtonStyle style = new TextButtonStyle();
-            style.font = font;
-            style.fontColor = Color.RED;
-
-            return style;
-        }
-
-        public static final TextButtonStyle orangeButtonStyle = createOrangeButtonStyle();
-
-        private static TextButtonStyle createOrangeButtonStyle() {
-            TextButtonStyle style = new TextButtonStyle();
-            style.font = font;
-            style.fontColor = Color.ORANGE;
-
-            return style;
-        }
-
-        public static final TextButtonStyle greenButtonStyle = createGreenButtonStyle();
-
-        private static TextButtonStyle createGreenButtonStyle() {
-            TextButtonStyle style = new TextButtonStyle();
-            style.font = font;
-            style.fontColor = Color.GREEN;
-
-            return style;
-        }
-
-        public static final LabelStyle whiteLabelStyle = createWhiteLabelStyle();
-
-        private static LabelStyle createWhiteLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.WHITE;
-
-            return style;
-        }
-
-        public static final LabelStyle redLabelStyle = createRedLabelStyle();
-
-        private static LabelStyle createRedLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.RED;
-
-            return style;
-        }
-
-        public static final LabelStyle blueLabelStyle = createBlueLabelStyle();
-
-        private static LabelStyle createBlueLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.BLUE;
-
-            return style;
-        }
-
-        public static final LabelStyle cyanLabelStyle = createCyanLabelStyle();
-
-        private static LabelStyle createCyanLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.CYAN;
-
-            return style;
-        }
-
-        public static final LabelStyle orangeLabelStyle = createOrangeLabelStyle();
-
-        private static LabelStyle createOrangeLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.ORANGE;
-
-            return style;
-        }
-
-        public static final LabelStyle yellowLabelStyle = createYellowLabelStyle();
-
-        private static LabelStyle createYellowLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.ORANGE;
-
-            return style;
-        }
-
-        public static final LabelStyle greenLabelStyle = createGreenLabelStyle();
-
-        private static LabelStyle createGreenLabelStyle() {
-            LabelStyle style = new LabelStyle();
-            style.font = font;
-            style.fontColor = Color.GREEN;
-
-            return style;
-        }
-    }
-
-    private static void loadDailyBonus() {
-        dailyBonusAvailability = preferences.getBoolean(DAILY_BONUS_PREFS);
-    }
-
     private void loadDate() {
         Calendar calendar = Calendar.getInstance();
 
@@ -405,17 +260,6 @@ public class SpitfireGame extends Game {
         loadDailyBonus();
 
         //Gdx.app.log(TAG, "AFTER-CHANGES Last day: " + last + " Today: " + today + " Bonus available: " + dailyBonusAvailability);
-    }
-
-    public static boolean isDailyBonusAvailable() {
-        return dailyBonusAvailability;
-    }
-
-    public static void setDailyBonusAvailability(boolean dailyBonusAvailability) {
-        preferences.putBoolean(DAILY_BONUS_PREFS,
-                dailyBonusAvailability);
-        preferences.flush();
-        loadDailyBonus();
     }
 
     public void buyPlane(PlayerType playerType, Stage stage) {
@@ -845,19 +689,6 @@ public class SpitfireGame extends Game {
         }
     }
 
-    /**
-     * -------------------
-     * tons of getters and setters
-     */
-
-    public static GameState getGameState() {
-        return gameState;
-    }
-
-    public static void setGameState(GameState gameState) {
-        SpitfireGame.gameState = gameState;
-    }
-
     public int getMGLevel(PlayerType playerType) {
         switch (playerType) {
             case SPITFIRE: {
@@ -1024,15 +855,15 @@ public class SpitfireGame extends Game {
                 true);
     }
 
+    public boolean isSoundEnabled() {
+        return soundEnabled;
+    }
+
     public void setSoundEnabled(boolean soundEnabled) {
         SpitfireGame.soundEnabled = soundEnabled;
         preferences.putBoolean(SOUND_PREFS,
                 SpitfireGame.soundEnabled);
         preferences.flush();
-    }
-
-    public boolean isSoundEnabled() {
-        return soundEnabled;
     }
 
     public PlayerType getCurrentPlayerType() {
@@ -1082,56 +913,6 @@ public class SpitfireGame extends Game {
         refreshCurrentPlayerType();
 
         return preferences.getString(CURRENT_PLANE);
-    }
-
-    public static int getSpeed(PlayerType playerType) {
-        switch (playerType) {
-            case SPITFIRE: {
-                return spitfireEngineSpeed;
-            }
-
-            case MUSTANG: {
-                return mustangEngineSpeed;
-            }
-
-            case SZTURMOVIK: {
-                return IL2engineSpeed;
-            }
-
-            default: {
-                return 0;
-            }
-
-
-        }
-    }
-
-    public static float getShootCooldown(PlayerType playerType) {
-        switch (playerType) {
-            case SPITFIRE: {
-                return spitfireMGShootCooldown;
-            }
-
-            case MUSTANG: {
-                return mustangMGShootCooldown;
-            }
-
-            case SZTURMOVIK: {
-                return IL2MGshootCooldown;
-            }
-
-            default: {
-                return 0;
-            }
-        }
-    }
-
-    public static float getMissileShootCooldown(PlayerType playerType) {
-        if (playerType == PlayerType.SZTURMOVIK) {
-            return IL2missileShootCooldown;
-        } else {
-            return 0;
-        }
     }
 
     public boolean isBought(PlayerType playerType) {
@@ -1297,5 +1078,198 @@ public class SpitfireGame extends Game {
         ResHelper.missileLaunch.dispose();
 
         super.dispose();
+    }
+
+    public static class ResHelper {
+        public static final String TAG_AM = "ResHelper";
+
+        public static final Skin SKIN = new Skin(Gdx.files.internal(StringHelper.UI_SKIN_PATH));
+
+        public static final Texture spitfire = new Texture("spitfire.png");
+        public static final Texture smallSpitfire = new Texture("spitfire_small.png");
+        public static final Texture mustang = new Texture("mustang.png");
+        public static final Texture smallMustang = new Texture("mustang_small.png");
+        public static final Texture szturmovik = new Texture("szturmovik.png");
+        public static final Texture smallSzturmovik = new Texture("szturmovik_small.png");
+        public static final Texture bf109 = new Texture("bf109.png");
+        public static final Texture me262 = new Texture("me262.png");
+        public static final Texture he111 = new Texture("he111.png");
+        public static final Texture japan155 = new Texture("japan155.png");
+
+        public static final Texture leaderboard = new Texture("leaderboards.png");
+        public static final Texture achievements = new Texture("achievement.png");
+        public static final Texture playGames = new Texture("play_games.png");
+        public static final Texture money = new Texture("money.png");
+        public static final Texture smallMoney = new Texture("money_tiny.png");
+        public static final Texture engine = new Texture("engine.png");
+        public static final Texture machineGun = new Texture("machine_gun.png");
+        public static final Texture missile = new Texture("missile_icon.png");
+        public static final Texture mgBoost = new Texture("mg_boost.png");
+        public static final Texture engineBoost = new Texture("engine_boost.png");
+        public static final Texture nuke = new Texture("nuke.png");
+        public static final Texture play = new Texture("play.png");
+        public static final Texture pause = new Texture("pause.png");
+
+        public static final Texture sky = new Texture("bgsky.jpg");
+        public static final Texture hangar = new Texture("hangar.jpg");
+
+        public static final Sound normalShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.mp3"));
+        public static final Sound strongShootSound = Gdx.audio.newSound(Gdx.files.internal("audio/hmg_shoot.mp3"));
+        public static final Sound explosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/explosion.mp3"));
+        public static final Sound maydaySound = Gdx.audio.newSound(Gdx.files.internal("audio/mayday.mp3"));
+        public static final Sound bonusSound = Gdx.audio.newSound(Gdx.files.internal("audio/bonus.mp3"));
+        public static final Sound bigExplosionSound = Gdx.audio.newSound(Gdx.files.internal("audio/big_explosion.mp3"));
+        public static final Sound missileLaunch = Gdx.audio.newSound(Gdx.files.internal("audio/missile_launch.mp3"));
+
+        public static final ParticleEffect explosion = loadExplosion();
+        public static final ParticleEffect bigExplosion = loadBigExplosion();
+        public static final ParticleEffect bonusExplosion = loadBonusExplosion();
+        public static final ParticleEffect ultraExplosion = loadUltraExplosion();
+        //font
+        public static final BitmapFont font = createFont();
+        public static final TextButtonStyle whiteButtonStyle = createWhiteButtonStyle();
+        public static final TextButtonStyle redButtonStyle = createButtonStyle();
+        public static final TextButtonStyle orangeButtonStyle = createOrangeButtonStyle();
+        public static final TextButtonStyle greenButtonStyle = createGreenButtonStyle();
+        public static final LabelStyle whiteLabelStyle = createWhiteLabelStyle();
+        public static final LabelStyle redLabelStyle = createRedLabelStyle();
+        public static final LabelStyle blueLabelStyle = createBlueLabelStyle();
+        public static final LabelStyle cyanLabelStyle = createCyanLabelStyle();
+        public static final LabelStyle orangeLabelStyle = createOrangeLabelStyle();
+        public static final LabelStyle yellowLabelStyle = createYellowLabelStyle();
+        public static final LabelStyle greenLabelStyle = createGreenLabelStyle();
+
+        private static ParticleEffect loadExplosion() {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("particles/explosion.p"),
+                    Gdx.files.internal(""));
+            effect.start();
+
+            return effect;
+        }
+
+        private static ParticleEffect loadBigExplosion() {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("particles/big_explosion.p"),
+                    Gdx.files.internal(""));
+            effect.start();
+
+            return effect;
+        }
+
+        private static ParticleEffect loadBonusExplosion() {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("particles/bonus_explosion.p"),
+                    Gdx.files.internal(""));
+            effect.start();
+
+            return effect;
+        }
+
+        private static ParticleEffect loadUltraExplosion() {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal("particles/ultra_explosion.p"),
+                    Gdx.files.internal(""));
+            effect.start();
+
+            return effect;
+        }
+
+        private static BitmapFont createFont() {
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/font.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            parameter.size = 120;
+
+            return generator.generateFont(parameter);
+        }
+
+        private static TextButtonStyle createWhiteButtonStyle() {
+            TextButtonStyle style = new TextButtonStyle();
+            style.font = font;
+            Gdx.app.log(TAG_AM,
+                    "Creating whiteButtonStyle!");
+
+            return style;
+        }
+
+        private static TextButtonStyle createButtonStyle() {
+            TextButtonStyle style = new TextButtonStyle();
+            style.font = font;
+            style.fontColor = Color.RED;
+
+            return style;
+        }
+
+        private static TextButtonStyle createOrangeButtonStyle() {
+            TextButtonStyle style = new TextButtonStyle();
+            style.font = font;
+            style.fontColor = Color.ORANGE;
+
+            return style;
+        }
+
+        private static TextButtonStyle createGreenButtonStyle() {
+            TextButtonStyle style = new TextButtonStyle();
+            style.font = font;
+            style.fontColor = Color.GREEN;
+
+            return style;
+        }
+
+        private static LabelStyle createWhiteLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.WHITE;
+
+            return style;
+        }
+
+        private static LabelStyle createRedLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.RED;
+
+            return style;
+        }
+
+        private static LabelStyle createBlueLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.BLUE;
+
+            return style;
+        }
+
+        private static LabelStyle createCyanLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.CYAN;
+
+            return style;
+        }
+
+        private static LabelStyle createOrangeLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.ORANGE;
+
+            return style;
+        }
+
+        private static LabelStyle createYellowLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.ORANGE;
+
+            return style;
+        }
+
+        private static LabelStyle createGreenLabelStyle() {
+            LabelStyle style = new LabelStyle();
+            style.font = font;
+            style.fontColor = Color.GREEN;
+
+            return style;
+        }
     }
 }

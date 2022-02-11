@@ -1,26 +1,24 @@
 package pl.baftek.spitfire.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import pl.baftek.spitfire.enums.BoostType;
-
 import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
 import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
+import pl.baftek.spitfire.enums.BoostType;
+
 public class AccountManager {
     private static final String TAG = "AccountManager";
-
-    private final SpitfireGame game;
-    private final Preferences preferences;
-    private final LevelHelper levelHelper;
-
     //preferences
     private static final String GAME_PREFS = "pl.baftek.spitfire.preferences";
     private static final String MONEY_PREFS = "pl.baftek.spitfire.preferences.money";
     private static final String XP_PREFS = "pl.baftek.spitfire.preferences.xp";
     private static final String SCORE_PREFS = "pl.baftek.spitfire.preferences.alltimescore";
     private static final String HIGH_SCORE_PREFS = "pl.baftek.spitfire.preferences.score";
-
+    private final SpitfireGame game;
+    private final Preferences preferences;
+    private final LevelHelper levelHelper;
     //statistics
     private int money;
     private int xp;

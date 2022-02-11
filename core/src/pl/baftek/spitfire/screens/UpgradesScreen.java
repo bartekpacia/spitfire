@@ -1,20 +1,26 @@
 package pl.baftek.spitfire.screens;
 
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.StringHelper.LEVEL;
+import static pl.baftek.spitfire.game.StringHelper.UPGRADE;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
-
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
-import static pl.baftek.spitfire.game.StringHelper.LEVEL;
-import static pl.baftek.spitfire.game.StringHelper.UPGRADE;
 
 public class UpgradesScreen extends AbstractScreen {
     private final int ROW_HORIZONTAL_SPACING = 15;

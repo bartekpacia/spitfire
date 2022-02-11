@@ -1,6 +1,15 @@
 package pl.baftek.spitfire.screens;
 
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.blueLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.yellowLabelStyle;
+import static pl.baftek.spitfire.game.StringHelper.HIGH_SCORE;
+import static pl.baftek.spitfire.game.StringHelper.SCORE;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -8,14 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+
 import pl.baftek.spitfire.enums.BoostType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
-
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
-import static pl.baftek.spitfire.game.StringHelper.HIGH_SCORE;
-import static pl.baftek.spitfire.game.StringHelper.SCORE;
 
 public class ProfileScreen extends AbstractScreen {
     private MyTextButton menuButton;
