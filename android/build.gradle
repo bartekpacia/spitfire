@@ -1,4 +1,4 @@
-def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystorePropertiesFile = rootProject.file('./android/keystore.properties')
 def keystoreProperties = new Properties()
 
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))

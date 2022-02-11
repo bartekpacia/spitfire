@@ -110,7 +110,7 @@ gradle-app.setting
 /ios-moe/build/
 
 ## Keystore sensitive data
-/keystore.properties
+/android/keystore.properties
 
 ## OS Specific
 .DS_Store

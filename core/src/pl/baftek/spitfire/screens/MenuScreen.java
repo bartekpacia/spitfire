@@ -192,12 +192,10 @@ public class MenuScreen extends AbstractScreen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (game.gameServiceClient.isSessionActive()) {
-                    game.setScreen(new GameplayScreen(game));
-                } else {
+                if (!game.gameServiceClient.isSessionActive()) {
                     new PopupLabel("Login with Play Games!", Color.RED, stage);
                 }
-
+                game.setScreen(new GameplayScreen(game));
                 super.clicked(event, x, y);
             }
         });
