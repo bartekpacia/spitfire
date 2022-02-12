@@ -6,10 +6,10 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
         signed {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
         }
     }
 
