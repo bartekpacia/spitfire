@@ -8,7 +8,12 @@ platform :android do
   
   desc "Deploy a new internal version to Google Play"
   lane :internal do
-    build_android_app(
+    gradle(
+      task: "clean bundleRelease",
+      project_dir: '..',
+    )
+
+    gradle( # aka build_android_app
       task: "bundleRelease",
       project_dir: "..",
       properties: {
