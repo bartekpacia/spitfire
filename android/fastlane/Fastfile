@@ -3,7 +3,10 @@ default_platform(:android)
 platform :android do
   desc "Deploy a new beta version to Google Play"
   lane :beta do
-    gradle(task: "clean bundleRelease", project_dir: '..')
+    gradle(
+      task: "clean bundleRelease",
+      project_dir: '..',
+    )
 
     upload_to_play_store(
       track: "beta",
@@ -12,7 +15,10 @@ platform :android do
 
   desc "Deploy a new production version to the Google Play"
   lane :prod do
-    gradle(task: "clean bundleRelease")
+    gradle(
+      task: "clean bundleRelease",
+      project_dir: '..',
+    )
 
     upload_to_play_store
   end
