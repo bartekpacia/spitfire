@@ -43,8 +43,8 @@ jobs:
         run: |
           echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/keystore.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
 
       - name: Download key.json (for Google Play Android Developer)
         id: firebase_key
