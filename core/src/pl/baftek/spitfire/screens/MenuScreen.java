@@ -1,10 +1,23 @@
 package pl.baftek.spitfire.screens;
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.blueLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeButtonStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
+import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import de.golfgl.gdxgamesvcs.GameServiceException;
 import de.golfgl.gdxgamesvcs.IGameServiceListener;
 import pl.baftek.spitfire.game.SpitfireGame;
@@ -12,9 +25,6 @@ import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.InfoDialog;
 import pl.baftek.spitfire.ui.MyTextButton;
 import pl.baftek.spitfire.ui.PopupLabel;
-
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
-import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
 
 public class MenuScreen extends AbstractScreen {
     private static final String TAG = "MenuScreen";
@@ -182,12 +192,10 @@ public class MenuScreen extends AbstractScreen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (game.gameServiceClient.isSessionActive()) {
-                    game.setScreen(new GameplayScreen(game));
-                } else {
+                if (!game.gameServiceClient.isSessionActive()) {
                     new PopupLabel("Login with Play Games!", Color.RED, stage);
                 }
-
+                game.setScreen(new GameplayScreen(game));
                 super.clicked(event, x, y);
             }
         });

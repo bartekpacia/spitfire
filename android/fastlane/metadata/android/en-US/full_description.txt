@@ -1,0 +1,3 @@
+This is my very first libGDX project written in Java. It works quite well, but the code is total garbage because I created this for fun and self-improvement. I tried to refactor this, but with no good result ;)
+
+Code available (MIT license) on https://github.com/BaftekPro/Spitfire

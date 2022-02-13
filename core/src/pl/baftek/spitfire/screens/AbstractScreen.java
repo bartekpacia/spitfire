@@ -7,16 +7,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
 import pl.baftek.spitfire.enums.GameState;
 import pl.baftek.spitfire.game.SpitfireGame;
 
 public abstract class AbstractScreen implements Screen {
-    private static final String TAG = "AbstractScreen";
-    protected SpitfireGame game;
-    protected Stage stage;
-    private OrthographicCamera camera;
-    protected SpriteBatch spriteBatch;
-
     public static final float FONT_SIZE_0 = 0.2f;
     public static final float FONT_SIZE_1 = 0.3f;
     public static final float FONT_SIZE_2 = 0.35f;
@@ -25,6 +20,11 @@ public abstract class AbstractScreen implements Screen {
     public static final float FONT_SIZE_5 = 0.75f;
     public static final float FONT_SIZE_6 = 0.9f;
     public static final float FONT_SIZE_7 = 1.5f;
+    private static final String TAG = "AbstractScreen";
+    protected SpitfireGame game;
+    protected Stage stage;
+    protected SpriteBatch spriteBatch;
+    private OrthographicCamera camera;
 
     public AbstractScreen(SpitfireGame game) {
         this.game = game;

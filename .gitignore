@@ -30,6 +30,7 @@ www-test/
 /android/out/
 com_crashlytics_export_strings.xml
 /captures/
+android/key.json
 
 ## Eclipse
 
@@ -110,7 +111,8 @@ gradle-app.setting
 /ios-moe/build/
 
 ## Keystore sensitive data
-/keystore.properties
+/android/keystore.properties
+/android/keystore.jks
 
 ## OS Specific
 .DS_Store

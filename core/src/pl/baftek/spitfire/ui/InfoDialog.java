@@ -1,13 +1,14 @@
 package pl.baftek.spitfire.ui;
 
 
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.SKIN;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+
 import pl.baftek.spitfire.game.SpitfireGame.ResHelper;
 import pl.baftek.spitfire.screens.AbstractScreen;
-
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.SKIN;
 
 /**
  * Dialog with one button, which result is false. You can other buttons with you own result, but then override

@@ -3,19 +3,18 @@ package pl.baftek.spitfire.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 
 public class Bullet extends GameObject implements Projectile {
-    private static Texture texture;
-    private float soundVolume;
-    private Sound sound;
-
     private static final float DAMAGE_SPITFIRE = 0.5f;
     private static final float DAMAGE_IL2 = 0.75f;
     private static final float DAMAGE_MUSTANG = 1.5f;
-
+    private static Texture texture;
     private static int bulletSpeed;
+    private float soundVolume;
+    private Sound sound;
     private float damage;
 
     public Bullet(float x, float y, PlayerType playerType, SpitfireGame game) {
