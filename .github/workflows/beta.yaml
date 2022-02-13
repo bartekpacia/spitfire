@@ -50,6 +50,7 @@ jobs:
         id: firebase_key
         uses: timheuer/base64-to-file@v1.1
         with:
+          fileDir: android
           fileName: key.json
           encodedString: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY_BASE64 }}
 
