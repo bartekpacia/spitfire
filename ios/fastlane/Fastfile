@@ -1,0 +1,32 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Upload a new build to Firebase App Distribution"
+  lane :distribute do |options|
+    app_store_connect_api_key(
+      key_id: "7D5993L68K",
+      issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
+      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
+      in_house: false,
+    )
+
+    match(
+        type: "adhoc",
+        force_for_new_devices: true,
+    )
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      xcargs: "-allowProvisioningUpdates",
+      scheme: "Runner",
+      export_options: {
+        signingStyle: "manual",
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
+        }
+      },
+      output_name: "Runner.ipa",
+    )
+  end
+end
