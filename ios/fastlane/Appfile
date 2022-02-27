@@ -1,0 +1,4 @@
+app_identifier("pl.baftek.spitfire") # The bundle identifier of your app
+apple_id("barpac02@gmail.com") # Your Apple email address
+itc_team_id("122009185") # App Store Connect Team ID
+team_id("VX8P4VC6NH") # Developer Portal Team ID
