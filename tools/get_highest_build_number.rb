@@ -40,12 +40,15 @@ end
 
 def get_version_code(track:, package_name:, json_key:)
   begin
-    return google_play_track_version_codes(
+    codes = google_play_track_version_codes(
       track: track,
       package_name: package_name,
-      json_key: google_play_json_key_path,
-    ).max
+      json_key: json_key,
+    )
+
+    return codes.max
   rescue
+    puts "Version code not found for track #{track}"
     return 0
   end
 end
