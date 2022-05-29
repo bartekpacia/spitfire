@@ -1,7 +1,8 @@
 # Spitfire
 
-Top-down shooter I've built to improve my programming skills. The code is a
-total mess, I tried to refactor it but without a good result ;P
+Top-down shooter about World War II planes I built when I was 15 years old.
+
+The code is a total mess.
 
 Do with it whatever you want.
 
