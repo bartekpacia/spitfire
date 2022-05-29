@@ -12,9 +12,10 @@ platform :android do
   lane :internal do
     build_android_app(
       task: "bundleRelease",
+      project_dir: "..",
       properties: {
         "android.injected.version.code" => build_number,
-      }
+      },
     )
 
     upload_to_play_store(
