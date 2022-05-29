@@ -2,32 +2,23 @@ default_platform(:android)
 
 require_relative "../../tools/get_new_build_number.rb"
 
-platform :android do
-  # app_store_connect_api_key(
-  #   key_id: "7D5993L68K",
-  #   issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
-  #   key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
-  #   in_house: false,
-  # )
-    
+platform :android do    
   build_number = get_new_build_number(
-    bundle_identifier: ENV["APP_BUNDLE_ID"],
     package_name: ENV["APP_PACKAGE_NAME"],
     google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
   ).to_s
   
   desc "Deploy a new internal version to Google Play"
   lane :internal do
-    sh(
-      "flutter",
-      "build",
-      "appbundle",
-      "--build-number",
-      build_number,
+    build_android_app(
+      task: "bundleRelease",
+      properties: {
+        "android.injected.version.code" => build_number,
+      }
     )
 
     upload_to_play_store(
-      track: "internal", 
+      track: "internal",
       aab: "../build/app/outputs/bundle/release/app-release.aab",
       json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
     )
