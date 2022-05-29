@@ -1,12 +1,8 @@
 require_relative "./get_highest_build_number.rb"
 
 def get_new_build_number(
-    bundle_identifier:,
     package_name:,
     google_play_json_key_path:,
-    firebase_json_key_path:,
-    firebase_app_ios:,
-    firebase_app_android:
   )
   puts "pwd: #{Dir.pwd}"
 
