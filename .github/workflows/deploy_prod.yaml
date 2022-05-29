@@ -43,12 +43,12 @@ jobs:
           fileName: keystore.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
-      - name: Download google-services.json
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileDir: android/app
-          fileName: google-services.json
-          encodedString: ${{ secrets.ANDROID_GOOGLE_SERVICES_BASE64 }}
+      # - name: Download google-services.json
+      #   uses: timheuer/base64-to-file@v1.1
+      #   with:
+      #     fileDir: android/app
+      #     fileName: google-services.json
+      #     encodedString: ${{ secrets.ANDROID_GOOGLE_SERVICES_BASE64 }}
 
       # - name: Download GoogleService-Info.plist
       #   uses: timheuer/base64-to-file@v1.1
