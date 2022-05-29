@@ -1,7 +1,5 @@
 default_platform(:android)
 
-require_relative "../../tools/get_new_build_number.rb"
-
 platform :android do    
   build_number = get_new_build_number(
     package_name: ENV["APP_PACKAGE_NAME"],
