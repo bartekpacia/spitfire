@@ -12,7 +12,7 @@ jobs:
 
     env:
       #APP_BUNDLE_ID: pl.baftek.spitfire
-      APP_PACKAGE_NAME: pl.baftek.discoverrudy
+      APP_PACKAGE_NAME: pl.baftek.spitfire
       #FIREBASE_APP_IOS: 1:225473880978:ios:47aac6768a4645c5
       #FIREBASE_APP_ANDROID: 1:225473880978:android:cd54c2bc09cb3990
 
