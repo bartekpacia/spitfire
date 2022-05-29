@@ -2,7 +2,7 @@ require_relative "./get_highest_build_number.rb"
 
 def get_new_build_number(
     package_name:,
-    google_play_json_key_path:,
+    google_play_json_key_path:
   )
   puts "pwd: #{Dir.pwd}"
 
@@ -13,12 +13,8 @@ def get_new_build_number(
   else 
     puts "file not found - getting highest build number"
     highest_build_number = get_highest_build_number(
-      bundle_identifier: bundle_identifier,
       package_name: package_name,
       google_play_json_key_path: google_play_json_key_path,
-      firebase_json_key_path: firebase_json_key_path,
-      firebase_app_ios: firebase_app_ios,
-      firebase_app_android: firebase_app_android,
     )
     
     File.open(file, "w") { |f| f.write "#{highest_build_number}\n" }
