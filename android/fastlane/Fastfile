@@ -20,7 +20,7 @@ platform :android do
 
     upload_to_play_store(
       track: "internal",
-      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      aab: "./build/outputs/bundle/release/android-release.aab",
       json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
     )
   end
