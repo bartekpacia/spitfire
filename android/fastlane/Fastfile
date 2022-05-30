@@ -13,7 +13,7 @@ platform :android do
       project_dir: '..',
     )
 
-    gradle( # aka build_android_app
+    gradle(
       task: "bundleRelease",
       project_dir: "..",
       properties: {
