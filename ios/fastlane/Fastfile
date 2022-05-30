@@ -1,6 +1,11 @@
 default_platform(:ios)
 
 platform :ios do
+  build_number = get_new_build_number(
+    package_name: ENV["APP_PACKAGE_NAME"],
+    google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
+  ).to_s
+  
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do |options|
     app_store_connect_api_key(
@@ -16,9 +21,9 @@ platform :ios do
     )
 
     build_app(
-      workspace: "Runner.xcworkspace",
+      # workspace: "Runner.xcworkspace",
       xcargs: "-allowProvisioningUpdates",
-      scheme: "Runner",
+      # scheme: "Runner",
       export_options: {
         signingStyle: "manual",
         method: "ad-hoc",
@@ -26,7 +31,7 @@ platform :ios do
           "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
         }
       },
-      output_name: "Runner.ipa",
+      # output_name: "Runner.ipa",
     )
   end
 end
