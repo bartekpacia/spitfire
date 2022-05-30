@@ -87,11 +87,17 @@ project(":ios") {
 
         implementation "de.golfgl.gdxgamesvcs:gdx-gamesvcs-ios-gamecenter:$gamesvcsVersion"
     }
+
+    robovm {
+        iosSignIdentity = "Apple Distribution: Bartek Pacia (VX8P4VC6NH)"
+        iosProvisioningProfile = "pl.baftek.spitfire AppStore"
+        iosSkipSigning = false
+        // archs = "thumbv8:arm64"
+    }
 }
 
 project(":core") {
     apply plugin: "java-library"
-
 
     dependencies {
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
