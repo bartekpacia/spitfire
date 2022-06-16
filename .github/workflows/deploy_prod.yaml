@@ -1,7 +1,6 @@
-name: Deploy Prod
+name: deploy prod
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - "v*"
@@ -18,12 +17,14 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Install Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.1.0
+          ruby-version: "3.1.0"
 
       - name: Install fastlane
         run: |
