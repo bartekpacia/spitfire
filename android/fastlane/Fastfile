@@ -1,23 +1,53 @@
 default_platform(:android)
 
 platform :android do    
+  app_store_connect_api_key(
+    key_id: "7D5993L68K",
+    issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
+    key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
+    in_house: false,
+  )
+
   build_number = get_new_build_number(
+    bundle_identifier: ENV["APP_BUNDLE_ID"],
     package_name: ENV["APP_PACKAGE_NAME"],
     google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
+    firebase_json_key_path: ENV["FIREBASE_JSON_KEY_PATH"],
+    firebase_app_ios: ENV["FIREBASE_APP_IOS"],
+    firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
   ).to_s
-  
-  desc "Deploy a new internal version to Google Play"
-  lane :internal do
-    gradle(
-      task: "clean bundleRelease",
-      project_dir: '..',
-    )
 
+  # get latest tag
+  build_name = sh("git describe --tags --abbrev=0 | cut -c 2-").strip
+  puts "build name: #{build_name}, build number: #{build_number}"
+
+  desc "Upload a new build to Firebase App Distribution"
+  lane :distribute do
     gradle(
       task: "bundleRelease",
       project_dir: "..",
       properties: {
         "android.injected.version.code" => build_number,
+        "android.injected.version.name" => build_name,
+      },
+    )
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_ANDROID"],
+      groups: "core-team",
+      android_artifact_path: "./build/outputs/bundle/release/android-release.aab",
+      service_credentials_file: ENV["FIREBASE_JSON_KEY_PATH"],
+    )
+  end
+
+  desc "Deploy a new internal version to Google Play"
+  lane :internal do
+    gradle(
+      task: "bundleRelease",
+      project_dir: "..",
+      properties: {
+        "android.injected.version.code" => build_number,
+        "android.injected.version.name" => build_name,
       },
     )
 
