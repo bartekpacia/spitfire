@@ -34,11 +34,9 @@ jobs:
           gem install bundler
           cd android
           bundle install
-          cd ..
-          cd ios
-          bundle install
 
-      - uses: actions/setup-java@v2
+      - name: Install Java
+        uses: actions/setup-java@v2
         with:
           distribution: "temurin"
           java-version: "8"
