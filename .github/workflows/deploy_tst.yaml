@@ -34,6 +34,7 @@ jobs:
           gem install bundler
           cd android
           bundle install
+          cd ..
           cd ios
           bundle install
 
