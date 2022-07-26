@@ -32,8 +32,9 @@ jobs:
       - name: Install fastlane
         run: |
           gem install bundler
-          cd android
-          bundle install
+          cd android && bundle install
+          cd ..
+          cd ios && bundle install
 
       - name: Install Java
         uses: actions/setup-java@v2
