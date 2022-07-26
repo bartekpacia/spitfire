@@ -1,8 +1,11 @@
-name: deploy prod
+name: deploy tst
 
 on:
+  workflow_dispatch:
   push:
-    tags:
+    branches:
+      - master
+    tags-ignore:
       - "v*"
 
 jobs:
@@ -12,8 +15,8 @@ jobs:
     env:
       APP_BUNDLE_ID: pl.baftek.spitfire
       APP_PACKAGE_NAME: pl.baftek.spitfire
-      #FIREBASE_APP_IOS: 1:225473880978:ios:47aac6768a4645c5
-      #FIREBASE_APP_ANDROID: 1:225473880978:android:cd54c2bc09cb3990
+      FIREBASE_APP_IOS: 1:694460082561:ios:21c308ba674a0c96942080
+      FIREBASE_APP_ANDROID: 1:694460082561:android:6e7163746a6cf91e
 
     steps:
       - name: Clone repository
@@ -44,20 +47,6 @@ jobs:
           fileName: keystore.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
-      # - name: Download google-services.json
-      #   uses: timheuer/base64-to-file@v1.1
-      #   with:
-      #     fileDir: android/app
-      #     fileName: google-services.json
-      #     encodedString: ${{ secrets.ANDROID_GOOGLE_SERVICES_BASE64 }}
-
-      # - name: Download GoogleService-Info.plist
-      #   uses: timheuer/base64-to-file@v1.1
-      #   with:
-      #     fileDir: ios/Runner
-      #     fileName: GoogleService-Info.plist
-      #     encodedString: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_BASE64 }}
-
       - name: Create keystore.properties
         run: |
           echo "storeFile=${{ steps.download_android_keystore.outputs.filePath }}" > android/keystore.properties
@@ -66,27 +55,27 @@ jobs:
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
 
       # Apple (App Store and match)
-      # - name: Create App Store Connect API key
-      #   run: |
-      #     echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" > ${{ runner.temp }}/key.p8
-      #     echo "APP_STORE_CONNECT_API_KEY_P8_PATH=${{ runner.temp }}/key.p8" >> $GITHUB_ENV
+      - name: Create App Store Connect API key
+        run: |
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" > ${{ runner.temp }}/key.p8
+          echo "APP_STORE_CONNECT_API_KEY_P8_PATH=${{ runner.temp }}/key.p8" >> $GITHUB_ENV
 
-      # - name: Create Personal Access Token to access bartekpacia/certificates
-      #   run: echo "MATCH_GIT_BASIC_AUTHORIZATION=${{ secrets.PERSONAL_ACCESS_TOKEN_BASE64 }}" >> $GITHUB_ENV
+      - name: Create Personal Access Token to access bartekpacia/certificates
+        run: echo "MATCH_GIT_BASIC_AUTHORIZATION=${{ secrets.PERSONAL_ACCESS_TOKEN_BASE64 }}" >> $GITHUB_ENV
 
-      # - name: Create MATCH_PASSWORD
-      #   run: echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
+      - name: Create MATCH_PASSWORD
+        run: echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
 
-      # # Firebase
-      # - name: Download Firebase JSON key (for App Distribution)
-      #   id: firebase_key
-      #   uses: timheuer/base64-to-file@v1.1
-      #   with:
-      #     fileName: firebase_key.json
-      #     encodedString: ${{ secrets.GOOGLE_SERVICES_FIREBASE_BASE64 }}
+      # Firebase
+      - name: Download Firebase JSON key (for App Distribution)
+        id: firebase_key
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: firebase_key.json
+          encodedString: ${{ secrets.GOOGLE_SERVICES_FIREBASE_BASE64 }}
 
-      # - name: Set FIREBASE_JSON_KEY_PATH (for App Distribution)
-      #   run: echo "FIREBASE_JSON_KEY_PATH=${{ steps.firebase_key.outputs.filePath }}" >> $GITHUB_ENV
+      - name: Set FIREBASE_JSON_KEY_PATH (for App Distribution)
+        run: echo "FIREBASE_JSON_KEY_PATH=${{ steps.firebase_key.outputs.filePath }}" >> $GITHUB_ENV
 
       # Google Play
       - name: Download Google Play JSON key (for Google Play Android Developer)
@@ -102,9 +91,8 @@ jobs:
       - name: Validate GOOGLE_PLAY_JSON_KEY_PATH
         run: fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
 
-      # The purpose of this action
-      # - name: fastlane ios prod
-      #   run: cd ios && bundle exec fastlane prod
+      - name: fastlane ios distribute
+        run: cd ios && bundle exec fastlane distribute
 
-      - name: fastlane android internal
-        run: cd android && bundle exec fastlane internal
+      - name: fastlane android distribute
+        run: cd android && bundle exec fastlane distribute
