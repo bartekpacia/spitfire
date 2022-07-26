@@ -1,6 +1,6 @@
 sourceSets.main.java.srcDirs = ["src/"]
 
-sourceCompatibility = '11'
+sourceCompatibility = '8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
@@ -13,5 +13,5 @@ launchIOSDevice.dependsOn build
 createIPA.dependsOn build
 
 robovm {
-    archs = "thumbv7:arm64"
+    archs = "arm64"
 }

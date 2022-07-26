@@ -7,6 +7,7 @@ hs_err_pid*
 
 ## Robovm
 /ios/robovm-build/
+/ios/fastlane/report.xml
 
 ## GWT
 /html/war/
@@ -23,7 +24,11 @@ www-test/
 /android/libs/x86/
 /android/libs/x86_64/
 /android/gen/
-.idea/
+.idea/codeStyles
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
+.idea/misc.xml
 *.ipr
 *.iws
 *.iml

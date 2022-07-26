@@ -1,4 +1,4 @@
-sourceCompatibility = 11
+sourceCompatibility = 8
 sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "pl.baftek.spitfire.desktop.DesktopLauncher"

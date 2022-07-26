@@ -1,0 +1,52 @@
+default_platform(:ios)
+
+platform :ios do
+    app_store_connect_api_key(
+    key_id: "7D5993L68K",
+    issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
+    key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
+    in_house: false,
+  )
+
+  build_number = get_new_build_number(
+    bundle_identifier: ENV["APP_BUNDLE_ID"],
+    package_name: ENV["APP_PACKAGE_NAME"],
+    google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
+    firebase_json_key_path: ENV["FIREBASE_JSON_KEY_PATH"],
+    firebase_app_ios: ENV["FIREBASE_APP_IOS"],
+    firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
+  ).to_s
+
+  # get latest tag
+  build_name = sh("git describe --tags --abbrev=0 | cut -c 2-").strip
+  puts "build name: #{build_name}, build number: #{build_number}"
+  
+  desc "Upload a new build to Firebase App Distribution"
+  lane :distribute do
+    app_store_connect_api_key(
+      key_id: "7D5993L68K",
+      issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
+      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
+      in_house: false,
+    )
+
+    match(
+        type: "adhoc",
+        force_for_new_devices: true,
+    )
+
+    build_app(
+      # workspace: "Runner.xcworkspace",
+      xcargs: "-allowProvisioningUpdates",
+      # scheme: "Runner",
+      export_options: {
+        signingStyle: "manual",
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
+        }
+      },
+      # output_name: "Runner.ipa",
+    )
+  end
+end
