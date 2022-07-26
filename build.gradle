@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:2.3.16"
+        classpath "com.mobidevelop.robovm:robovm-gradle-plugin:2.3.18"
     }
 }
 
@@ -92,7 +92,7 @@ project(":ios") {
         iosSignIdentity = "Apple Distribution: Bartek Pacia (VX8P4VC6NH)"
         iosProvisioningProfile = "pl.baftek.spitfire AppStore"
         iosSkipSigning = false
-        // archs = "thumbv8:arm64"
+        archs = "thumbv8:arm64"
     }
 }
 
