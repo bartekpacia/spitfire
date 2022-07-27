@@ -19,8 +19,8 @@ platform :ios do
   
   build_name = get_new_build_name()
 
-  File.write("robovm.properties", "app.build=#{build_number}", mode: "a")
-  File.write("robovm.properties", "app.version=#{build_name}", mode: "a")
+  File.write("../robovm.properties", "app.build=#{build_number}\n", mode: "a")
+  File.write("../robovm.properties", "app.version=#{build_name}\n", mode: "a")
   
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do
@@ -36,7 +36,10 @@ platform :ios do
         force_for_new_devices: true,
     )
 
-    gradle(task: "robovmArchive")
+    gradle(
+      task: "robovmArchive",
+      project_dir: ".."
+    )
 
     firebase_app_distribution(
       app: ENV["FIREBASE_APP_IOS"],
