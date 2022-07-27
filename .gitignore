@@ -26,6 +26,7 @@ www-test/
 /android/gen/
 .idea/codeStyles
 .idea/compiler.xml
+.idea/modules.xml
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/misc.xml
@@ -47,6 +48,7 @@ android/key.json
 /desktop/bin/
 /html/bin/
 /ios/bin/
+/ios/Payload/
 /ios-moe/bin/
 *.tmp
 *.bak

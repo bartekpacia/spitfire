@@ -1,7 +1,7 @@
 default_platform(:ios)
 
 platform :ios do
-    app_store_connect_api_key(
+  app_store_connect_api_key(
     key_id: "7D5993L68K",
     issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
     key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
@@ -16,10 +16,11 @@ platform :ios do
     firebase_app_ios: ENV["FIREBASE_APP_IOS"],
     firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
   ).to_s
+  
+  build_name = get_new_build_name()
 
-  # get latest tag
-  build_name = sh("git describe --tags --abbrev=0 | cut -c 2-").strip
-  puts "build name: #{build_name}, build number: #{build_number}"
+  File.write("robovm.properties", "app.build=#{build_number}", mode: "a")
+  File.write("robovm.properties", "app.version=#{build_name}", mode: "a")
   
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do
@@ -35,18 +36,29 @@ platform :ios do
         force_for_new_devices: true,
     )
 
-    build_app(
-      # workspace: "Runner.xcworkspace",
-      xcargs: "-allowProvisioningUpdates",
-      # scheme: "Runner",
-      export_options: {
-        signingStyle: "manual",
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
-        }
-      },
-      # output_name: "Runner.ipa",
+    gradle(task: "robovmArchive")
+
+    firebase_app_distribution(
+      app: ENV["FIREBASE_APP_IOS"],
+      groups: "core-team",
+      ipa_path: "build/robovm/IOSLauncher.ipa",
+      service_credentials_file: ENV["FIREBASE_JSON_KEY_PATH"],
     )
+    # build_app(
+    #   # workspace: "Runner.xcworkspace",
+    #   xcargs: "-allowProvisioningUpdates",
+    #   # scheme: "Runner",
+    #   export_options: {
+    #     signingStyle: "manual",
+    #     method: "ad-hoc",
+    #     provisioningProfiles: {
+    #       "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
+    #     }
+    #   },
+    #   # output_name: "Runner.ipa",
+    # )
+
+    # /Users/bartek/dev/bartekpacia/spitfire/ios/build/robovm/IOSLauncher.app
+    # build/robovm/IOSLauncher.app
   end
 end

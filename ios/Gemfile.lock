@@ -156,7 +156,7 @@ GEM
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
     fastlane-plugin-firebase_app_distribution (0.3.4)
-    fastlane-plugin-get_new_build_number (0.2.5)
+    fastlane-plugin-get_new_build_number (0.2.6)
       fastlane-plugin-firebase_app_distribution
     ffi (1.15.5)
     fourflusher (2.3.1)
@@ -282,6 +282,7 @@ PLATFORMS
 DEPENDENCIES
   cocoapods
   fastlane
+  fastlane-plugin-firebase_app_distribution
   fastlane-plugin-get_new_build_number
 
 BUNDLED WITH

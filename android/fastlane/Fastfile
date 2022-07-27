@@ -17,9 +17,7 @@ platform :android do
     firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
   ).to_s
 
-  # get latest tag
-  build_name = sh("git describe --tags --abbrev=0 | cut -c 2-").strip
-  puts "build name: #{build_name}, build number: #{build_number}"
+  build_name = get_new_build_name()
 
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do
