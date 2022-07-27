@@ -90,9 +90,9 @@ project(":ios") {
 
     robovm {
         iosSignIdentity = "Apple Distribution: Bartek Pacia (VX8P4VC6NH)"
-        iosProvisioningProfile = "pl.baftek.spitfire AppStore"
+        iosProvisioningProfile = "match AdHoc pl.baftek.spitfire"
         iosSkipSigning = false
-        archs = "thumbv8:arm64"
+        archs = "arm64"
     }
 }
 
