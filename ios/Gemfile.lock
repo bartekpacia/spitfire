@@ -156,7 +156,7 @@ GEM
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
     fastlane-plugin-firebase_app_distribution (0.3.4)
-    fastlane-plugin-get_new_build_number (0.2.7)
+    fastlane-plugin-get_new_build_number (0.2.8)
       fastlane-plugin-firebase_app_distribution
     ffi (1.15.5)
     fourflusher (2.3.1)
