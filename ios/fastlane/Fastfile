@@ -24,6 +24,10 @@ platform :ios do
   
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do
+    if is_ci
+      setup_ci
+    end
+
     app_store_connect_api_key(
       key_id: "7D5993L68K",
       issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
@@ -33,6 +37,7 @@ platform :ios do
 
     match(
         type: "adhoc",
+        readonly: false,
         force_for_new_devices: true,
     )
 
