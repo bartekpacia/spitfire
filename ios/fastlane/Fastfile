@@ -28,11 +28,14 @@ platform :ios do
       setup_ci
     end
 
-    app_store_connect_api_key(
-      key_id: "7D5993L68K",
-      issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
-      key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
-      in_house: false,
+    firebase_app_distribution_get_udids(
+      app: ENV["FIREBASE_APP_IOS"],
+      output_file: 'firebase_devices.txt',
+      service_credentials_file: ENV["FIREBASE_JSON_KEY_PATH"],
+    )
+
+    register_devices(
+      devices_file: 'firebase_devices.txt',
     )
 
     match(
