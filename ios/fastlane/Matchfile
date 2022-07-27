@@ -1,4 +1,4 @@
-git_url("git@github.com:bartekpacia/certificates.git")
+git_url("https://github.com:bartekpacia/certificates.git")
 storage_mode("git")
 username("barpac02@gmail.com") # Your Apple Developer Portal username
 app_identifier("pl.baftek.spitfire")
