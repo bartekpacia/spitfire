@@ -34,7 +34,7 @@ GEM
       rake (>= 12.0.0, < 14.0.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.8.0)
+    dotenv (2.8.1)
     emoji_regex (3.2.3)
     excon (0.92.4)
     faraday (1.10.0)
@@ -106,7 +106,7 @@ GEM
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
     fastlane-plugin-firebase_app_distribution (0.3.4)
-    fastlane-plugin-get_new_build_number (0.2.4)
+    fastlane-plugin-get_new_build_number (0.2.5)
       fastlane-plugin-firebase_app_distribution
     gh_inspector (1.1.3)
     google-apis-androidpublisher_v3 (0.25.0)
