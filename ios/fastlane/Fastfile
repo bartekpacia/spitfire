@@ -55,21 +55,30 @@ platform :ios do
       ipa_path: "build/robovm/IOSLauncher.ipa",
       service_credentials_file: ENV["FIREBASE_JSON_KEY_PATH"],
     )
-    # build_app(
-    #   # workspace: "Runner.xcworkspace",
-    #   xcargs: "-allowProvisioningUpdates",
-    #   # scheme: "Runner",
-    #   export_options: {
-    #     signingStyle: "manual",
-    #     method: "ad-hoc",
-    #     provisioningProfiles: {
-    #       "pl.baftek.spitfire": "match AdHoc pl.baftek.spitfire"
-    #     }
-    #   },
-    #   # output_name: "Runner.ipa",
-    # )
+  end
 
-    # /Users/bartek/dev/bartekpacia/spitfire/ios/build/robovm/IOSLauncher.app
-    # build/robovm/IOSLauncher.app
+  desc "Upload a new release build to App Store"
+  lane :prod do
+    app_bundle_id = ENV["APP_BUNDLE_ID"]
+    profile_name = "match AppStore #{app_bundle_id}"
+
+    if is_ci
+      setup_ci
+    end
+
+    match(
+      type: "appstore",
+      readonly: false,
+    )
+
+    gradle(
+      task: "robovmArchive",
+      project_dir: ".."
+    )
+
+    upload_to_app_store(
+      force: true,
+      precheck_include_in_app_purchases: false,
+    )
   end
 end

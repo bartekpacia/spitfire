@@ -11,7 +11,3 @@ launchIPhoneSimulator.dependsOn build
 launchIPadSimulator.dependsOn build
 launchIOSDevice.dependsOn build
 createIPA.dependsOn build
-
-robovm {
-    archs = "arm64"
-}

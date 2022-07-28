@@ -89,8 +89,11 @@ project(":ios") {
     }
 
     robovm {
+        def isAppStore = System.getenv('SPITFIRE_APP_STORE')
+        def profile = isAppStore == "true" ? "AppStore" : "AdHoc"
+
         iosSignIdentity = "Apple Distribution: Bartek Pacia (VX8P4VC6NH)"
-        iosProvisioningProfile = "match AdHoc pl.baftek.spitfire"
+        iosProvisioningProfile = "match ${profile} pl.baftek.spitfire"
         iosSkipSigning = false
         archs = "arm64"
     }
