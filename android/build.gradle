@@ -114,5 +114,5 @@ idea {
         }
     }
 }
-dependencies {
-}
+
+dependencies {}
