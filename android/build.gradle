@@ -1,4 +1,4 @@
-def keystorePropertiesFile = rootProject.file('./android/keystore.properties')
+def keystorePropertiesFile = rootProject.file("./android/keystore.properties")
 def keystoreProperties = new Properties()
 
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -6,39 +6,47 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     signingConfigs {
         signed {
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties["storeFile"])
+            storePassword keystoreProperties["storePassword"]
+            keyAlias keystoreProperties["keyAlias"]
+            keyPassword keystoreProperties["keyPassword"]
         }
     }
 
-    compileSdkVersion 31
+    namespace "pl.baftek.spitfire"
+
+    compileSdk 33
+
     sourceSets {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
+            manifest.srcFile "AndroidManifest.xml"
+            java.srcDirs = ["src"]
+            aidl.srcDirs = ["src"]
+            renderscript.srcDirs = ["src"]
+            res.srcDirs = ["res"]
+            assets.srcDirs = ["assets"]
+            jniLibs.srcDirs = ["libs"]
         }
     }
-    packagingOptions {
-        exclude 'META-INF/robovm/ios/robovm.xml'
-    }
+
     defaultConfig {
         applicationId "pl.baftek.spitfire"
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdk 21
+        targetSdk 33
         versionCode 1 // set automatically by fastlane + GitHub Action
         versionName "1.3.0"
     }
+
+    packagingOptions {
+        resources {
+            excludes += ["META-INF/robovm/ios/robovm.xml"]
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.signed
 
         }
@@ -47,7 +55,7 @@ android {
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
-task copyAndroidNatives() {
+tasks.register("copyAndroidNatives") {
     doFirst {
         file("libs/armeabi-v7a/").mkdirs()
         file("libs/arm64-v8a/").mkdirs()
@@ -70,7 +78,7 @@ task copyAndroidNatives() {
         }
     }
 }
-task run(type: Exec) {
+tasks.register("run", Exec) {
     def path
     def localProperties = project.file("../local.properties")
     if (localProperties.exists()) {
@@ -78,7 +86,7 @@ task run(type: Exec) {
         localProperties.withInputStream { instr ->
             properties.load(instr)
         }
-        def sdkDir = properties.getProperty('sdk.dir')
+        def sdkDir = properties.getProperty("sdk.dir")
         if (sdkDir) {
             path = sdkDir
         } else {
@@ -89,8 +97,9 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher'
+    commandLine "$adb", "shell", "am", "start", "-n", "pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher"
 }
+
 // sets up the Android Idea project, using the old Ant based build.
 idea {
     module {
@@ -112,5 +121,5 @@ idea {
         }
     }
 }
-dependencies {
-}
+
+dependencies {}
