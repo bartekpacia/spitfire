@@ -229,7 +229,7 @@ public class MenuScreen extends AbstractScreen {
 
     private void initPlayGamesImageAndLabel() {
         playGamesImage = new Image(SpitfireGame.ResHelper.playGames);
-        signLabel = new Label(StringHelper.SIGNED_OUT, redLabelStyle);
+        signLabel = new Label(StringHelper.SIGNED_OUT_ANDROID, redLabelStyle);
         signLabel.setFontScale(FONT_SIZE_2);
 
         playGamesImage.addListener(new ClickListener() {
@@ -262,12 +262,12 @@ public class MenuScreen extends AbstractScreen {
     private void updatePlayGamesUI() {
         String string;
         if (game.gameServiceClient.isSessionActive()) {
-            string = StringHelper.SIGNED_IN;
+            string = StringHelper.SIGNED_IN_ANDROID;
             signLabel.setText(string);
             signLabel.setStyle(greenLabelStyle);
             playerButton.setText(game.gameServiceClient.getPlayerDisplayName());
         } else {
-            string = StringHelper.SIGNED_OUT;
+            string = StringHelper.SIGNED_OUT_ANDROID;
             signLabel.setText(string);
             signLabel.setStyle(redLabelStyle);
             playerButton.setText("Logged out");
