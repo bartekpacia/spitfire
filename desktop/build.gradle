@@ -6,7 +6,7 @@ project.ext.assetsDir = new File("../android/assets");
 
 tasks.register("run", JavaExec) {
     dependsOn "classes"
-    
+
     mainClass = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
