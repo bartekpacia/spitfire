@@ -1,12 +1,11 @@
 package pl.baftek.spitfire.game;
 
-import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
-import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-
 import pl.baftek.spitfire.enums.BoostType;
+
+import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
+import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_SCORE;
 
 public class AccountManager {
     private static final String TAG = "AccountManager";

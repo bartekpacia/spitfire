@@ -1,20 +1,17 @@
 package pl.baftek.spitfire.screens;
 
 
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.greenButtonStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redButtonStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
-import static pl.baftek.spitfire.game.StringHelper.SETTINGS;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
+
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.*;
+import static pl.baftek.spitfire.game.StringHelper.SETTINGS;
 
 public class SettingsScreen extends AbstractScreen {
     private Table menuTable;

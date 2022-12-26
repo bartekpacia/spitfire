@@ -2,7 +2,6 @@ package pl.baftek.spitfire.entities;
 
 
 import com.badlogic.gdx.math.Rectangle;
-
 import pl.baftek.spitfire.enums.GameState;
 import pl.baftek.spitfire.game.SpitfireGame;
 
