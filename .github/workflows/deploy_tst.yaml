@@ -43,6 +43,9 @@ jobs:
           distribution: "temurin"
           java-version: "11"
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: Download Android keystore
         id: download_android_keystore
         uses: timheuer/base64-to-file@v1.1
