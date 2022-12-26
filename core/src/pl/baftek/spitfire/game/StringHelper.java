@@ -4,7 +4,7 @@ package pl.baftek.spitfire.game;
 public final class StringHelper {
     public static final String UI_SKIN_PATH = "skin/neutralizer-ui.json";
 
-    public static final String VERSION = "version 1.1";
+    public static final String VERSION = "version 1.3.0";
 
     public static final String SCORE = "SCORE";
     public static final String HIGH = "HIGH";
@@ -44,13 +44,15 @@ public final class StringHelper {
     public static final String SPITFIRE_DESC = "Agile and fast-firing, Spitfire is \na great fighter that you can rely on.";
     public static final String MUSTANG_DESC = "Very fast and agile, equipped with \npowerful, but not-fast-firing 20mm cannons, \nMustang is a plane for all those, who \nwant to hit once and for good.";
     public static final String IL2_DESC = "Very powerful, but slow. \nCan be equipped with missiles.";
-    public static final String SIGNED_IN = "PLAY GAMES CONNECTED";
-    public static final String SIGNED_OUT = "PLAY GAMES DISCONNECTED";
+    public static final String SIGNED_IN_ANDROID = "PLAY GAMES CONNECTED";
+    public static final String SIGNED_OUT_ANDROID = "PLAY GAMES DISCONNECTED";
+    public static final String SIGNED_IN_IOS = "GAME CENTER CONNECTED";
+    public static final String SIGNED_OUT_IOS = "GAME CENTER DISCONNECTED";
     public static final String MG_BOOST = "MG BOOST";
     public static final String NUKE = "NUKE";
     public static final String ENGINE_BOOST = "ENGINE BOOST";
 
-    public static final String CREDITS_TEXT = "Created with libGDX 1.9.9" +
+    public static final String CREDITS_TEXT = "Created with libGDX 1.10.0" +
             "\nUses gdx-gamesvcs by MrStahlfelge " +
             "\n" +
             "\nTesters: " +

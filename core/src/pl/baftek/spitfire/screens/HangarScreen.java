@@ -1,23 +1,18 @@
 package pl.baftek.spitfire.screens;
 
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
-import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
-
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.game.SpitfireGame;
 import pl.baftek.spitfire.game.StringHelper;
 import pl.baftek.spitfire.ui.MyTextButton;
+
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.orangeLabelStyle;
+import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 
 public class HangarScreen extends AbstractScreen {
     private Timer timer;

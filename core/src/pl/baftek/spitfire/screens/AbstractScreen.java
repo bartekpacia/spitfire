@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import pl.baftek.spitfire.enums.GameState;
 import pl.baftek.spitfire.game.SpitfireGame;
 
@@ -31,7 +30,7 @@ public abstract class AbstractScreen implements Screen {
 
         createCamera();
 
-        stage = new Stage(new StretchViewport(SpitfireGame.WIDTH, SpitfireGame.HEIGHT, camera));
+        stage = new Stage(new FitViewport(SpitfireGame.WIDTH, SpitfireGame.HEIGHT, camera));
         Gdx.input.setInputProcessor(stage);
         spriteBatch = new SpriteBatch();
 

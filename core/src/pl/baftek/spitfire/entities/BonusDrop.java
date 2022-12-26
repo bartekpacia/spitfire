@@ -3,7 +3,6 @@ package pl.baftek.spitfire.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-
 import pl.baftek.spitfire.enums.BonusDropType;
 
 public class BonusDrop extends GameObject {

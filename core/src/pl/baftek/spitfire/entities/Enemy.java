@@ -2,7 +2,6 @@ package pl.baftek.spitfire.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-
 import pl.baftek.spitfire.enums.EnemyType;
 import pl.baftek.spitfire.game.SpitfireGame;
 
