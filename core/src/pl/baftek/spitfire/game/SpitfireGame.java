@@ -1,14 +1,5 @@
 package pl.baftek.spitfire.game;
 
-import static pl.baftek.spitfire.enums.Achievement.BIG_BOY;
-import static pl.baftek.spitfire.enums.Achievement.FIRST_BLOOD;
-import static pl.baftek.spitfire.enums.Achievement.RATATA;
-import static pl.baftek.spitfire.enums.Achievement.TOP_GEAR;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_BIGBOY;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_FIRST_BLOOD;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_RATATA;
-import static pl.baftek.spitfire.game.StringHelper.ACHIEVEMENT_TOP_GEAR;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -24,15 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.Timer;
 import com.kotcrab.vis.ui.VisUI;
-
-import java.util.Calendar;
-
 import de.golfgl.gdxgamesvcs.IGameServiceClient;
 import pl.baftek.spitfire.enums.Achievement;
 import pl.baftek.spitfire.enums.GameState;
 import pl.baftek.spitfire.enums.PlayerType;
 import pl.baftek.spitfire.screens.MenuScreen;
 import pl.baftek.spitfire.ui.PopupLabel;
+
+import java.util.Calendar;
+
+import static pl.baftek.spitfire.enums.Achievement.*;
+import static pl.baftek.spitfire.game.StringHelper.*;
 
 public class SpitfireGame extends Game {
     public static final String TITLE = "Spitfire Game";
@@ -103,8 +96,6 @@ public class SpitfireGame extends Game {
 
     public SpitfireGame() {
     }
-
-    ;
 
     public SpitfireGame(IGameServiceClient gameServiceClient) {
         this.gameServiceClient = gameServiceClient;
@@ -816,7 +807,7 @@ public class SpitfireGame extends Game {
             }
 
             case SZTURMOVIK: {
-                return IL2engineUpgradeCost;
+                return IL2MGupgradeCost;
             }
 
             default: {
@@ -1039,8 +1030,7 @@ public class SpitfireGame extends Game {
         }
 
 
-        Gdx.app.log(TAG,
-                "Unlocking achievement " + achievement.toString());
+        Gdx.app.log(TAG, "Unlocking achievement " + achievement);
     }
 
     @Override

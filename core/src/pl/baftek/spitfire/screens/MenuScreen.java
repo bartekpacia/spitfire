@@ -7,6 +7,7 @@ import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.redLabelStyle;
 import static pl.baftek.spitfire.game.SpitfireGame.ResHelper.whiteLabelStyle;
 import static pl.baftek.spitfire.game.StringHelper.LEADERBOARD_HIGH_SCORE;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -263,11 +264,17 @@ public class MenuScreen extends AbstractScreen {
         String string;
         if (game.gameServiceClient.isSessionActive()) {
             string = StringHelper.SIGNED_IN_ANDROID;
+            if (Gdx.app.getType() == Application.ApplicationType.iOS) {
+                string = StringHelper.SIGNED_IN_IOS;
+            }
             signLabel.setText(string);
             signLabel.setStyle(greenLabelStyle);
             playerButton.setText(game.gameServiceClient.getPlayerDisplayName());
         } else {
             string = StringHelper.SIGNED_OUT_ANDROID;
+            if (Gdx.app.getType() == Application.ApplicationType.iOS) {
+                string = StringHelper.SIGNED_OUT_IOS;
+            }
             signLabel.setText(string);
             signLabel.setStyle(redLabelStyle);
             playerButton.setText("Logged out");
