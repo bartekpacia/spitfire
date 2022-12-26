@@ -8,14 +8,7 @@ sourceSets {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.compileJava {
-    options.encoding = "UTF-8"
-}
-
-tasks.compileTestJava {
-    options.encoding = "UTF-8"
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 extra.apply {
