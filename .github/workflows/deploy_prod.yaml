@@ -95,4 +95,4 @@ jobs:
           cd ios && bundle exec fastlane prod
 
       - name: fastlane android internal
-        run: cd android && bundle exec fastlane internal
+        run: cd android && bundle exec fastlane prod

@@ -3,11 +3,9 @@ package pl.baftek.spitfire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-
+import de.golfgl.gdxgamesvcs.GameCenterClient;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
-
-import de.golfgl.gdxgamesvcs.GameCenterClient;
 import pl.baftek.spitfire.game.SpitfireGame;
 
 public class IOSLauncher extends IOSApplication.Delegate {
