@@ -101,26 +101,4 @@ tasks.register<Exec>("run") {
     commandLine(adb, "shell", "am", "start", "-n", "pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher")
 }
 
-/*// sets up the Android Idea project, using the old Ant based build.
-idea {
-    module {
-        sourceDirs += file("src")
-
-        iml {
-            withXml {
-                def node = it.asNode()
-                def builder = NodeBuilder.newInstance()
-                builder.current = node
-                builder.component(name: "FacetManager") {
-                    facet(type: "android", name: "Android") {
-                        configuration {
-                            option(name: "UPDATE_PROPERTY_FILES", value: "true")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}*/
-
 dependencies {}
