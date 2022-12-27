@@ -34,19 +34,6 @@ allprojects {
     }
 }
 
-project(":desktop") {
-    apply plugin: "java-library"
-
-    dependencies {
-        implementation project(":core")
-        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-
-        implementation "de.golfgl.gdxgamesvcs:gdx-gamesvcs-desktop-gpgs:$gamesvcsVersion"
-    }
-}
-
 project(":android") {
     apply plugin: "com.android.application"
 

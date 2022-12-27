@@ -1,5 +1,10 @@
+plugins {
+    `java-library`
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 sourceSets {
@@ -8,6 +13,18 @@ sourceSets {
             setSrcDirs(listOf("src/"))
         }
     }
+}
+
+dependencies {
+    val gdxVersion: String by rootProject.extra
+    val gamesvcsVersion: String by rootProject.extra
+
+    implementation(project(":core"))
+    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
+    implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
+    implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
+
+    implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-desktop-gpgs:$gamesvcsVersion")
 }
 
 val mainClassName by extra("pl.baftek.spitfire.desktop.DesktopLauncher")
