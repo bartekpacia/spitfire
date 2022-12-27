@@ -1,6 +1,12 @@
 import java.io.FileInputStream
 import java.util.Properties
 
+plugins {
+    id("com.android.application") version "7.3.1" apply true
+}
+
+val natives = configurations.create("natives")
+
 val keystorePropertiesFile = rootProject.file("./android/keystore.properties")
 val keystoreProperties = Properties()
 
@@ -56,6 +62,28 @@ android {
     }
 }
 
+dependencies {
+    val gdxVersion: String by rootProject.extra
+    val gamesvcsVersion: String by rootProject.extra
+
+    implementation(project(":core"))
+    implementation("com.badlogicgames.gdx:gdx-backend-android:$gdxVersion")
+    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a")
+    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a")
+    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86")
+    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64")
+    // Freetype
+    implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
+    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a")
+    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a")
+    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86")
+    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64")
+    // Play Games
+    implementation("com.google.android.gms:play-services-games:23.1.0")
+    // Game Services
+    implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-android-gpgs:$gamesvcsVersion")
+}
+
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
@@ -66,7 +94,7 @@ tasks.register<Copy>("copyAndroidNatives") {
         file("libs/x86_64/").mkdirs()
         file("libs/x86/").mkdirs()
 
-        configurations.natives.get().files.forEach { jar ->
+        project.configurations["natives"].files.forEach { jar ->
             var outputDir: File? = null
             if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
             if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
