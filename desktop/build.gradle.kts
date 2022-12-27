@@ -52,20 +52,17 @@ tasks.register<JavaExec>("debug") {
 }
 
 tasks.register<Jar>("dist") {
+    description = "Creates a JAR ready to be distributed"
+
     dependsOn(tasks.classes)
 
     from(files(sourceSets["main"].output.classesDirs))
     from(files(sourceSets["main"].output.resourcesDir))
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    // configurations.compileClasspath.files.forEach {
-    //     from(if (it.isDirectory) it else zipTree(it))
-    // }
-    // duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    // from { configurations.compile.collect { zipTree(it) } } // FIXME: make it work in KTS
-
-    dependsOn(configurations.runtimeClasspath)
     from({
-        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        configurations.runtimeClasspath.get().filter { file ->
+            file.name.endsWith("jar")
+        }.map { zipTree(it) }
     })
 
     from(files(assetsDir))
