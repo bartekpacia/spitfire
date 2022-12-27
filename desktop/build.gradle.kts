@@ -56,10 +56,21 @@ tasks.register<Jar>("dist") {
 
     from(files(sourceSets["main"].output.classesDirs))
     from(files(sourceSets["main"].output.resourcesDir))
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // configurations.compileClasspath.files.forEach {
+    //     from(if (it.isDirectory) it else zipTree(it))
+    // }
+    // duplicatesStrategy = DuplicatesStrategy.INCLUDE
     // from { configurations.compile.collect { zipTree(it) } } // FIXME: make it work in KTS
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+
     from(files(assetsDir))
 
     manifest {
-        attributes(Pair("Main-Class", mainClassName))
+        attributes["Main-Class"] = mainClassName
     }
 }
