@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
         google()
     }
@@ -15,6 +14,15 @@ pluginManagement {
 
     plugins {
         id("robovm") version "2.3.18" apply false
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+    repositories {
+        mavenCentral()
+        google()
     }
 }
 
