@@ -2,16 +2,12 @@ pluginManagement {
     repositories {
         mavenLocal()
         mavenCentral()
-        gradlePluginPortal()
         google()
-        // maven("https://oss.sonatype.org/content/repositories/releases/")
-        // maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 
     resolutionStrategy {
         eachPlugin {
             if (requested.id.name == "robovm") {
-                println("found! namespace: ${requested.id.namespace}, name: ${requested.id.name}")
                 useModule("com.mobidevelop.robovm:robovm-gradle-plugin:${requested.version}")
             }
         }
