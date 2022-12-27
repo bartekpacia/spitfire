@@ -85,15 +85,3 @@ project(":ios") {
         archs = "arm64"
     }
 }
-
-project(":core") {
-    apply plugin: "java-library"
-
-    dependencies {
-        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        api "com.kotcrab.vis:vis-ui:$visuiVersion"
-
-        implementation "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
-    }
-}
