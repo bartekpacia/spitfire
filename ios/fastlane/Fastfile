@@ -71,12 +71,6 @@ platform :ios do
       readonly: false,
     )
 
-    update_code_signing_settings(
-          profile_name: profile_name,
-          build_configurations: 'Release',
-          code_sign_identity: 'iPhone Distribution'
-        )
-
     ENV["SPITFIRE_APP_STORE"] = "true"
     gradle(
       task: "robovmArchive",
