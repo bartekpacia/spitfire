@@ -42,8 +42,8 @@ android {
         applicationId = "pl.baftek.spitfire"
         minSdk = 21
         targetSdk = 33
-        versionCode = 1 // set automatically by fastlane + GitHub Action
-        versionName = "1.3.0"
+        versionCode = (findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
+        versionName = findProperty("versionName") as? String ?: "1.0.0"
     }
 
     packagingOptions {

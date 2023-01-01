@@ -44,8 +44,8 @@ platform :android do
       task: "bundleRelease",
       project_dir: "..",
       properties: {
-        "android.injected.version.code" => build_number,
-        "android.injected.version.name" => build_name,
+        "versionCode" => build_number,
+        "versionName" => build_name,
       },
     )
 
