@@ -2,25 +2,25 @@ default_platform(:ios)
 
 platform :ios do
   app_store_connect_api_key(
-    key_id: "7D5993L68K",
+    key_id: "553H6VCHPC",
     issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
     key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
     in_house: false,
   )
 
-  build_number = get_new_build_number(
-    bundle_identifier: ENV["APP_BUNDLE_ID"],
-    package_name: ENV["APP_PACKAGE_NAME"],
-    google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
-    firebase_json_key_path: ENV["FIREBASE_JSON_KEY_PATH"],
-    firebase_app_ios: ENV["FIREBASE_APP_IOS"],
-    firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
-  ).to_s
+  # build_number = get_new_build_number(
+  #   bundle_identifier: ENV["APP_BUNDLE_ID"],
+  #   package_name: ENV["APP_PACKAGE_NAME"],
+  #   google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
+  #   firebase_json_key_path: ENV["FIREBASE_JSON_KEY_PATH"],
+  #   firebase_app_ios: ENV["FIREBASE_APP_IOS"],
+  #   firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
+  # ).to_s
   
-  build_name = get_new_build_name()
+  # build_name = get_new_build_name()
 
-  File.write("../robovm.properties", "app.build=#{build_number}\n", mode: "a")
-  File.write("../robovm.properties", "app.version=#{build_name}\n", mode: "a")
+  # File.write("../robovm.properties", "app.build=#{build_number}\n", mode: "a")
+  # File.write("../robovm.properties", "app.version=#{build_name}\n", mode: "a")
   
   desc "Upload a new build to Firebase App Distribution"
   lane :distribute do
@@ -66,7 +66,7 @@ platform :ios do
       setup_ci
     end
 
-    match(
+    sync_code_signing(
       type: "appstore",
       readonly: false,
     )
@@ -80,6 +80,9 @@ platform :ios do
     upload_to_app_store(
       force: true,
       precheck_include_in_app_purchases: false,
+      skip_screenshots: true,
+      skip_metadata: true,
+      ipa: "build/robovm/IOSLauncher.ipa"
     )
   end
 end

@@ -38,15 +38,19 @@
     <key>UIRequiredDeviceCapabilities</key>
     <array>
       <string>opengles-2</string>
+      <string>arm64</string>
     </array>
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
     </array>
+    <key>UIRequiresFullScreen</key>
+    <true/>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
     <key>CFBundleIconName</key>
     <string>AppIcon</string>
-    <key>ITSAppUsesNonExemptEncryption</key><false/>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
   </dict>
 </plist>
