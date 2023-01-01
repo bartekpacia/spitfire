@@ -59,9 +59,6 @@ platform :ios do
 
   desc "Upload a new release build to App Store"
   lane :prod do
-    app_bundle_id = ENV["APP_BUNDLE_ID"]
-    profile_name = "match AppStore #{app_bundle_id}"
-
     if is_ci
       setup_ci
     end
