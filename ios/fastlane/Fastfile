@@ -38,10 +38,10 @@ platform :ios do
       devices_file: 'firebase_devices.txt',
     )
 
-    match(
-        type: "adhoc",
-        readonly: false,
-        force_for_new_devices: true,
+    sync_code_signing(
+      type: "adhoc",
+      readonly: false,
+      force_for_new_devices: true
     )
 
     gradle(
