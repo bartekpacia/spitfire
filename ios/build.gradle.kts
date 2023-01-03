@@ -3,6 +3,11 @@ plugins {
     id("robovm") version "2.3.18"
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 sourceSets {
     main {
         java {

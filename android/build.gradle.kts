@@ -2,7 +2,12 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application") version "7.3.1" apply true
+    id("com.android.application") version "7.3.1"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 val natives = configurations.create("natives")
@@ -128,5 +133,3 @@ tasks.register<Exec>("run") {
     val adb = "$path/platform-tools/adb"
     commandLine(adb, "shell", "am", "start", "-n", "pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher")
 }
-
-dependencies {}
