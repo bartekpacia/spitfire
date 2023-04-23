@@ -14,7 +14,7 @@ pluginManagement {
     }
 
     plugins {
-        id("robovm") version "2.3.18" apply false
+        id("robovm") version "2.3.19" apply false
     }
 }
 
