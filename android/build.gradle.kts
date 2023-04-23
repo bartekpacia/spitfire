@@ -2,7 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application") version "7.3.1"
+    id("com.android.application") version "8.0.0"
 }
 
 java {
