@@ -38,6 +38,9 @@ tasks.register<JavaExec>("run") {
     standardInput = System.`in`
     workingDir = assetsDir
     isIgnoreExitValue = true
+
+    // Fix for macOS
+    jvmArgs = listOf("-XstartOnFirstThread")
 }
 
 tasks.register<JavaExec>("debug") {
