@@ -33,7 +33,7 @@ val assetsDir by extra(File("../android/assets"))
 tasks.register<JavaExec>("run") {
     dependsOn(tasks.classes)
 
-    mainClass.set(mainClassName)
+    mainClass = mainClassName
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
     workingDir = assetsDir
@@ -43,7 +43,7 @@ tasks.register<JavaExec>("run") {
 tasks.register<JavaExec>("debug") {
     dependsOn(tasks.classes)
 
-    mainClass.set(mainClassName)
+    mainClass = mainClassName
     classpath = sourceSets["main"].runtimeClasspath
     standardInput = System.`in`
     workingDir = assetsDir

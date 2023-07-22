@@ -1,35 +1,18 @@
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 plugins {
-    id("com.android.application") version "7.3.1"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    id("com.android.application")
 }
 
 val natives = configurations.create("natives")
 
-val keystorePropertiesFile = rootProject.file("./android/keystore.properties")
 val keystoreProperties = Properties()
-
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+keystoreProperties.load(FileInputStream(rootProject.file("./android/keystore.properties")))
 
 android {
-    signingConfigs {
-        create("signed") {
-            storeFile = file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["storePassword"] as String
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-        }
-    }
-
-    namespace = "pl.baftek.spitfire"
-
     compileSdk = 33
+    namespace = "pl.baftek.spitfire"
 
     sourceSets {
         getByName("main") {
@@ -51,9 +34,23 @@ android {
         versionName = findProperty("versionName") as? String ?: "1.0.0"
     }
 
-    packagingOptions {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    packaging {
         resources {
             excludes.add("META-INF/robovm/ios/robovm.xml")
+        }
+    }
+
+    signingConfigs {
+        create("signed") {
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
         }
     }
 

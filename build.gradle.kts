@@ -4,8 +4,8 @@ allprojects {
     version = "1.0"
 
     extra["appName"] = "Spitfire"
-    extra["gdxVersion"] = "1.10.0"
-    extra["roboVMVersion"] = "2.3.15"
+    extra["gdxVersion"] = "1.12.0"
+    extra["roboVMVersion"] = "2.3.19"
     extra["gamesvcsVersion"] = "1.1.0"
-    extra["visuiVersion"] = "1.3.0"
+    extra["visuiVersion"] = "1.5.2"
 }

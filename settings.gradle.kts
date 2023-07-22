@@ -14,12 +14,13 @@ pluginManagement {
     }
 
     plugins {
-        id("robovm") version "2.3.18" apply false
+        id("robovm") version "2.3.19" apply false
+        id("com.android.application") version "8.0.2" apply false
     }
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
 
     repositories {
         mavenCentral()
