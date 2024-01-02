@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("robovm") version "2.3.19"
+    id("robovm") version "2.3.20"
 }
 
 java {

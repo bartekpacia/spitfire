@@ -1,5 +1,5 @@
 import java.io.FileInputStream
-import java.util.*
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -11,7 +11,7 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(rootProject.file("./android/keystore.properties")))
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     namespace = "pl.baftek.spitfire"
 
     sourceSets {
@@ -29,7 +29,7 @@ android {
     defaultConfig {
         applicationId = "pl.baftek.spitfire"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = (findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
         versionName = findProperty("versionName") as? String ?: "1.0.0"
     }
