@@ -137,3 +137,8 @@ Thumbs.db
 /ios-moe/xcode/native/
 
 android/fastlane/report.xml
+
+.env
+android/firebase_sa_key.json
+android/google_play_android_developer_sa_key.json
+ios/app_store_connect_api_key.p8
