@@ -10,86 +10,53 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
 
     env:
-      APP_BUNDLE_ID: pl.baftek.spitfire
-      APP_PACKAGE_NAME: pl.baftek.spitfire
-      FIREBASE_APP_IOS: 1:694460082561:ios:21c308ba674a0c96942080
-      FIREBASE_APP_ANDROID: 1:694460082561:android:6e7163746a6cf91e
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Install Ruby
+      - name: Load secrets from 1Password
+        uses: 1password/load-secrets-action@v2
+
+      - name: Set up credentials
+        run: |
+          ./setup_credentials
+          while read -r line; do echo "$line" >> $GITHUB_ENV; done < .env
+
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1.0"
+          ruby-version: 3.3
           bundler-cache: true
 
-      - name: Install fastlane
+      - name: Set up fastlane
         run: |
           gem install bundler
           cd android && bundle install
           cd ..
           cd ios && bundle install
 
-      - name: Install Java
-        uses: actions/setup-java@v3
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
-      - name: Create keystore.properties
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > ${{ runner.temp }}/keystore.jks
-          echo "storeFile=${{ runner.temp }}/keystore.jks" > android/keystore.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
-
-      # Apple (App Store and match)
-      - name: Create App Store Connect API key
-        run: |
-          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" > ${{ runner.temp }}/key.p8
-          echo "APP_STORE_CONNECT_API_KEY_P8_PATH=${{ runner.temp }}/key.p8" >> $GITHUB_ENV
-
-      - name: Create Personal Access Token to access bartekpacia/certificates
-        run: echo "MATCH_GIT_BASIC_AUTHORIZATION=${{ secrets.PERSONAL_ACCESS_TOKEN_BASE64 }}" >> $GITHUB_ENV
-
-      - name: Create MATCH_PASSWORD
-        run: echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
-
-      # Firebase
-      - name: Download Firebase JSON key (for App Distribution)
-        id: firebase_key
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: firebase_key.json
-          encodedString: ${{ secrets.GOOGLE_SERVICES_FIREBASE_BASE64 }}
-
-      - name: Set FIREBASE_JSON_KEY_PATH (for App Distribution)
-        run: echo "FIREBASE_JSON_KEY_PATH=${{ steps.firebase_key.outputs.filePath }}" >> $GITHUB_ENV
-
-      # Google Play
-      - name: Download Google Play JSON key (for Google Play Android Developer)
-        id: google_play_android_developer_key
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: google_play_android_developer_key.json
-          encodedString: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY_BASE64 }}
-
-      - name: Set GOOGLE_PLAY_JSON_KEY_PATH (for Google Play Android Developer)
-        run: echo "GOOGLE_PLAY_JSON_KEY_PATH=${{ steps.google_play_android_developer_key.outputs.filePath }}" >> $GITHUB_ENV
-
-      - name: Validate GOOGLE_PLAY_JSON_KEY_PATH
-        run: fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
+      - name: Validate service account key (for Google Play Android Developer)
+        working-directory: android
+        run: bundle exec fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
 
       - name: fastlane ios distribute
-        run: cd ios && bundle exec fastlane distribute
+        working-directory: ios
+        run: bundle exec fastlane distribute
 
       - name: fastlane android distribute
-        run: cd android && bundle exec fastlane distribute
+        working-directory: android
+        run: bundle exec fastlane distribute
