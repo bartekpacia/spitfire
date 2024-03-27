@@ -56,16 +56,16 @@ jobs:
         run: |
           cd android
           if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
-            op run -- bundle exec fastlane internal
+            op run -- bundle exec fastlane android internal
           else
-            op run -- bundle exec fastlane distribute
+            op run -- bundle exec fastlane android distribute
           fi
 
       - name: Deploy iOS app
         run: |
           cd ios
           if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
-            op run -- bundle exec fastlane prod
+            op run -- bundle exec fastlane ios prod
           else
-            op run -- bundle exec fastlane distribute
+            op run -- bundle exec fastlane ios distribute
           fi

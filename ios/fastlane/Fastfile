@@ -1,7 +1,10 @@
-default_platform(:ios)
 require 'base64'
 
 platform :ios do
+  ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
+    "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
+  )
+
   app_store_connect_api_key(
     key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
     issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
@@ -17,10 +20,6 @@ platform :ios do
     firebase_app_ios: ENV.fetch('FIREBASE_APP_ID_IOS'),
     firebase_app_android: ENV.fetch('FIREBASE_APP_ID_ANDROID')
   ).to_s
-
-  ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
-    "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
-  )
 
   build_name = get_new_build_name
 
