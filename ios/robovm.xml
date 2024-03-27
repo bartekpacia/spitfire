@@ -1,4 +1,12 @@
 <config>
+  <tools>
+    <linker>
+      <flags>
+        <!-- <flag>-fembed-bitcode</flag> -->
+        <flag>-ld_classic</flag>
+      </flags>
+    </linker>
+  </tools>
   <executableName>${app.executable}</executableName>
   <mainClass>${app.mainclass}</mainClass>
   <os>ios</os>
