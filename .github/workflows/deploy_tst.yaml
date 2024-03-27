@@ -50,13 +50,24 @@ jobs:
           cache: gradle
 
       - name: Validate service account key (for Google Play Android Developer)
-        working-directory: android
-        run: bundle exec fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
+        run: |
+          cd android
+          bundle exec fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
 
-      - name: fastlane ios distribute
-        working-directory: ios
-        run: bundle exec fastlane distribute
+      - name: Deploy Android app
+        run: |
+          cd android
+          if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
+            bundle exec fastlane internal
+          else
+            bundle exec fastlane distribute
+          fi
 
-      - name: fastlane android distribute
-        working-directory: android
-        run: bundle exec fastlane distribute
+      - name: Deploy iOS app
+        run: |
+          cd ios
+          if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
+            bundle exec fastlane prod
+          else
+            bundle exec fastlane distribute
+          fi
