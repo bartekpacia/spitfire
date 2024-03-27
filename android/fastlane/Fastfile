@@ -1,58 +1,63 @@
 default_platform(:android)
 
-platform :android do    
+platform :android do
   app_store_connect_api_key(
-    key_id: "7D5993L68K",
-    issuer_id: "ff222ec2-322e-44a6-b28b-a183bbdd16e5",
-    key_filepath: ENV["APP_STORE_CONNECT_API_KEY_P8_PATH"],
-    in_house: false,
+    key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
+    issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
+    key_filepath: ENV.fetch('APP_STORE_CONNECT_P8_KEY_PATH'),
+    in_house: false
   )
 
   build_number = get_new_build_number(
-    bundle_identifier: ENV["APP_BUNDLE_ID"],
-    package_name: ENV["APP_PACKAGE_NAME"],
-    google_play_json_key_path: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
-    firebase_json_key_path: ENV["FIREBASE_JSON_KEY_PATH"],
-    firebase_app_ios: ENV["FIREBASE_APP_IOS"],
-    firebase_app_android: ENV["FIREBASE_APP_ANDROID"],
+    bundle_identifier: ENV.fetch('APP_BUNDLE_ID'),
+    package_name: ENV.fetch('APP_PACKAGE_NAME'),
+    google_play_json_key_path: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH'),
+    firebase_json_key_path: ENV.fetch('FIREBASE_JSON_KEY_PATH'),
+    firebase_app_ios: ENV.fetch('FIREBASE_APP_ID_IOS'),
+    firebase_app_android: ENV.fetch('FIREBASE_APP_ID_ANDROID')
   ).to_s
 
-  build_name = get_new_build_name()
+  build_name = get_new_build_name
 
-  desc "Upload a new build to Firebase App Distribution"
+  desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
+    project_root = Dir.chdir('../..') { Dir.pwd }
+
     gradle(
-      task: "bundleRelease",
-      project_dir: "..",
+      task: 'bundleRelease',
+      project_dir: '..',
       properties: {
-        "android.injected.version.code" => build_number,
-        "android.injected.version.name" => build_name,
-      },
+        'versionCode' => build_number,
+        'versionName' => build_name
+      }
     )
 
+    aab_path = File.join(project_root, 'android/build/outputs/bundle/release/android-release.aab')
     firebase_app_distribution(
-      app: ENV["FIREBASE_APP_ANDROID"],
-      groups: "core-team",
-      android_artifact_path: "./build/outputs/bundle/release/android-release.aab",
-      service_credentials_file: ENV["FIREBASE_JSON_KEY_PATH"],
+      app: ENV.fetch('FIREBASE_APP_ID_ANDROID'),
+      groups: 'core-team',
+      android_artifact_path: aab_path,
+      service_credentials_file: ENV.fetch('FIREBASE_JSON_KEY_PATH')
     )
   end
 
-  desc "Deploy a new internal version to Google Play"
+  desc 'Deploy a new internal version to Google Play'
   lane :internal do
+    project_root = Dir.chdir('../..') { Dir.pwd }
+
     gradle(
-      task: "bundleRelease",
-      project_dir: "..",
+      task: 'bundleRelease',
+      project_dir: '..',
       properties: {
-        "versionCode" => build_number,
-        "versionName" => build_name,
-      },
+        'versionCode' => build_number,
+        'versionName' => build_name
+      }
     )
 
     upload_to_play_store(
-      track: "internal",
-      aab: "./build/outputs/bundle/release/android-release.aab",
-      json_key: ENV["GOOGLE_PLAY_JSON_KEY_PATH"],
+      track: 'internal',
+      aab: File.join(project_root, 'android/build/outputs/bundle/release/android-release.aab'),
+      json_key: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH')
     )
   end
 end
