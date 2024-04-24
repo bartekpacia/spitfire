@@ -14,7 +14,7 @@ pluginManagement {
     }
 
     plugins {
-        id("robovm") version "2.3.20" apply false
+        id("robovm") version "2.3.21" apply false
         id("com.android.application") version "8.2.0" apply false
     }
 }
