@@ -75,25 +75,19 @@ android {
 }
 
 dependencies {
-    val gdxVersion: String by rootProject.extra
-    val gamesvcsVersion: String by rootProject.extra
-
-    implementation(project(":core"))
-    implementation("com.badlogicgames.gdx:gdx-backend-android:$gdxVersion")
-    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a")
-    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a")
-    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86")
-    natives("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64")
-    // Freetype
-    implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
-    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a")
-    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a")
-    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86")
-    natives("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64")
-    // Play Games
-    implementation("com.google.android.gms:play-services-games:23.1.0")
-    // Game Services
-    implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-android-gpgs:$gamesvcsVersion")
+    implementation(projects.core)
+    implementation(libs.gdx.backend.android)
+    natives(variantOf(libs.gdx.platform) { classifier("natives-armeabi-v7a") })
+    natives(variantOf(libs.gdx.platform) { classifier("natives-arm64-v8a") })
+    natives(variantOf(libs.gdx.platform) { classifier("natives-x86") })
+    natives(variantOf(libs.gdx.platform) { classifier("natives-x86_64") })
+    implementation(libs.gdx.freetype)
+    natives(variantOf(libs.gdx.freetype.platform) { classifier("natives-armeabi-v7a") })
+    natives(variantOf(libs.gdx.freetype.platform) { classifier("natives-arm64-v8a") })
+    natives(variantOf(libs.gdx.freetype.platform) { classifier("natives-x86") })
+    natives(variantOf(libs.gdx.freetype.platform) { classifier("natives-x86_64") })
+    implementation(libs.play.services.games)
+    implementation(libs.gdx.gamesvcs.android.gpgs)
 }
 
 tasks.named("preBuild").configure {
