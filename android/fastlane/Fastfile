@@ -1,3 +1,8 @@
+ENV['FASTLANE_HIDE_TIMESTAMP'] = 1
+ENV['FASTLANE_HIDE_GITHUB_ISSUES'] = 1
+ENV['FASTLANE_HIDE_PLUGINS_TABLE'] = 1
+skip_docs
+
 platform :android do
   app_store_connect_api_key(
     key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
