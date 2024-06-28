@@ -67,7 +67,6 @@ platform :ios do
 
   desc 'Upload a new release build to App Store'
   lane :prod do
-
     setup_ci if is_ci
 
     sync_code_signing(
@@ -90,7 +89,6 @@ platform :ios do
     )
   end
 end
-
 
 platform :android do
   app_store_connect_api_key(
@@ -151,7 +149,7 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       mapping_paths: [
-        File.join(project_root, 'android/build/outputs/mapping/release/mapping.txt'),
+        File.join(project_root, 'android/build/outputs/mapping/release/mapping.txt')
       ]
     )
   end
