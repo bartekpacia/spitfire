@@ -1,0 +1,16 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3
+
+  Exclude:
+    - "Flutter/*"
+    - Podfile
+
+Style/FrozenStringLiteralComment: # disabled because clutters files
+  Enabled: false
+Metrics/BlockLength: # disabled because not useful at all
+  Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - fastlane/Matchfile
