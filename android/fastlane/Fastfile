@@ -1,6 +1,5 @@
 ENV['FASTLANE_HIDE_TIMESTAMP'] = 'true'
 ENV['FASTLANE_HIDE_GITHUB_ISSUES'] = 'true'
-ENV['FASTLANE_HIDE_PLUGINS_TABLE'] = 'true'
 skip_docs
 
 platform :android do
@@ -60,7 +59,15 @@ platform :android do
     upload_to_play_store(
       track: 'internal',
       aab: File.join(project_root, 'android/build/outputs/bundle/release/android-release.aab'),
-      json_key: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH')
+      json_key: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH'),
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      mapping_paths: [
+        File.join(project_root, 'build/app/outputs/mapping/release/mapping.txt'),
+        native_symbols_path
+      ]
     )
   end
 end

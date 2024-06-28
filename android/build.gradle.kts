@@ -55,11 +55,21 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        named("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isShrinkResources = false
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("signed")
+        }
 
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("signed")
+            isShrinkResources = true
+            isMinifyEnabled = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 }
