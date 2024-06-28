@@ -86,6 +86,10 @@ dependencies {
     implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-android-gpgs:$gamesvcsVersion")
 }
 
+tasks.named("preBuild").configure {
+    dependsOn("copyAndroidNatives")
+}
+
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
