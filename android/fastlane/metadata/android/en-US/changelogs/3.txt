@@ -1,4 +1,0 @@
-– Fixed strange bug when player had level higher than 11
-– Pobably introduced some new bugs
-
-        – Thanks, Antek Sobaszek
