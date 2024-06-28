@@ -16,15 +16,12 @@ sourceSets {
 }
 
 dependencies {
-    val gdxVersion: String by rootProject.extra
-    val gamesvcsVersion: String by rootProject.extra
+    implementation(projects.core)
+    implementation(libs.gdx.backend.lwjgl3)
+    implementation(variantOf(libs.gdx.platform) { classifier("natives-desktop") })
+    implementation(variantOf(libs.gdx.freetype.platform) { classifier("natives-desktop") })
 
-    implementation(project(":core"))
-    implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
-    implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
-    implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
-
-    implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-desktop-gpgs:$gamesvcsVersion")
+    implementation(libs.gdx.gamesvcs.desktop.gpgs)
 }
 
 val mainClassName by extra("pl.baftek.spitfire.desktop.DesktopLauncher")

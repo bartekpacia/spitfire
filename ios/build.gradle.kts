@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("robovm") version "2.3.20"
+    id("robovm") version "2.3.21"
 }
 
 java {
@@ -17,19 +17,17 @@ sourceSets {
 }
 
 dependencies {
-    val roboVMVersion: String by rootProject.extra
-    val gdxVersion: String by rootProject.extra
-    val gamesvcsVersion: String by rootProject.extra
+    implementation(projects.core)
 
-    implementation(project(":core"))
-    api("com.mobidevelop.robovm:robovm-rt:$roboVMVersion")
-    api("com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion")
-    api("com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion")
-    api("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios")
+    // TODO: Can this be "implementation" instead?
+    api(libs.robovm.rt)
+    api(libs.robovm.cocoatouch)
+    api(libs.gdx.backend.robovm)
+    api(variantOf(libs.gdx.platform) { classifier("natives-ios") })
 
-    implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios")
+    implementation(variantOf(libs.gdx.freetype.platform) { classifier("natives-ios") })
 
-    implementation("de.golfgl.gdxgamesvcs:gdx-gamesvcs-ios-gamecenter:$gamesvcsVersion")
+    implementation(libs.gdx.gamesvcs.ios.gamecenter)
 }
 
 robovm {
@@ -40,11 +38,6 @@ robovm {
     iosProvisioningProfile = "match $profile pl.baftek.spitfire"
     isIosSkipSigning = false
     archs = "arm64"
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 extra.apply {

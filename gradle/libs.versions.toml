@@ -1,0 +1,33 @@
+[versions]
+agp = "8.2.2"
+gdx = "1.12.1"
+robovm = "2.3.21"
+gamesvcs = "1.1.0"
+visui = "1.5.3"
+playServicesGames = "23.2.0"
+
+[libraries]
+gdx = { module = "com.badlogicgames.gdx:gdx", version.ref = "gdx" }
+gdx-backend-android = { module = "com.badlogicgames.gdx:gdx-backend-android", version.ref = "gdx" }
+gdx-backend-robovm = { module = "com.badlogicgames.gdx:gdx-backend-robovm", version.ref = "gdx" }
+gdx-backend-lwjgl3 = { module = "com.badlogicgames.gdx:gdx-backend-lwjgl3", version.ref = "gdx" }
+gdx-platform = { module = "com.badlogicgames.gdx:gdx-platform", version.ref = "gdx" }
+gdx-freetype = { module = "com.badlogicgames.gdx:gdx-freetype", version.ref = "gdx" }
+gdx-freetype-platform = { module = "com.badlogicgames.gdx:gdx-freetype-platform", version.ref = "gdx" }
+
+robovm-rt = { module = "com.mobidevelop.robovm:robovm-rt", version.ref = "robovm" }
+robovm-cocoatouch = { module = "com.mobidevelop.robovm:robovm-cocoatouch", version.ref = "robovm" }
+
+play-services-games = { module = "com.google.android.gms:play-services-games", version.ref = "playServicesGames" }
+
+gdx-gamesvcs-core = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core", version.ref = "gamesvcs" }
+gdx-gamesvcs-android-gpgs = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-android-gpgs", version.ref = "gamesvcs" }
+gdx-gamesvcs-ios-gamecenter = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-ios-gamecenter", version.ref = "gamesvcs" }
+gdx-gamesvcs-desktop-gpgs = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-desktop-gpgs", version.ref = "gamesvcs" }
+
+visui = { module = "com.kotcrab.vis:vis-ui", version.ref = "visui" }
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+# roboVM = { module = "com.mobidevelop.robovm:robovm-gradle-plugin", version.ref = "robovm" }
