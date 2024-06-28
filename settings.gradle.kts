@@ -1,3 +1,6 @@
+rootProject.name = "spitfire"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -11,11 +14,6 @@ pluginManagement {
                 useModule("com.mobidevelop.robovm:robovm-gradle-plugin:${requested.version}")
             }
         }
-    }
-
-    plugins {
-        id("robovm") version "2.3.21" apply false
-        id("com.android.application") version "8.2.2" apply false
     }
 }
 

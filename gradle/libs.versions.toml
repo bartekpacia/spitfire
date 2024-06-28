@@ -1,0 +1,18 @@
+[versions]
+agp = "8.2.2"
+gdx = "1.12.1"
+robovm = "2.3.21"
+gamesvcs = "1.1.0"
+visui = "1.5.3"
+
+[libraries]
+robovm-rt = { module = "com.mobidevelop.robovm:robovm-rt", version.ref = "robovm" }
+robovm-cocoatouch = { module = "com.mobidevelop.robovm:robovm-cocoatouch", version.ref = "robovm" }
+gdx-backend-robovm = { module = "com.badlogicgames.gdx:gdx-backend-robovm", version.ref = "gdx" }
+gdx-platform = { module = "com.badlogicgames.gdx:gdx-platform", version.ref = "gdx"} # classifier: natives-ios"
+gdx-freetype-platform = { module = "com.badlogicgames.gdx:gdx-freetype-platform", version.ref = "gdx" } # classifier: natives-ios"
+gdx-gamesvcs-ios-gamecenter = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-ios-gamecenter", version.ref = "gamesvcs" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+# roboVM = { module = "com.mobidevelop.robovm:robovm-gradle-plugin", version.ref = "robovm" }
