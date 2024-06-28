@@ -29,8 +29,8 @@ platform :ios do
 
   build_name = get_new_build_name
 
-  File.write(project_root, 'ios/robovm.properties', "app.build=#{build_number}\n", mode: 'a')
-  File.write(project_root, 'ios/robovm.properties', "app.version=#{build_name}\n", mode: 'a')
+  File.write(File.join(project_root, 'ios/robovm.properties'), "app.build=#{build_number}\n", mode: 'a')
+  File.write(File.join(project_root, 'ios/robovm.properties'), "app.version=#{build_name}\n", mode: 'a')
 
   desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
