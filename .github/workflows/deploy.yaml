@@ -36,9 +36,7 @@ jobs:
       - name: Set up fastlane
         run: |
           gem install bundler
-          cd android && bundle install
-          cd ..
-          cd ios && bundle install
+          cd fastlane && bundle install
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -49,12 +47,12 @@ jobs:
 
       - name: Validate service account key (for Google Play Android Developer)
         run: |
-          cd android
+          cd fastlane
           bundle exec fastlane run validate_play_store_json_key json_key:"$GOOGLE_PLAY_JSON_KEY_PATH"
 
       - name: Deploy Android app
         run: |
-          cd android
+          cd fastlane
           if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
             op run -- bundle exec fastlane android internal
           else
@@ -63,7 +61,7 @@ jobs:
 
       - name: Deploy iOS app
         run: |
-          cd ios
+          cd fastlane
           if [ "$(git tag -l "$GITHUB_REF_NAME")" ]; then
             op run -- bundle exec fastlane ios prod
           else
