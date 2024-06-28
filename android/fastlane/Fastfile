@@ -65,7 +65,7 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       mapping_paths: [
-        File.join(project_root, 'build/app/outputs/mapping/release/mapping.txt'),
+        File.join(project_root, 'android/build/outputs/mapping/release/mapping.txt'),
       ]
     )
   end
