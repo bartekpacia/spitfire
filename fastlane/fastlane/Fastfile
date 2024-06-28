@@ -1,34 +1,32 @@
 require 'base64'
 
-ENV['FASTLANE_HIDE_TIMESTAMP'] = 'true'
-ENV['FASTLANE_HIDE_GITHUB_ISSUES'] = 'true'
 skip_docs
 
 project_root = Dir.chdir('../..') { Dir.pwd }
 
+ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
+  "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
+)
+
+app_store_connect_api_key(
+  key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
+  issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
+  key_filepath: ENV.fetch('APP_STORE_CONNECT_P8_KEY_PATH'),
+  in_house: false
+)
+
+build_number = get_new_build_number(
+  bundle_identifier: ENV.fetch('APP_BUNDLE_ID'),
+  package_name: ENV.fetch('APP_PACKAGE_NAME'),
+  google_play_json_key_path: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH'),
+  firebase_json_key_path: ENV.fetch('FIREBASE_JSON_KEY_PATH'),
+  firebase_app_ios: ENV.fetch('FIREBASE_APP_ID_IOS'),
+  firebase_app_android: ENV.fetch('FIREBASE_APP_ID_ANDROID')
+).to_s
+
+build_name = get_new_build_name
+
 platform :ios do
-  ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
-    "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
-  )
-
-  app_store_connect_api_key(
-    key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
-    issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
-    key_filepath: ENV.fetch('APP_STORE_CONNECT_P8_KEY_PATH'),
-    in_house: false
-  )
-
-  build_number = get_new_build_number(
-    bundle_identifier: ENV.fetch('APP_BUNDLE_ID'),
-    package_name: ENV.fetch('APP_PACKAGE_NAME'),
-    google_play_json_key_path: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH'),
-    firebase_json_key_path: ENV.fetch('FIREBASE_JSON_KEY_PATH'),
-    firebase_app_ios: ENV.fetch('FIREBASE_APP_ID_IOS'),
-    firebase_app_android: ENV.fetch('FIREBASE_APP_ID_ANDROID')
-  ).to_s
-
-  build_name = get_new_build_name
-
   File.write(File.join(project_root, 'ios/robovm.properties'), "app.build=#{build_number}\n", mode: 'a')
   File.write(File.join(project_root, 'ios/robovm.properties'), "app.version=#{build_name}\n", mode: 'a')
 
@@ -36,9 +34,10 @@ platform :ios do
   lane :distribute do
     setup_ci if is_ci
 
+    devices_file = File.join(project_root, 'fastlane', 'firebase_ios_devices.txt')
     firebase_app_distribution_get_udids(
-      app: ENV.fetch('FIREBASE_APP_ID_IOS'),
-      output_file: 'firebase_ios_devices.txt',
+      project_number: ENV.fetch('FIREBASE_PROJECT_NUMBER'),
+      output_file: devices_file,
       service_credentials_file: ENV.fetch('FIREBASE_JSON_KEY_PATH')
     )
 
@@ -91,24 +90,6 @@ platform :ios do
 end
 
 platform :android do
-  app_store_connect_api_key(
-    key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
-    issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
-    key_filepath: ENV.fetch('APP_STORE_CONNECT_P8_KEY_PATH'),
-    in_house: false
-  )
-
-  build_number = get_new_build_number(
-    bundle_identifier: ENV.fetch('APP_BUNDLE_ID'),
-    package_name: ENV.fetch('APP_PACKAGE_NAME'),
-    google_play_json_key_path: ENV.fetch('GOOGLE_PLAY_JSON_KEY_PATH'),
-    firebase_json_key_path: ENV.fetch('FIREBASE_JSON_KEY_PATH'),
-    firebase_app_ios: ENV.fetch('FIREBASE_APP_ID_IOS'),
-    firebase_app_android: ENV.fetch('FIREBASE_APP_ID_ANDROID')
-  ).to_s
-
-  build_name = get_new_build_name
-
   desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
     gradle(
