@@ -66,7 +66,6 @@ platform :android do
       skip_upload_screenshots: true,
       mapping_paths: [
         File.join(project_root, 'build/app/outputs/mapping/release/mapping.txt'),
-        native_symbols_path
       ]
     )
   end
