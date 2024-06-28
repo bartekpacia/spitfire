@@ -67,3 +67,14 @@ jobs:
           else
             op run -- bundle exec fastlane ios distribute
           fi
+
+      - name: Create release on GitHub
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref_name, 'v')
+        with:
+          name: ${{ github.ref_name }}
+          fail_on_unmatched_files: true
+          # see https://github.com/softprops/action-gh-release/issues/158
+          files: |
+            android/build/outputs/bundle/release/android-release.aab
+            ios/build/robovm/IOSLauncher.ipa
