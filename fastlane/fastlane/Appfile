@@ -1,3 +1,8 @@
+# Android
+json_key_file("key.json")
+package_name("pl.baftek.spitfire")
+
+# iOS
 app_identifier("pl.baftek.spitfire") # The bundle identifier of your app
 apple_id("barpac02@gmail.com") # Your Apple email address
 itc_team_id("122009185") # App Store Connect Team ID
