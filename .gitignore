@@ -136,10 +136,10 @@ Thumbs.db
 !/ios-moe/xcode/*.xcodeproj/project.pbxproj
 /ios-moe/xcode/native/
 
-android/fastlane/report.xml
+fastlane/fastlane/report.xml
+fastlane/firebase_ios_devices.txt
 
 .env
 android/firebase_sa_key.json
 android/google_play_android_developer_sa_key.json
 ios/app_store_connect_api_key.p8
-ios/firebase_devices.txt

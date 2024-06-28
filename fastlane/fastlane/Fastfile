@@ -4,6 +4,8 @@ ENV['FASTLANE_HIDE_TIMESTAMP'] = 'true'
 ENV['FASTLANE_HIDE_GITHUB_ISSUES'] = 'true'
 skip_docs
 
+project_root = Dir.chdir('../..') { Dir.pwd }
+
 platform :ios do
   ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
     "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
@@ -27,8 +29,8 @@ platform :ios do
 
   build_name = get_new_build_name
 
-  File.write('../robovm.properties', "app.build=#{build_number}\n", mode: 'a')
-  File.write('../robovm.properties', "app.version=#{build_name}\n", mode: 'a')
+  File.write(project_root, 'ios/robovm.properties', "app.build=#{build_number}\n", mode: 'a')
+  File.write(project_root, 'ios/robovm.properties', "app.version=#{build_name}\n", mode: 'a')
 
   desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
@@ -36,12 +38,12 @@ platform :ios do
 
     firebase_app_distribution_get_udids(
       app: ENV.fetch('FIREBASE_APP_ID_IOS'),
-      output_file: 'firebase_devices.txt',
+      output_file: 'firebase_ios_devices.txt',
       service_credentials_file: ENV.fetch('FIREBASE_JSON_KEY_PATH')
     )
 
     register_devices(
-      devices_file: 'firebase_devices.txt'
+      devices_file: 'firebase_ios_devices.txt'
     )
 
     sync_code_signing(
@@ -52,19 +54,20 @@ platform :ios do
 
     gradle(
       task: 'robovmArchive',
-      project_dir: '..'
+      project_dir: project_root
     )
 
     firebase_app_distribution(
       app: ENV.fetch('FIREBASE_APP_ID_IOS'),
       groups: 'core-team',
-      ipa_path: 'build/robovm/IOSLauncher.ipa',
+      ipa_path: File.join(project_root, 'ios/build/robovm/IOSLauncher.ipa'),
       service_credentials_file: ENV.fetch('FIREBASE_JSON_KEY_PATH')
     )
   end
 
   desc 'Upload a new release build to App Store'
   lane :prod do
+
     setup_ci if is_ci
 
     sync_code_signing(
@@ -75,7 +78,7 @@ platform :ios do
     ENV['SPITFIRE_APP_STORE'] = 'true'
     gradle(
       task: 'robovmArchive',
-      project_dir: '..'
+      project_dir: File.join(project_root, 'ios')
     )
 
     upload_to_app_store(
@@ -110,8 +113,6 @@ platform :android do
 
   desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
-    project_root = Dir.chdir('../..') { Dir.pwd }
-
     gradle(
       task: 'bundleRelease',
       project_dir: '..',
@@ -132,11 +133,9 @@ platform :android do
 
   desc 'Deploy a new internal version to Google Play'
   lane :internal do
-    project_root = Dir.chdir('../..') { Dir.pwd }
-
     gradle(
       task: 'bundleRelease',
-      project_dir: '..',
+      project_dir: File.join(project_root, 'android'),
       properties: {
         'versionCode' => build_number,
         'versionName' => build_name
