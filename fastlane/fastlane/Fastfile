@@ -94,7 +94,7 @@ platform :android do
   lane :distribute do
     gradle(
       task: 'bundleRelease',
-      project_dir: '..',
+      project_dir: project_root,
       properties: {
         'versionCode' => build_number,
         'versionName' => build_name
@@ -114,7 +114,7 @@ platform :android do
   lane :internal do
     gradle(
       task: 'bundleRelease',
-      project_dir: File.join(project_root, 'android'),
+      project_dir: project_root,
       properties: {
         'versionCode' => build_number,
         'versionName' => build_name
