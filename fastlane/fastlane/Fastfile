@@ -93,7 +93,7 @@ platform :android do
   desc 'Upload a new build to Firebase App Distribution'
   lane :distribute do
     gradle(
-      task: 'bundleRelease',
+      task: ':android:bundleRelease',
       project_dir: project_root,
       properties: {
         'versionCode' => build_number,
@@ -113,7 +113,7 @@ platform :android do
   desc 'Deploy a new internal version to Google Play'
   lane :internal do
     gradle(
-      task: 'bundleRelease',
+      task: ':android:bundleRelease',
       project_dir: project_root,
       properties: {
         'versionCode' => build_number,
