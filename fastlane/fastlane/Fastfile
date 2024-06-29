@@ -4,10 +4,6 @@ skip_docs
 
 project_root = Dir.chdir('../..') { Dir.pwd }
 
-ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64(
-  "#{ENV.fetch('GITHUB_USERNAME')}:#{ENV.fetch('GITHUB_PAT')}"
-)
-
 app_store_connect_api_key(
   key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
   issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
