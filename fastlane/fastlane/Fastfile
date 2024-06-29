@@ -72,7 +72,7 @@ platform :ios do
     ENV['SPITFIRE_APP_STORE'] = 'true'
     gradle(
       task: 'robovmArchive',
-      project_dir: File.join(project_root, 'ios')
+      project_dir: project_root
     )
 
     upload_to_app_store(
