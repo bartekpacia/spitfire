@@ -37,9 +37,7 @@ platform :ios do
       service_credentials_file: ENV.fetch('FIREBASE_JSON_KEY_PATH')
     )
 
-    register_devices(
-      devices_file: 'firebase_ios_devices.txt'
-    )
+    register_devices(devices_file:)
 
     sync_code_signing(
       type: 'adhoc',
@@ -71,7 +69,7 @@ platform :ios do
 
     ENV['SPITFIRE_APP_STORE'] = 'true'
     gradle(
-      task: 'robovmArchive',
+      task: ':ios:robovmArchive',
       project_dir: project_root
     )
 
@@ -80,7 +78,7 @@ platform :ios do
       precheck_include_in_app_purchases: false,
       skip_screenshots: true,
       skip_metadata: true,
-      ipa: 'build/robovm/IOSLauncher.ipa'
+      ipa: File.join(project_root, 'build/robovm/IOSLauncher.ipa')
     )
   end
 end
