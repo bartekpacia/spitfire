@@ -46,7 +46,7 @@ platform :ios do
     )
 
     gradle(
-      task: 'robovmArchive',
+      task: ':ios:robovmArchive',
       project_dir: project_root
     )
 
@@ -78,7 +78,7 @@ platform :ios do
       precheck_include_in_app_purchases: false,
       skip_screenshots: true,
       skip_metadata: true,
-      ipa: File.join(project_root, 'build/robovm/IOSLauncher.ipa')
+      ipa: File.join(project_root, 'ios/build/robovm/IOSLauncher.ipa')
     )
   end
 end
