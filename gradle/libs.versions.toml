@@ -1,7 +1,7 @@
 [versions]
-agp = "8.2.2"
-gdx = "1.12.1"
-robovm = "2.3.21"
+agp = "8.6.1"
+gdx = "1.13.0"
+robovm = "2.3.22"
 gamesvcs = "1.1.0"
 visui = "1.5.3"
 playServicesGames = "23.2.0"
