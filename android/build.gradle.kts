@@ -11,7 +11,7 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(rootProject.file("./android/keystore.properties")))
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "pl.baftek.spitfire"
 
     sourceSets {
@@ -29,14 +29,14 @@ android {
     defaultConfig {
         applicationId = "pl.baftek.spitfire"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = (findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
         versionName = findProperty("versionName") as? String ?: "1.0.0"
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     packaging {
@@ -136,5 +136,12 @@ tasks.register<Exec>("run") {
     }
 
     val adb = "$path/platform-tools/adb"
-    commandLine(adb, "shell", "am", "start", "-n", "pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher")
+    commandLine(
+        adb,
+        "shell",
+        "am",
+        "start",
+        "-n",
+        "pl.baftek.spitfire/pl.baftek.spitfire.AndroidLauncher"
+    )
 }
