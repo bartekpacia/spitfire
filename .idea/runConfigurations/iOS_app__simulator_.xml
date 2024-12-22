@@ -7,9 +7,10 @@
     <option name="signingIdentity" value="" />
     <option name="provisioningProfileType" value="AUTO" />
     <option name="provisioningProfile" value="" />
-    <option name="simArch" value="x86_64" />
-    <option name="simulatorType" value="ID" />
-    <option name="simulatorName" value="633247FA-E35B-4E60-AEB3-FC2D9C52FAD5" />
+    <option name="targetDeviceUDID" value="" />
+    <option name="simArch" value="arm64" />
+    <option name="simulatorType" value="AUTO" />
+    <option name="simulatorName" value="" />
     <option name="simulatorSdk" value="-1" />
     <option name="simulatorLaunchWatch" value="0" />
     <option name="arguments" value="" />
