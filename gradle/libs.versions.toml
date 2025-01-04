@@ -5,6 +5,7 @@ robovm = "2.3.22"
 gamesvcs = "1.1.0"
 visui = "1.5.3"
 playServicesGames = "23.2.0"
+androidx = "1.13.1"
 
 [libraries]
 gdx = { module = "com.badlogicgames.gdx:gdx", version.ref = "gdx" }
@@ -18,6 +19,7 @@ gdx-freetype-platform = { module = "com.badlogicgames.gdx:gdx-freetype-platform"
 robovm-rt = { module = "com.mobidevelop.robovm:robovm-rt", version.ref = "robovm" }
 robovm-cocoatouch = { module = "com.mobidevelop.robovm:robovm-cocoatouch", version.ref = "robovm" }
 
+androidx-core = { module = "androidx.core:core", version.ref = "androidx" }
 play-services-games = { module = "com.google.android.gms:play-services-games", version.ref = "playServicesGames" }
 
 gdx-gamesvcs-core = { module = "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core", version.ref = "gamesvcs" }

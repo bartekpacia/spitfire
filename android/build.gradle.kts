@@ -88,6 +88,7 @@ dependencies {
     natives(variantOf(libs.gdx.freetype.platform) { classifier("natives-x86_64") })
     implementation(libs.play.services.games)
     implementation(libs.gdx.gamesvcs.android.gpgs)
+    implementation(libs.androidx.core)
 }
 
 tasks.named("preBuild").configure {
