@@ -84,8 +84,8 @@ platform :ios do
 end
 
 platform :android do
-  desc 'Upload a new build to Firebase App Distribution'
-  lane :distribute do
+  desc 'Make a production build'
+  lane :build do
     gradle(
       task: ':android:bundleRelease',
       project_dir: project_root,
@@ -94,6 +94,11 @@ platform :android do
         'versionName' => build_name
       }
     )
+  end
+
+  desc 'Upload a new build to Firebase App Distribution'
+  lane :distribute do
+    build
 
     aab_path = File.join(project_root, 'android/build/outputs/bundle/release/android-release.aab')
     firebase_app_distribution(
@@ -106,14 +111,16 @@ platform :android do
 
   desc 'Deploy a new internal version to Google Play'
   lane :internal do
-    gradle(
-      task: ':android:bundleRelease',
-      project_dir: project_root,
-      properties: {
-        'versionCode' => build_number,
-        'versionName' => build_name
-      }
-    )
+    build
+
+    native_symbols_path = File.join(project_root, 'native_debug_symbols.zip')
+    Dir.chdir(File.join(project_root, 'android/build/app/intermediates/merged_native_libs/release/out/lib/')) do
+      # using zip directly because fastlane's zip action is... weird
+      sh(
+        step_name: 'zip native debug symbols',
+        command: "zip -r #{native_symbols_path} ."
+      )
+    end
 
     upload_to_play_store(
       track: 'internal',
@@ -124,7 +131,8 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       mapping_paths: [
-        File.join(project_root, 'android/build/outputs/mapping/release/mapping.txt')
+        File.join(project_root, 'android/build/outputs/mapping/release/mapping.txt'),
+        native_symbols_path
       ]
     )
   end
