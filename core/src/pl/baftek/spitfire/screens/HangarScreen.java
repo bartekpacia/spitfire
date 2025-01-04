@@ -1,9 +1,14 @@
 package pl.baftek.spitfire.screens;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import pl.baftek.spitfire.enums.PlayerType;
@@ -18,18 +23,74 @@ public class HangarScreen extends AbstractScreen {
     private Timer timer;
 
     private Table table;
-    private Image moneyImage;
-    private Label upgradesTitle;
-    private Label moneyLabel;
-    private MyTextButton exitButton;
 
-    private HorizontalGroup upGroup;
-    private VerticalGroup mainVerticalGroup;
-    private VerticalGroup contentVG;
-
-    private HorizontalGroup scrollerHG;
+    private Label currentPlaneLabel;
+    private Label availabilityLabel;
     private MyTextButton actionButton;
+    private Image moneyImageInActionButton;
     private Image planeImage;
+    private Label descLabel;
+
+    private State state;
+
+    private static class State {
+        private final PlayerType currentPlayerType;
+        private final String availabilityString;
+        private final String currentPlaneString;
+        private final String action;
+        private final String desc;
+        private final boolean bought;
+        private final Texture texture;
+
+        public State(PlayerType playerType, SpitfireGame game) {
+            this.currentPlayerType = playerType;
+
+            if (game.isBought(playerType)) {
+                game.setCurrentPlayerType(playerType);
+            }
+
+            if (playerType == PlayerType.SPITFIRE) {
+                texture = SpitfireGame.ResHelper.spitfire;
+                currentPlaneString = StringHelper.SPITIFRE;
+
+                action = StringHelper.UPGRADE;
+                desc = StringHelper.SPITFIRE_DESC;
+                bought = true;
+            } else if (playerType == PlayerType.MUSTANG) {
+                texture = SpitfireGame.ResHelper.mustang;
+                currentPlaneString = StringHelper.MUSTANG;
+                desc = StringHelper.MUSTANG_DESC;
+
+                if (game.isBought(PlayerType.MUSTANG)) {
+                    action = StringHelper.UPGRADE;
+                    bought = true;
+                } else {
+                    action = StringHelper.BUY + game.getPlanePrice(PlayerType.MUSTANG);
+                    bought = false;
+                }
+            } else if (playerType == PlayerType.SZTURMOVIK) {
+                texture = SpitfireGame.ResHelper.szturmovik;
+                currentPlaneString = StringHelper.IL2;
+                desc = StringHelper.IL2_DESC;
+
+                if (game.isBought(PlayerType.SZTURMOVIK)) {
+                    action = StringHelper.UPGRADE;
+                    bought = true;
+                } else {
+                    action = StringHelper.BUY + game.getPlanePrice(PlayerType.SZTURMOVIK);
+                    bought = false;
+                }
+            } else {
+                desc = null;
+                action = null;
+                texture = null;
+                currentPlaneString = null;
+                bought = false;
+            }
+
+            availabilityString = Integer.toString(game.getCurrentPlaneAvailabilityLevel(playerType));
+        }
+    }
 
     HangarScreen(SpitfireGame game) {
         super(game);
@@ -38,108 +99,35 @@ public class HangarScreen extends AbstractScreen {
     @Override
     protected void init() {
         timer = new Timer();
+        state = new State(game.getCurrentPlayerType(), game);
     }
 
     @Override
     protected void buildUI() {
-        upGroup = new HorizontalGroup();
-        upGroup.padTop(10);
-        upGroup.padBottom(10);
-        upGroup.space(10);
-
-        mainVerticalGroup = new VerticalGroup();
-        mainVerticalGroup.padTop(20);
-        mainVerticalGroup.padBottom(20);
-        mainVerticalGroup.space(20);
-
-        initTitle();
-        initExitButton();
-        initUpGroup();
-        initContentGroup(game.getCurrentPlayerType());
-
         table = new Table();
-        table.add(upGroup).row();
-        table.add(upgradesTitle).row();
-        table.add(mainVerticalGroup).height(950).row();
-        table.add(exitButton).row();
-        table.top(); //sets table in upper part of the screen, not middle
         table.setFillParent(true);
+        table.top();
+
+        initUpGroup();
+        initTitle();
+        initContentGroup();
+        initExitButton();
+
         stage.addActor(table);
     }
 
-    private void initContentGroup(final PlayerType playerType) {
-        //init section
-        String availabilityString;
-        String currentPlaneString;
-        String action;
-        String desc;
-        boolean bought;
+    private void initContentGroup() {
+        planeImage = new Image();
 
-        Texture texture;
+        actionButton = new MyTextButton(null, FONT_SIZE_3);
+        moneyImageInActionButton = new Image(SpitfireGame.ResHelper.smallMoney);
+        actionButton.add(moneyImageInActionButton).right();
 
-        contentVG = new VerticalGroup();
-        contentVG.space(10);
-
-        scrollerHG = new HorizontalGroup();
-        scrollerHG.space(30);
-
-        System.out.println("playerType:" + playerType.toString());
-
-        if (game.isBought(playerType)) {
-            game.setCurrentPlayerType(playerType);
-        }
-
-        if (playerType == PlayerType.SPITFIRE) {
-            texture = SpitfireGame.ResHelper.spitfire;
-            currentPlaneString = StringHelper.SPITIFRE;
-
-            action = StringHelper.UPGRADE;
-            desc = StringHelper.SPITFIRE_DESC;
-            bought = true;
-        } else if (playerType == PlayerType.MUSTANG) {
-            texture = SpitfireGame.ResHelper.mustang;
-            currentPlaneString = StringHelper.MUSTANG;
-            desc = StringHelper.MUSTANG_DESC;
-
-            if (game.isBought(PlayerType.MUSTANG)) {
-                action = StringHelper.UPGRADE;
-                bought = true;
-            } else {
-                action = StringHelper.BUY + game.getPlanePrice(PlayerType.MUSTANG);
-                bought = false;
-            }
-        } else if (playerType == PlayerType.SZTURMOVIK) {
-            texture = SpitfireGame.ResHelper.szturmovik;
-            currentPlaneString = StringHelper.IL2;
-            desc = StringHelper.IL2_DESC;
-
-            if (game.isBought(PlayerType.SZTURMOVIK)) {
-                action = StringHelper.UPGRADE;
-                bought = true;
-            } else {
-                action = StringHelper.BUY + game.getPlanePrice(PlayerType.SZTURMOVIK);
-                bought = false;
-            }
-        } else {
-            desc = null;
-            action = null;
-            texture = null;
-            currentPlaneString = null;
-            bought = false;
-        }
-
-        availabilityString = Integer.toString(game.getCurrentPlaneAvailabilityLevel(playerType));
-
-        planeImage = new Image(texture);
-
-        actionButton = new MyTextButton(action, FONT_SIZE_3);
-        if (!bought) {
-            Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
-            actionButton.add(moneyImage).right();
-        }
         actionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                PlayerType playerType = state.currentPlayerType;
+
                 //spitfire
                 if (playerType == PlayerType.SPITFIRE) {
                     game.setScreen(new UpgradesScreen(game));
@@ -149,7 +137,7 @@ public class HangarScreen extends AbstractScreen {
                 if (playerType == PlayerType.MUSTANG && !game.isBought(PlayerType.MUSTANG)) {
                     game.buyPlane(PlayerType.MUSTANG, stage);
                     game.setCurrentPlayerType(PlayerType.MUSTANG);
-                    refreshContentGroup(PlayerType.MUSTANG);
+                    updateContentGroup(PlayerType.MUSTANG);
                 } else if (playerType == PlayerType.MUSTANG && game.isBought(PlayerType.MUSTANG)) {
                     game.setScreen(new UpgradesScreen(game));
                 }
@@ -158,7 +146,7 @@ public class HangarScreen extends AbstractScreen {
                 if (playerType == PlayerType.SZTURMOVIK && !game.isBought(PlayerType.SZTURMOVIK)) {
                     game.buyPlane(PlayerType.SZTURMOVIK, stage);
                     game.setCurrentPlayerType(PlayerType.SZTURMOVIK);
-                    refreshContentGroup(PlayerType.SZTURMOVIK);
+                    updateContentGroup(PlayerType.SZTURMOVIK);
                 } else if (playerType == PlayerType.SZTURMOVIK && game.isBought(PlayerType.SZTURMOVIK)) {
                     game.setScreen(new UpgradesScreen(game));
                 }
@@ -171,12 +159,14 @@ public class HangarScreen extends AbstractScreen {
         left.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                PlayerType playerType = state.currentPlayerType;
+
                 if (playerType == PlayerType.SPITFIRE) {
-                    refreshContentGroup(PlayerType.MUSTANG);
+                    updateContentGroup(PlayerType.MUSTANG);
                 } else if (playerType == PlayerType.MUSTANG) {
-                    refreshContentGroup(PlayerType.SZTURMOVIK);
+                    updateContentGroup(PlayerType.SZTURMOVIK);
                 } else if (playerType == PlayerType.SZTURMOVIK) {
-                    refreshContentGroup(PlayerType.SPITFIRE);
+                    updateContentGroup(PlayerType.SPITFIRE);
                 }
 
                 super.clicked(event, x, y);
@@ -187,52 +177,76 @@ public class HangarScreen extends AbstractScreen {
         right.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                PlayerType playerType = state.currentPlayerType;
+
                 if (playerType == PlayerType.SPITFIRE) {
-                    refreshContentGroup(PlayerType.SZTURMOVIK);
+                    updateContentGroup(PlayerType.SZTURMOVIK);
                 } else if (playerType == PlayerType.SZTURMOVIK) {
-                    refreshContentGroup(PlayerType.MUSTANG);
+                    updateContentGroup(PlayerType.MUSTANG);
                 } else if (playerType == PlayerType.MUSTANG) {
-                    refreshContentGroup(PlayerType.SPITFIRE);
+                    updateContentGroup(PlayerType.SPITFIRE);
                 }
 
                 super.clicked(event, x, y);
             }
         });
 
-        Label currentPlaneLabel = new Label(currentPlaneString, whiteLabelStyle);
+        currentPlaneLabel = new Label(null, whiteLabelStyle);
         currentPlaneLabel.setFontScale(FONT_SIZE_4);
 
-        Label availabilityLabel = new Label(StringHelper.AVAILABLE_FROM_LEVEL + availabilityString, orangeLabelStyle);
+        availabilityLabel = new Label(null, orangeLabelStyle);
         availabilityLabel.setFontScale(FONT_SIZE_2);
 
-        Label descLabel = new Label(desc, whiteLabelStyle);
+        descLabel = new Label(null, whiteLabelStyle);
         descLabel.setFontScale(FONT_SIZE_1);
         descLabel.setAlignment(Align.center);
 
-        scrollerHG.addActor(left);
-        scrollerHG.addActor(currentPlaneLabel);
-        scrollerHG.addActor(right);
+        table.add(left).padLeft(16).padRight(16);
+        table.add(currentPlaneLabel).expandX();
+        table.add(right).pad(16).padRight(16);
+        table.row();
 
-        contentVG.addActor(availabilityLabel);
-        contentVG.addActor(scrollerHG);
-        contentVG.addActor(actionButton);
-        contentVG.addActor(planeImage);
-        contentVG.addActor(descLabel);
+        table.add(availabilityLabel).colspan(3);
+        table.row();
 
-        mainVerticalGroup.addActor(contentVG);
+        table.add(actionButton).pad(32).colspan(3);
+        table.row();
+
+        table.add(planeImage).colspan(3);
+        table.row();
+
+        table.add(descLabel).padTop(16).colspan(3);
+        table.row();
+
+        // Set initial values
+        updateContentGroup(game.getCurrentPlayerType());
     }
 
-    private void refreshContentGroup(PlayerType playerType) {
-        mainVerticalGroup.removeActor(contentVG);
-        initContentGroup(playerType);
+    private void updateContentGroup(PlayerType playerType) {
+        if (game.isBought(playerType)) {
+            game.setCurrentPlayerType(playerType);
+        }
+
+        state = new State(playerType, game);
+        currentPlaneLabel.setText(state.currentPlaneString);
+        availabilityLabel.setText(StringHelper.AVAILABLE_FROM_LEVEL + state.availabilityString);
+        actionButton.setText(state.action);
+        moneyImageInActionButton.setVisible(!state.bought);
+        if (state.bought) {
+            moneyImageInActionButton.setDrawable(null);
+        } else {
+            moneyImageInActionButton.setDrawable(new TextureRegionDrawable(new TextureRegion(SpitfireGame.ResHelper.smallMoney)));
+        }
+        planeImage.setDrawable(new TextureRegionDrawable(new TextureRegion(state.texture)));
+        descLabel.setText(state.desc);
     }
 
     private void initUpGroup() {
         HorizontalGroup moneyHG = new HorizontalGroup();
 
-        moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
+        Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
+        Label moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
         moneyLabel.setFontScale(FONT_SIZE_3);
 
         //refreshing money
@@ -246,16 +260,20 @@ public class HangarScreen extends AbstractScreen {
         moneyHG.addActor(moneyLabel);
         moneyHG.addActor(moneyImage);
 
-        upGroup.addActor(moneyHG);
+        table.add(moneyHG).colspan(3);
+        table.row();
     }
 
     private void initTitle() {
-        upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
+        Label upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
         upgradesTitle.setFontScale(FONT_SIZE_6);
+
+        table.add(upgradesTitle).colspan(3);
+        table.row();
     }
 
     private void initExitButton() {
-        exitButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
+        MyTextButton exitButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -263,6 +281,8 @@ public class HangarScreen extends AbstractScreen {
                 super.clicked(event, x, y);
             }
         });
+
+        table.add(exitButton).expand().padBottom(32).align(Align.bottom).colspan(3);
     }
 
     @Override
