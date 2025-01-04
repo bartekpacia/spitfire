@@ -26,6 +26,8 @@ public class HangarScreen extends AbstractScreen {
 
     private Label currentPlaneLabel;
     private Label availabilityLabel;
+    private MyTextButton actionButton;
+    private Image moneyImageInActionButton;
     private Image planeImage;
     private Label descLabel;
 
@@ -104,7 +106,6 @@ public class HangarScreen extends AbstractScreen {
     protected void buildUI() {
         table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
         table.top();
 
         initUpGroup();
@@ -118,11 +119,10 @@ public class HangarScreen extends AbstractScreen {
     private void initContentGroup() {
         planeImage = new Image();
 
-        MyTextButton actionButton = new MyTextButton(state.action, FONT_SIZE_3);
-        if (!state.bought) {
-            Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
-            actionButton.add(moneyImage).right();
-        }
+        actionButton = new MyTextButton(null, FONT_SIZE_3);
+        moneyImageInActionButton = new Image(SpitfireGame.ResHelper.smallMoney);
+        actionButton.add(moneyImageInActionButton).right();
+
         actionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -215,7 +215,7 @@ public class HangarScreen extends AbstractScreen {
         table.add(planeImage).colspan(3);
         table.row();
 
-        table.add(descLabel).colspan(3);
+        table.add(descLabel).padTop(16).colspan(3);
         table.row();
 
         // Set initial values
@@ -230,6 +230,13 @@ public class HangarScreen extends AbstractScreen {
         state = new State(playerType, game);
         currentPlaneLabel.setText(state.currentPlaneString);
         availabilityLabel.setText(StringHelper.AVAILABLE_FROM_LEVEL + state.availabilityString);
+        actionButton.setText(state.action);
+        moneyImageInActionButton.setVisible(!state.bought);
+        if (state.bought) {
+            moneyImageInActionButton.setDrawable(null);
+        } else {
+            moneyImageInActionButton.setDrawable(new TextureRegionDrawable(new TextureRegion(SpitfireGame.ResHelper.smallMoney)));
+        }
         planeImage.setDrawable(new TextureRegionDrawable(new TextureRegion(state.texture)));
         descLabel.setText(state.desc);
     }
@@ -275,8 +282,7 @@ public class HangarScreen extends AbstractScreen {
             }
         });
 
-        table.add(exitButton).padTop(48).colspan(3);
-        table.row();
+        table.add(exitButton).expand().padBottom(32).align(Align.bottom).colspan(3);
     }
 
     @Override
