@@ -18,18 +18,10 @@ public class HangarScreen extends AbstractScreen {
     private Timer timer;
 
     private Table table;
-    private Image moneyImage;
-    private Label upgradesTitle;
-    private Label moneyLabel;
-    private MyTextButton exitButton;
 
-    private HorizontalGroup upGroup;
-    private VerticalGroup mainVerticalGroup;
-    private VerticalGroup contentVG;
-
-    private HorizontalGroup scrollerHG;
-    private MyTextButton actionButton;
-    private Image planeImage;
+//    private HorizontalGroup upGroup;
+//    private VerticalGroup mainVerticalGroup;
+//    private VerticalGroup contentVG;
 
     HangarScreen(SpitfireGame game) {
         super(game);
@@ -42,28 +34,31 @@ public class HangarScreen extends AbstractScreen {
 
     @Override
     protected void buildUI() {
-        upGroup = new HorizontalGroup();
-        upGroup.padTop(10);
-        upGroup.padBottom(10);
-        upGroup.space(10);
-
-        mainVerticalGroup = new VerticalGroup();
-        mainVerticalGroup.padTop(20);
-        mainVerticalGroup.padBottom(20);
-        mainVerticalGroup.space(20);
-
-        initTitle();
-        initExitButton();
-        initUpGroup();
-        initContentGroup(game.getCurrentPlayerType());
+//        upGroup = new HorizontalGroup();
+//        upGroup.padTop(10);
+//        upGroup.padBottom(10);
+//        upGroup.space(10);
+//
+//        mainVerticalGroup = new VerticalGroup();
+//        mainVerticalGroup.setDebug(true);
+//        mainVerticalGroup.fill();
+//        mainVerticalGroup.padTop(20);
+//        mainVerticalGroup.padBottom(20);
+//        mainVerticalGroup.space(20);
 
         table = new Table();
-        table.add(upGroup).row();
-        table.add(upgradesTitle).row();
-        table.add(mainVerticalGroup).height(950).row();
-        table.add(exitButton).row();
-        table.top(); //sets table in upper part of the screen, not middle
         table.setFillParent(true);
+        table.setDebug(true);
+        table.top();
+
+        initUpGroup();
+        initTitle();
+        initContentGroup(game.getCurrentPlayerType());
+        initExitButton();
+
+        // table.add(mainVerticalGroup).height(950).row();
+        // table.add(exitButton).row();
+        // table.top(); //sets table in upper part of the screen, not middle
         stage.addActor(table);
     }
 
@@ -77,11 +72,11 @@ public class HangarScreen extends AbstractScreen {
 
         Texture texture;
 
-        contentVG = new VerticalGroup();
-        contentVG.space(10);
+//        contentVG = new VerticalGroup();
+//        contentVG.space(10);
 
-        scrollerHG = new HorizontalGroup();
-        scrollerHG.space(30);
+        // scrollerTable = new Table();
+        // scrollerTable.space(30);
 
         System.out.println("playerType:" + playerType.toString());
 
@@ -130,9 +125,10 @@ public class HangarScreen extends AbstractScreen {
 
         availabilityString = Integer.toString(game.getCurrentPlaneAvailabilityLevel(playerType));
 
-        planeImage = new Image(texture);
+        Image planeImage = new Image(texture);
 
-        actionButton = new MyTextButton(action, FONT_SIZE_3);
+        // private Table scrollerTable;
+        MyTextButton actionButton = new MyTextButton(action, FONT_SIZE_3);
         if (!bought) {
             Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
             actionButton.add(moneyImage).right();
@@ -209,30 +205,35 @@ public class HangarScreen extends AbstractScreen {
         descLabel.setFontScale(FONT_SIZE_1);
         descLabel.setAlignment(Align.center);
 
-        scrollerHG.addActor(left);
-        scrollerHG.addActor(currentPlaneLabel);
-        scrollerHG.addActor(right);
+        table.add(availabilityLabel).colspan(3);
+        table.row();
 
-        contentVG.addActor(availabilityLabel);
-        contentVG.addActor(scrollerHG);
-        contentVG.addActor(actionButton);
-        contentVG.addActor(planeImage);
-        contentVG.addActor(descLabel);
+        table.add(left).padLeft(16).padRight(16);
+        table.add(currentPlaneLabel).expandX();
+        table.add(right).pad(16).padRight(16);
+        table.row();
 
-        mainVerticalGroup.addActor(contentVG);
+        table.add(actionButton).colspan(3);
+        table.row();
+
+        table.add(planeImage).colspan(3);
+        table.row();
+
+        table.add(descLabel).colspan(3);
+        table.row();
     }
 
     private void refreshContentGroup(PlayerType playerType) {
-        mainVerticalGroup.removeActor(contentVG);
+        // mainVerticalGroup.removeActor(contentVG);
         initContentGroup(playerType);
     }
 
     private void initUpGroup() {
         HorizontalGroup moneyHG = new HorizontalGroup();
 
-        moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
+        Image moneyImage = new Image(SpitfireGame.ResHelper.smallMoney);
 
-        moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
+        Label moneyLabel = new Label(Integer.toString(game.playerManager.getMoney()), whiteLabelStyle);
         moneyLabel.setFontScale(FONT_SIZE_3);
 
         //refreshing money
@@ -246,16 +247,24 @@ public class HangarScreen extends AbstractScreen {
         moneyHG.addActor(moneyLabel);
         moneyHG.addActor(moneyImage);
 
-        upGroup.addActor(moneyHG);
+        // upGroup.addActor(moneyHG);
+
+        table.add(moneyHG).colspan(3);
+        // table.add(moneyLabel).expandX().right().padRight(24);
+        // table.add(moneyImage).expandX().left();
+        table.row();
     }
 
     private void initTitle() {
-        upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
+        Label upgradesTitle = new Label(StringHelper.HANGAR, whiteLabelStyle);
         upgradesTitle.setFontScale(FONT_SIZE_6);
+
+        table.add(upgradesTitle).colspan(3);
+        table.row();
     }
 
     private void initExitButton() {
-        exitButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
+        MyTextButton exitButton = new MyTextButton(StringHelper.GO_TO_MENU, FONT_SIZE_3);
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -263,6 +272,9 @@ public class HangarScreen extends AbstractScreen {
                 super.clicked(event, x, y);
             }
         });
+
+        table.add(exitButton).colspan(3);
+        table.row();
     }
 
     @Override
