@@ -1,11 +1,11 @@
-package pl.baftek.spitfire.desktop;
+package pl.baftek.spitfire.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import de.golfgl.gdxgamesvcs.NoGameServiceClient;
 import pl.baftek.spitfire.game.SpitfireGame;
 
-public class DesktopLauncher {
+public class Lwjgl3Launcher {
     public static void main(String[] arg) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 
@@ -18,7 +18,6 @@ public class DesktopLauncher {
         );
 
         config.setResizable(false);
-
         new Lwjgl3Application(new SpitfireGame(new NoGameServiceClient()), config);
     }
 }

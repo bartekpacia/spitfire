@@ -26,4 +26,4 @@ dependencyResolutionManagement {
     }
 }
 
-include("desktop", "android", "ios", "core")
+include("lwjgl3", "android", "ios", "core")
