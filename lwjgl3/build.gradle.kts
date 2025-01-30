@@ -24,8 +24,8 @@ dependencies {
     implementation(libs.gdx.gamesvcs.desktop.gpgs)
 }
 
-val mainClassName by extra("pl.baftek.spitfire.desktop.DesktopLauncher")
-val assetsDir by extra(File("../assets"))
+val mainClassName = "pl.baftek.spitfire.lwjgl3.Lwjgl3Launcher"
+val assetsDir = File("../assets")
 
 tasks.register<JavaExec>("run") {
     dependsOn(tasks.classes)
@@ -38,17 +38,6 @@ tasks.register<JavaExec>("run") {
 
     // Fix for macOS
     jvmArgs = listOf("-XstartOnFirstThread")
-}
-
-tasks.register<JavaExec>("debug") {
-    dependsOn(tasks.classes)
-
-    mainClass = mainClassName
-    classpath = sourceSets["main"].runtimeClasspath
-    standardInput = System.`in`
-    workingDir = assetsDir
-    isIgnoreExitValue = true
-    debug = true
 }
 
 tasks.register<Jar>("dist") {

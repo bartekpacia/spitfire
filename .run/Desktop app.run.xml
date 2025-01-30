@@ -2,9 +2,9 @@
   <configuration default="false" name="Desktop app" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="23" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-    <option name="MAIN_CLASS_NAME" value="pl.baftek.spitfire.desktop.DesktopLauncher" />
-    <module name="spitfire.desktop.main" />
-    <option name="VM_PARAMETERS" value="-XstartOnFirstThread" />
+    <option name="MAIN_CLASS_NAME" value="pl.baftek.spitfire.lwjgl3.Lwjgl3Launcher" />
+    <module name="spitfire.lwjgl3.main" />
+    <option name="VM_PARAMETERS" value="-XstartOnFirstThread -ea" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/assets" />
     <method v="2">
       <option name="Make" enabled="true" />
