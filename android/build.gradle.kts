@@ -21,7 +21,7 @@ android {
             aidl.setSrcDirs(listOf("src"))
             renderscript.setSrcDirs(listOf("src"))
             res.setSrcDirs(listOf("res"))
-            assets.setSrcDirs(listOf("assets"))
+            assets.setSrcDirs(listOf("../assets"))
             jniLibs.setSrcDirs(listOf("libs"))
         }
     }
