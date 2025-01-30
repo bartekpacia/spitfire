@@ -25,7 +25,7 @@ dependencies {
 }
 
 val mainClassName by extra("pl.baftek.spitfire.desktop.DesktopLauncher")
-val assetsDir by extra(File("../android/assets"))
+val assetsDir by extra(File("../assets"))
 
 tasks.register<JavaExec>("run") {
     dependsOn(tasks.classes)
